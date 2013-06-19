@@ -94,6 +94,12 @@ public class AccordionHeader extends JPanel {
         this.addMouseListener(mouseListener);
     }
 
+    public IOptimizationPlugin getPlugin() {
+        return plugin;
+    }
+    
+    
+
     public void setSelected(boolean selected)
     {
         checkbox.setSelected(selected);

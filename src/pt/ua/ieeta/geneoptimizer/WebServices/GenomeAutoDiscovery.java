@@ -227,4 +227,10 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
         setChanged();
         notifyObservers(new Boolean(true));
     }
+
+    public Genome getGenome() {
+        return genome;
+    }
+    
+    
 }

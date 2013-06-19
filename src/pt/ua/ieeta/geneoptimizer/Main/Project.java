@@ -2,6 +2,7 @@ package pt.ua.ieeta.geneoptimizer.Main;
 
 import java.util.*;
 import pt.ua.ieeta.geneoptimizer.GUI.*;
+import pt.ua.ieeta.geneoptimizer.GUI.RedesignPanel.HostSelectionPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.RedesignPanel.StudyMakerPanel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
 import pt.ua.ieeta.geneoptimizer.WebServices.GeneAutoDiscover;
@@ -117,6 +118,9 @@ public class Project extends Observable
         
         /* Add study to project (and create panel). */
         addNewStudy(newStudy);
+        
+        /* EXPERIMENTAL */
+        StudyMakerPanel.getInstance().setPluginsGenome(HostSelectionPanel.getSelectedGenome());
         
 //        List<Gene> list = gene.generateRandomSynonymousGenes(20);
 //        GeneProfileList pList = new GeneProfileList(gene);

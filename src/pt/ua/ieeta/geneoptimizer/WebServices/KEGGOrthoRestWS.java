@@ -111,26 +111,6 @@ public class KEGGOrthoRestWS extends Thread {
             }
             
         }
-//        for(String s : aux){
-//            System.out.println("s: " + s);
-//        }
-//        for (int i = 0; i < element.children().size(); i++) {
-//            if (found == MAX_ORTHOLOGS) {
-//                break;
-//            }
-//            if (!element.children().get(i).attr("value").isEmpty()) {
-//                Matcher m = p.matcher(element.textNodes().get(textIdx).text());
-//                double identity = 0;
-//                if (m.find()) {
-//                    identity = Double.parseDouble(m.group());
-//                }
-//                assert identity != 0;
-//                System.out.println("Value: " + element.children().get(i).attr("value"));
-//                System.out.println("Identity: " + identity + "\n");
-//                orthIdAndIdentityMap.put(element.children().get(i).attr("value"), identity);
-//                found++;
-//            }
-//        }
 
         if (orthIdAndIdentityMap.isEmpty()) {
             processPanel.setFailed();

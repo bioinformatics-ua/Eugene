@@ -137,7 +137,7 @@ public class ApplicationSettings
     
     
     private Vector<Setting> getDefaultSettings() {
-        Vector<Setting> defaultSettings = new Vector<Setting>(30, 5);
+        Vector<Setting> defaultSettings = new Vector<Setting>(31, 5);
         /* Gene filters. */
         defaultSettings.add(new Setting("checkUnknownLetters", true, Boolean.class));
         defaultSettings.add(new Setting("checkStartCodon", true, Boolean.class));
@@ -154,6 +154,7 @@ public class ApplicationSettings
         defaultSettings.add(new Setting("toolsVersion", 0, Integer.class));
         defaultSettings.add(new Setting("pluginPath", "Plugins", String.class));
         defaultSettings.add(new Setting("projectsPath", "Projects", String.class));
+        defaultSettings.add(new Setting("imagesPath", "Images", String.class));
         defaultSettings.add(new Setting("lastGeneDirectory", ".", String.class));
         defaultSettings.add(new Setting("highlyExpressedGenesFileName", "highly_expressed.txt", String.class));
         defaultSettings.add(new Setting("userEmail", "bioinfo@ieeta.pt", String.class));

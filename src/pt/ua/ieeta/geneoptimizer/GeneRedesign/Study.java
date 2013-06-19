@@ -28,7 +28,7 @@ public class Study
 
     /* Report of the studies. The last report corresponds to the last study. */
     private Vector<OptimizationReport> optimizationReports;
-
+       
     /* Project where this study is inserted. */
     private Project project;
 
@@ -233,5 +233,5 @@ public class Study
      */
     public int getSelectedEndIndex() {
         return selectedEndIndex;
-    }
+    }      
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 import javax.swing.JPanel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
+import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 
 /**
  *
@@ -69,4 +70,6 @@ public interface IOptimizationPlugin extends IPlugin
      */
     public Enum[] getAvailableParameters();
     
+    /* Sets the genome host used, when needed */
+    public void setHost(Genome genome);    
 }

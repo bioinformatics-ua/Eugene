@@ -73,8 +73,8 @@ public class OptimizationRunner extends Thread
             OptimizationModel.getInstance().optimizationEnded(this);
             return;
         } 
-        //TODO: precisa de uma warning message
-
+        //TODO: precisa de uma warning message        
+                
         System.out.println("New optimization started...");
         
         /* verify if has selection zone */
@@ -132,18 +132,15 @@ public class OptimizationRunner extends Thread
 //        for (IOptimizationPlugin plugin : selectedPlugins)            
 //            parametersList.add(plugin.getParameters());
 
-        /* Make the plugins calculate the best score they can achieve in a single optimization. */
+        /* Make the plugins calculate the best score they can achieve in a single optimization. */                
         processPanel.setStatus("Calculating best scores...");
         for (int i=0; i<selectedPlugins.size(); i++)
-            this.selectedPlugins.get(i).calculateBestScore(study);
-
+            this.selectedPlugins.get(i).calculateBestScore(study);        
+  
         /* Calculate the fitness score of the original sequence for each plugin. */
         processPanel.setStatus("Getting original score...");
         for (int i=0; i<selectedPlugins.size(); i++)
-            this.originalScores.add(selectedPlugins.get(i).getScoreOfSequence(study, study.getResultingGene().getCodonSequence()));
-     
-
-        
+            this.originalScores.add(selectedPlugins.get(i).getScoreOfSequence(study, study.getResultingGene().getCodonSequence()));        
         
         /* ------------------------------------------------------------------------ */
         /* Avoid using genetic algorithms when dealing with single algorithm cases. */
@@ -216,7 +213,7 @@ public class OptimizationRunner extends Thread
                                                                                 selectedPlugins,                                                                                 
                                                                                 selecType, 
                                                                                 processPanel);
-            finalSolutionScore = SimulatedAnnealing.getScore();
+            finalSolutionScore = SimulatedAnnealing.getScore();            
         }
         else
         {   
@@ -355,6 +352,14 @@ public class OptimizationRunner extends Thread
         OptimizationModel.getInstance().optimizationEnded(this);
 
         System.out.println("Optimization ended.");
+    }
+    
+    /* Estimate the k max (simulated annealing max iterations) based on codons length */
+    private int calculateKMaxValue(){
+        //y = 14,779x + 1606,8;
+        int nCodons = study.getResultingGene().getCodonSequence().length();
+        
+        return 100000;
     }
     
     public static boolean isRunning()

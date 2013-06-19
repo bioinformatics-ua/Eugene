@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 import pt.ua.ieeta.geneoptimizer.GUI.ContentPanel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationReport;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
+import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 
 /**
  *
@@ -87,6 +88,12 @@ public class StudyMakerPanel extends ContentPanel
     public Collection<AccordionHeader> getAccordionHeaderList()
     {
         return accordionHeaderList.values();
+    }
+    
+    public void setPluginsGenome(Genome genome){
+        for(Map.Entry<String, AccordionHeader> key : accordionHeaderList.entrySet()){
+            key.getValue().getPlugin().setHost(genome);
+        }
     }
 
     public void addOptimizationPlugin(IOptimizationPlugin plugin)

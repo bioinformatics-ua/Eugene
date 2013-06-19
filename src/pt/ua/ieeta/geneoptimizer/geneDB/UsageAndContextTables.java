@@ -245,7 +245,12 @@ public class UsageAndContextTables extends Observable implements Runnable
         return getCodonUsageFrequency(codon) / getCodonUsageFrequency(syn.get(maxIndex));
     }
     
-    /* Return codon usage frequency per thousand */
+    
+    /**
+     * Return codon usage frequency per thousand 
+     * @param codon
+     * @return 
+     */
     public synchronized float getCodonUsageFrequency(String codon)
     {
         assert codonUsageTable != null;
@@ -255,6 +260,20 @@ public class UsageAndContextTables extends Observable implements Runnable
         
         /* Make frequency calculation (per thousand). */
         return (getCodonUsageCount(codon)*1000) / (float)numberOfCodons;
+    }
+    
+    /**
+     * Check if a codon is rare in the genome (appearance < 5 in 1000)
+     * @param codon
+     * @return 
+     */
+    public synchronized boolean isCodonRare(String codon){
+        assert codonUsageTable != null;
+        assert codon != null;
+        
+        waitUntilFinished();
+        
+        return (getCodonUsageFrequency(codon) <= 5);
     }
 
     public synchronized float getCodonContextFrequency(String codon1, String codon2)

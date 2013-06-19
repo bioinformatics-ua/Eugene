@@ -15,7 +15,8 @@ import pt.ua.ieeta.geneoptimizer.geneDB.GeneticCodeTable;
  */
 public class SimulatedAnnealing
 {
-    private static float score;
+    private static float score;    
+    
 
     /**
      * 
@@ -41,7 +42,7 @@ public class SimulatedAnnealing
         String sbest;
         StringBuilder snew;
         float e = 0, enew, ebest;
-        int convergenceCounter = 0;
+        int convergenceCounter = 0;        
 
         e = calculateEnergy(study, s, selectedPlugins);
 
@@ -112,24 +113,23 @@ public class SimulatedAnnealing
 
         return sbest;
     }
-
+        
     private static float calculateEnergy(   Study study, 
                                             String sequence, 
                                             Vector<IOptimizationPlugin> selectedPlugins)
     {
         float e = 0;
-
-        for (int k=0; k<selectedPlugins.size(); k++)
+        
+        for (int k=0; k<selectedPlugins.size(); k++){            
             e += selectedPlugins.get(k).getScoreOfSequence(study, sequence);
-
+        }
+        
         e /= selectedPlugins.size(); //TODO: unnecessary operation.
 
         return e;
     }
 
-    public static float getScore()
-    {
+    public static float getScore() {
         return score;
     }
-
 }

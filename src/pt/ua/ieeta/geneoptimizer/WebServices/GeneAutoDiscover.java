@@ -2,11 +2,13 @@ package pt.ua.ieeta.geneoptimizer.WebServices;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pt.ua.ieeta.geneoptimizer.ExternalTools.Muscle;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.NCBIwebFetcher;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.FastaHeaderParser;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.HeaderInfo;
 import pt.ua.ieeta.geneoptimizer.GUI.GeneInformationPanel;
+import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.SequencePaintingPool;
 import pt.ua.ieeta.geneoptimizer.GUI.Protein3DViewerPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
@@ -106,12 +108,30 @@ public class GeneAutoDiscover extends Thread {
 //                KEGGorthoWS keggService = new KEGGorthoWS(keggOrg + ":" + geneLocusTag, KeggResultKeeper);
                 KEGGOrthoRestWS keggService = new KEGGOrthoRestWS(keggOrg + ":" + geneLocusTag, KeggResultKeeper);
                 keggService.start();
-                
+
 
                 /* Wait for result. */
                 KeggResultKeeper.getResult();
                 if (!KeggResultKeeper.isFail()) {
-                    gene.setOrthologList((Genome) KeggResultKeeper.getResult());
+
+                    if (!study.getResultingGene().hasOrthologs()) {
+                        study.getOriginalGene().setOrthologList((Genome) KeggResultKeeper.getResult());
+                    }
+
+                    Genome orthologs = study.getResultingGene().hasOrthologs() ? study.getResultingGene().getOrthologList() : study.getOriginalGene().getOrthologList();
+                    orthologs.addGene(study.getResultingGene());
+                    study.getResultingGene().setOrthologInfo(0, 0, "randomID", "");
+                    ResultKeeper alignmentResult = new ResultKeeper();
+                    Muscle muscleTool = new Muscle(orthologs.getGenes(), alignmentResult);
+                    new Thread(muscleTool).start();
+
+
+                    
+                    alignmentResult.getResult();
+                    orthologs.removeGene(study.getResultingGene());
+                    /* Get aligned orthologs. */
+                    orthologs.setOrthologsAligned(true);
+
                     gotOrthologsFromKegg = true;
                 }
             }

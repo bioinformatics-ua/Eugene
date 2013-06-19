@@ -26,7 +26,7 @@ public class Main
     public static void main(String[] args) throws FileNotFoundException, IOException
     {          
         /* Application version. */
-        version = "v0.93";
+        version = "v1.2";
         
         /* Check directoy tree. */
         verifyDirectoryTree();
@@ -106,7 +106,7 @@ public class Main
         String separator = System.getProperty("file.separator");
         String eugene_dir = home_dir.concat(separator + "EuGene" + separator);
 
-        String[] folders = {"HighlyExpressed", "PDBFiles", "Plugins", "Studies", "Tools", "Projects"};
+        String[] folders = {"HighlyExpressed", "PDBFiles", "Plugins", "Studies", "Images", "Tools", "Projects"};
 
         for (String folder : folders) {
             dir = new File(eugene_dir, folder);
@@ -263,7 +263,7 @@ public class Main
                 Process p = Runtime.getRuntime().exec(cmdArgs1, null, new File(path));
                 new StreamConsumer(p.getInputStream(), System.out).start();
                 new StreamConsumer(p.getErrorStream(), System.out).start();
-                p.waitFor();
+                p.waitFor();                
             } 
             catch (Exception ex) 
             {

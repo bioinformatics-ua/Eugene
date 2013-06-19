@@ -59,11 +59,11 @@ public class PluginLoader extends Observable implements Runnable
         /* Then try reading from the default plugins JAR file. */
         classLoader = new PluginClassLoader(new File(eugeneDir + pluginPath + "/"));
 
-        String[] jarFiles = {           
-            "GCContentParametersPanel.class",
+        String[] jarFiles = {                           
+                        "GCContentParametersPanel.class",
             "GCContentPlugin$Parameter.class",
             "GCContentPlugin.class",
-             "CodonCorrelationEffectParametersPanel.class",
+            "CodonCorrelationEffectParametersPanel.class",
             "CodonCorrelationEffectPlugin$Parameter.class",
             "CodonCorrelationEffectPlugin.class",
             "SiteRemovalParametersPanel.class",
@@ -71,7 +71,7 @@ public class PluginLoader extends Observable implements Runnable
             "SiteRemovalPlugin.class",
             "CodonContextParametersPanel.class",
             "CodonContextPlugin$Parameter.class",
-            "CodonContextPlugin.class",            
+            "CodonContextPlugin.class",
             "RepeatsRemovalParametersPanel.class",
             "RepeatsRemovalPlugin$Parameter.class",
             "RepeatsRemovalPlugin.class",
@@ -80,12 +80,14 @@ public class PluginLoader extends Observable implements Runnable
             "CodonUsagePlugin.class",
             "HiddenStopCodonsParametersPanel.class",
             "HiddenStopCodonsPlugin$Parameter.class",
-            "HiddenStopCodonsPlugin.class", 
+            "HiddenStopCodonsPlugin.class",
             "UnmodifiedtRNAsParametersPanel.class",
             "UnmodifiedtRNAsPlugin$Parameter.class",
             "UnmodifiedtRNAsPlugin.class",
             "RNASecondaryStructurePanel.class",
             "RNASecondaryStructurePlugin$Parameter.class",
+            "RNASecondaryStructurePlugin$1.class",
+            "RNASecondaryStructurePlugin$2.class",
             "RNASecondaryStructurePlugin.class"
         };
         /* Read all plugins from JAR file list. */
