@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.WebServices;
 
 import java.util.Vector;
@@ -6,127 +5,122 @@ import java.util.Vector;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
-public class KeggGenomeCodes 
-{
-    private static KeggGenomeCodes instance;
+public class KeggGenomeCodes {
+
+    private static volatile KeggGenomeCodes instance;
     private Vector<String> species;
-    
-    
-    public static KeggGenomeCodes getInstance()
-    {
-        if (instance == null)
-            instance = new KeggGenomeCodes();
-        
+
+    public static KeggGenomeCodes getInstance() {
+        if (instance == null) {
+            synchronized (KeggGenomeCodes.class) {
+                if (instance == null) {
+                    instance = new KeggGenomeCodes();
+                }
+            }
+        }
         return instance;
     }
-    
-    private KeggGenomeCodes()
-    {
+
+    private KeggGenomeCodes() {
         /* Populate the species vector. */
         species = new Vector<String>(genomeCodes.length);
-        for (int i = 0; i < genomeCodes.length; i++)
+        for (int i = 0; i < genomeCodes.length; i++) {
             species.add(genomeCodes[i].getRight());
+        }
     }
-    
-    public Pair getMostLikelyGenomeName(String genomeName)
-    {
+
+    public Pair getMostLikelyGenomeName(String genomeName) {
         assert genomeName != null;
-        
+
         int minScore = Integer.MAX_VALUE;
         Pair bestPair = null;
-        
-        for (Pair p : genomeCodes)
-        {
+
+        for (Pair p : genomeCodes) {
             int newScore = computeLevenshteinDistance(genomeName, p.getRight());
-            
-            if (newScore < minScore)
-            {
+
+            if (newScore < minScore) {
                 minScore = newScore;
                 bestPair = p;
             }
         }
-        
+
         return bestPair;
     }
-    
-    public Vector<String> getAvailableSpecies()
-    {
+
+    public Vector<String> getAvailableSpecies() {
         assert species != null;
-        
+
         return species;
     }
-    
-    private int minimum(int a, int b, int c)
-    {
+
+    private int minimum(int a, int b, int c) {
         return Math.min(Math.min(a, b), c);
     }
 
-    public int computeLevenshteinDistance(CharSequence str1, CharSequence str2)
-    {
+    public int computeLevenshteinDistance(CharSequence str1, CharSequence str2) {
         int[][] distance = new int[str1.length() + 1][str2.length() + 1];
 
-        for (int i = 0; i <= str1.length(); i++)
+        for (int i = 0; i <= str1.length(); i++) {
             distance[i][0] = i;
-        for (int j = 0; j <= str2.length(); j++)
+        }
+        for (int j = 0; j <= str2.length(); j++) {
             distance[0][j] = j;
+        }
 
-        for (int i = 1; i <= str1.length(); i++)
-            for (int j = 1; j <= str2.length(); j++)
+        for (int i = 1; i <= str1.length(); i++) {
+            for (int j = 1; j <= str2.length(); j++) {
                 distance[i][j] = minimum(
                         distance[i - 1][j] + 1,
                         distance[i][j - 1] + 1,
                         distance[i - 1][j - 1]
                         + ((str1.charAt(i - 1) == str2.charAt(j - 1)) ? 0
                         : 1));
+            }
+        }
 
         return distance[str1.length()][str2.length()];
     }
-    
-    public static class Pair
-    {
+
+    public static class Pair {
+
         public final String left;
         public final String right;
 
-        public Pair(String left, String right)
-        {
+        public Pair(String left, String right) {
             this.left = left;
             this.right = right;
         }
 
-        public String getLeft()
-        {
+        public String getLeft() {
             return left;
         }
 
-        public String getRight()
-        {
+        public String getRight() {
             return right;
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return left.hashCode() ^ right.hashCode();
         }
 
         @Override
-        public boolean equals(Object o)
-        {
-            if (o == null)
+        public boolean equals(Object o) {
+            if (o == null) {
                 return false;
-            if (!(o instanceof Pair))
+            }
+            if (!(o instanceof Pair)) {
                 return false;
+            }
             Pair pairo = (Pair) o;
             return this.left.equals(pairo.getLeft())
                     && this.right.equals(pairo.getRight());
         }
     }
-    
-    
     /* Define KEGG genome codes. */
-    private static Pair[] genomeCodes = 
-    {
+    private static Pair[] genomeCodes = {
         new Pair("hsa", "Homo sapiens"),
         new Pair("ptr", "Pan troglodytes"),
         new Pair("pon", "Pongo abelii"),

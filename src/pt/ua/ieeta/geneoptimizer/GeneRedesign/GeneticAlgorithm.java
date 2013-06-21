@@ -5,7 +5,6 @@ package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
 import java.text.DecimalFormat;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel.ProcessPanel;

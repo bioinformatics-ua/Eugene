@@ -4,10 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -31,7 +29,6 @@ import org.xml.sax.SAXException;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationReport.Optimization;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.Main.Main;
-import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterDetails;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterSet;
 
@@ -46,15 +43,18 @@ public class RedesignProtocolReaderWriter extends Thread {
     private static Vector<OptimizationReport> studyList;
 
     /* Singleton instance. */
-    private static RedesignProtocolReaderWriter instance = null;
+    private static volatile RedesignProtocolReaderWriter instance = null;
     /* Project version */
     private final static String SCHEMA_VERSION = "1.0";
 
     public static RedesignProtocolReaderWriter getInstance() {
         if (instance == null) {
-            instance = new RedesignProtocolReaderWriter();
+            synchronized (RedesignProtocolReaderWriter.class) {
+                if (instance == null) {
+                    instance = new RedesignProtocolReaderWriter();
+                }
+            }
         }
-
         return instance;
     }
 

@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.PluginSystem;
 
 import java.awt.Color;

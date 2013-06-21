@@ -18,7 +18,6 @@ import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.SequenceValidator;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
-import pt.ua.ieeta.geneoptimizer.geneDB.ByteString;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.GeneticCodeTable;
 import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
@@ -402,8 +401,8 @@ public class KEGGOrthoRestWS extends Thread {
         /* Create new ortholog gene. */
         Gene newGene = new Gene(geneName, genome);
         newGene.setOrthologInfo(0, 0, geneID, genomeName);
-        newGene.createStructure(new ByteString(codonSequence), BioStructure.Type.mRNAPrimaryStructure);
-        newGene.createStructure(new ByteString(aaSequence + "*"), BioStructure.Type.proteinPrimaryStructure);
+        newGene.createStructure(codonSequence, BioStructure.Type.mRNAPrimaryStructure);
+        newGene.createStructure(aaSequence + "*", BioStructure.Type.proteinPrimaryStructure);
         return newGene;
     }
 

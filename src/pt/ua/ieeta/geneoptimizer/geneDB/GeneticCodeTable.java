@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.geneDB;
 
 import java.util.HashMap;
@@ -10,7 +9,7 @@ import java.util.Vector;
  * @author Paulo
  */
 public class GeneticCodeTable
-{
+{    
     private Map<String, String> codeTable;
     private Map<String, String> startCodons;
     private Map<String, Vector<String>> synonymousList;
@@ -35,6 +34,7 @@ public class GeneticCodeTable
         for(int i=0; i<ncbieaa.length(); i++)
         {
             String codon = base1.substring(i, i+1) + base2.substring(i, i+1) + base3.substring(i, i+1);
+            // ncbieaa.substring(i, i+1) -> aminoacid            
             codeTable.put(codon.replaceAll("T", "U"), ncbieaa.substring(i, i+1));
             startCodons.put(codon.replaceAll("T", "U"), sncbieaa.substring(i, i+1));
         }

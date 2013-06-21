@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.WebServices;
 
 import java.io.StringReader;
@@ -22,7 +21,6 @@ import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel.ProcessPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure.Type;
-import pt.ua.ieeta.geneoptimizer.geneDB.ByteString;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 import uk.ac.ebi.webservices.jaxws.stubs.ncbiblast.InputParameters;
@@ -184,7 +182,7 @@ public class NCBIBlastWS extends Thread
                 //System.out.println("Length: " + length + "  Score: "+score+"    ID: "+ id + "   Identity: "+identity+"   Description: "+description+"  Sequence: " + sequence);
                 Gene newGene = new Gene(geneName, orthologList);
                 newGene.setOrthologInfo(Integer.parseInt(score), Double.parseDouble(identity), id, genomeName);
-                newGene.createStructure(new ByteString(sequence), Type.mRNAPrimaryStructure);
+                newGene.createStructure(sequence, Type.mRNAPrimaryStructure);
                 newGene.calculateAllStructures();
 
                 orthologList.addGene(newGene);
@@ -197,7 +195,7 @@ public class NCBIBlastWS extends Thread
             processPanel.setFailed();
         }
         
-        if ((orthologList == null) || (orthologList.getGenes().size() == 0))
+        if ((orthologList == null) || (orthologList.getGenes().isEmpty()))
             resultKeeper.setFailed();
         else
         {

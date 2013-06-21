@@ -12,7 +12,6 @@ import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.Main.Main;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
-import pt.ua.ieeta.geneoptimizer.geneDB.ByteString;
 
 /**
  *
@@ -74,7 +73,7 @@ public class Psipred extends Thread
         processPanel.setStatus("Done.");
         processPanel.setComplete();
 
-        study.getResultingGene().createStructure(new BioStructure(new ByteString(result), BioStructure.Type.proteinSecondaryStructure));
+        study.getResultingGene().createStructure(new BioStructure(result, BioStructure.Type.proteinSecondaryStructure));
         study.getCurrentPanel().remakePanel();
 
         System.out.println("PsiPred ended.");

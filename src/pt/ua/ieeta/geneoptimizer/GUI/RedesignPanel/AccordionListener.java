@@ -1,5 +1,3 @@
-
-
 package pt.ua.ieeta.geneoptimizer.GUI.RedesignPanel;
 
 /**

@@ -12,7 +12,6 @@ import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.Main.Main;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
-import pt.ua.ieeta.geneoptimizer.geneDB.ByteString;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 
 /**
@@ -247,7 +246,7 @@ public class Muscle extends AlignmentTool
                 if (gene.getAminoacidSequence().contains("*"))
                     alignedAASequence += "*";
                 
-                gene.setAlignedStructure(new ByteString(alignedAASequence), BioStructure.Type.proteinPrimaryStructure);
+                gene.setAlignedStructure(alignedAASequence, BioStructure.Type.proteinPrimaryStructure);
                 StringBuilder alignedCodonSequence = new StringBuilder();
                 int i=0, j=0; //i to count aligned AA structure;  j to count original codon sequence
                 for (; i<alignedAASequence.length(); i++)                
@@ -261,7 +260,7 @@ public class Muscle extends AlignmentTool
                     alignedCodonSequence.append(gene.getStructure(BioStructure.Type.mRNAPrimaryStructure).getWordAt(j++));
                 }
 
-                gene.setAlignedStructure(new ByteString(alignedCodonSequence.toString()), BioStructure.Type.mRNAPrimaryStructure);
+                gene.setAlignedStructure(alignedCodonSequence.toString(), BioStructure.Type.mRNAPrimaryStructure);
                 
 //                System.out.println(gene.getAlignedStructure(BioStructure.Type.mRNAPrimaryStructure).getSequence());
                 

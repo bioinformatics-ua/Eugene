@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.FileOpeningParsing;
 
 import java.io.File;
@@ -175,7 +174,7 @@ public class DefaultFileParser extends IGenomeFileParser
                         genes.add(newGene);
 
                         /* Make sequence uppercase, replace Tinamin by Uracil, and set new gene as this sequence. */
-                        newGene.createStructure(new ByteString(SequenceValidator.makeCorrectionsToGene(sequence)), BioStructure.Type.mRNAPrimaryStructure);
+                        newGene.createStructure(SequenceValidator.makeCorrectionsToGene(sequence), BioStructure.Type.mRNAPrimaryStructure);
 
                         /* Warn GUI about an update in the reading process. */
                         setChanged();

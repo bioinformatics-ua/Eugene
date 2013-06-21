@@ -8,7 +8,6 @@ import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.FastaHeaderParser;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.HeaderInfo;
 import pt.ua.ieeta.geneoptimizer.GUI.GeneInformationPanel;
-import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.SequencePaintingPool;
 import pt.ua.ieeta.geneoptimizer.GUI.Protein3DViewerPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;

@@ -224,7 +224,7 @@ public class GeneLoader extends Thread {
                 //get value of the key
                 String sequence = (String) mapEntry.getValue();
                 Gene additionGene = new Gene(geneName, genome);
-                additionGene.createStructure(new ByteString(sequence), BioStructure.Type.mRNAPrimaryStructure);
+                additionGene.createStructure(sequence, BioStructure.Type.mRNAPrimaryStructure);
                 additionGene.calculateAllStructures();
                 genome.addGeneManually(additionGene);
             }

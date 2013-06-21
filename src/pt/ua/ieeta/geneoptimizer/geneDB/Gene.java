@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
-import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationRunner;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 
 /**
@@ -98,11 +97,11 @@ public class Gene //implements Comparable<Gene>
         this.geneName = name;
     }
 
-    public void createStructure(ByteString sequence, BioStructure.Type structureType)
+    public void createStructure(String sequence, BioStructure.Type structureType)
     {
         assert sequence != null;
         assert structureType != null;
-        assert sequence.getLength() > 0;
+        assert sequence.length()> 0;
 
         bioStructures.put(structureType, new BioStructure(sequence, structureType));
     }
@@ -112,7 +111,7 @@ public class Gene //implements Comparable<Gene>
     {
         assert bioStrut != null;
 
-        BioStructure bioStructure = new BioStructure(new ByteString(bioStrut.getSequence()), bioStrut.getType());
+        BioStructure bioStructure = new BioStructure(bioStrut.getSequence(), bioStrut.getType());
         bioStructures.put(bioStrut.getType(), bioStructure);
     }
     
@@ -439,7 +438,7 @@ public class Gene //implements Comparable<Gene>
             for (int i=0; i<struct.getLength(); i++)
                 proteinPrimaryStructure.append(genome.getAminoAcidFromCodon(struct.getWordAt(i)));
 
-            bioStructures.put(BioStructure.Type.proteinPrimaryStructure, new BioStructure(new ByteString(proteinPrimaryStructure.toString()), BioStructure.Type.proteinPrimaryStructure));
+            bioStructures.put(BioStructure.Type.proteinPrimaryStructure, new BioStructure(proteinPrimaryStructure.toString(), BioStructure.Type.proteinPrimaryStructure));
         }
 
         boolean calculateProteinSeconStructure = (Boolean) ApplicationSettings.getProperty("autoCalculateProteinSecondaryStructure", Boolean.class);
@@ -522,11 +521,11 @@ public class Gene //implements Comparable<Gene>
         this.alignedBioStructures = new HashMap<BioStructure.Type, BioStructure>();
     }
 
-    public void setAlignedStructure(ByteString sequence, BioStructure.Type structureType)
+    public void setAlignedStructure(String sequence, BioStructure.Type structureType)
     {
         assert sequence != null;
         assert structureType != null;
-        assert sequence.getLength() > 0;
+        assert sequence.length()  > 0;
 
         alignedBioStructures.put(structureType, new BioStructure(sequence, structureType));
     }
@@ -579,7 +578,7 @@ public class Gene //implements Comparable<Gene>
             assert newGeneSequence.length() == codonSequence.length();
             
             Gene g = new Gene("Random " + (count+1) + " -> " + geneName, genome);
-            g.createStructure(new ByteString(newGeneSequence.toString()), BioStructure.Type.mRNAPrimaryStructure);
+            g.createStructure(newGeneSequence.toString(), BioStructure.Type.mRNAPrimaryStructure);
             g.calculateAllStructures();
             randomGeneList.add(g);
             count++;

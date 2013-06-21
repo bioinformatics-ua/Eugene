@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.FileOpeningParsing;
 
 import java.io.FileNotFoundException;

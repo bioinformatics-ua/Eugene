@@ -11,14 +11,14 @@ import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
-public class PluginLoader extends Observable implements Runnable 
-{
+public class PluginLoader extends Observable implements Runnable {
 
     private static Vector<Class> pluginList;
 
     /* Singleton instance. */
-    private static PluginLoader instance = null;
+    private static volatile PluginLoader instance = null;
 
     private PluginLoader() {
     }
@@ -26,29 +26,30 @@ public class PluginLoader extends Observable implements Runnable
     /* Flag that tell wether all pluglins were already loaded or not. */
     private boolean doneLoading = false;
 
-    public synchronized static PluginLoader getInstance() 
-    {
-        if (instance == null) 
-        {
-            instance = new PluginLoader();
-            pluginList = new Vector<Class>();
+    public static PluginLoader getInstance() {
+        if (instance == null) {
+            synchronized (PluginLoader.class) {
+                if (instance == null) {
+                    instance = new PluginLoader();
+                    pluginList = new Vector<Class>();
 
-            /* Add StudyMakerPanel as an observer so each optimization plugin is automatically loaded into the Panel. */
-            instance.addObserver(OptimizationModel.getInstance());
+                    /* Add StudyMakerPanel as an observer so each optimization plugin is automatically loaded into the Panel. */
+                    instance.addObserver(OptimizationModel.getInstance());                    
+                }
+            }
         }
 
         return instance;
     }
 
     /* Load all available plugins not yet loaded, in the jar folder. */
-    public synchronized void loadPlugins() 
-    {
+    public synchronized void loadPlugins() {
         /* Create a class loader. */
         String eugeneDir = (String) ApplicationSettings.getInstance().getProperty("eugene_dir", String.class);
         String pluginPath = (String) ApplicationSettings.getProperty("pluginPath", String.class);
         File directory = new File(eugeneDir + pluginPath);
         ClassLoader classLoader = new PluginClassLoader(directory);
-        
+
         /* If it's a valid directory, load classes in it. */
         if (directory.exists() && directory.isDirectory()) /* Read all plugins from file list. */ {
             if (directory.list().length != 0) {
@@ -59,8 +60,8 @@ public class PluginLoader extends Observable implements Runnable
         /* Then try reading from the default plugins JAR file. */
         classLoader = new PluginClassLoader(new File(eugeneDir + pluginPath + "/"));
 
-        String[] jarFiles = {                           
-                        "GCContentParametersPanel.class",
+        String[] jarFiles = {
+            "GCContentParametersPanel.class",
             "GCContentPlugin$Parameter.class",
             "GCContentPlugin.class",
             "CodonCorrelationEffectParametersPanel.class",
@@ -91,31 +92,29 @@ public class PluginLoader extends Observable implements Runnable
             "RNASecondaryStructurePlugin.class"
         };
         /* Read all plugins from JAR file list. */
-        if (jarFiles.length != 0) 
+        if (jarFiles.length != 0) {
             readFromFileList(classLoader, jarFiles);
+        }
 
         doneLoading = true;
         notifyAll();
     }
 
-    public synchronized void readFromFileList(ClassLoader classLoader, String[] fileList) 
-    {
-        for (String fileName : fileList) 
-        {
+    public synchronized void readFromFileList(ClassLoader classLoader, String[] fileList) {
+        for (String fileName : fileList) {
             /* Ignore non-class files. */
-            if (!fileName.endsWith(".class")) 
+            if (!fileName.endsWith(".class")) {
                 continue;
+            }
 
-            try 
-            {
+            try {
                 /* Load class files, instantiate them, and add to the list of plugins. */
                 Class pluginClass = classLoader.loadClass(fileName.substring(0, fileName.indexOf(".")));
                 Class[] interfaces = pluginClass.getInterfaces();
-                
-                for (Class interf : interfaces) 
-                    for (PluginType type : PluginType.values()) 
-                        if (interf.getName().equals(type.getClassName())) 
-                        {
+
+                for (Class interf : interfaces) {
+                    for (PluginType type : PluginType.values()) {
+                        if (interf.getName().equals(type.getClassName())) {
                             pluginList.add(pluginClass);
                             System.out.println("  Loaded class " + pluginClass.getSimpleName() + " : " + interf.getSimpleName());
 
@@ -124,6 +123,8 @@ public class PluginLoader extends Observable implements Runnable
                             instance.notifyObservers(pluginClass);
                             break;
                         }
+                    }
+                }
             } //TODO: excepçoes..
             catch (Exception ex) {
                 System.err.println("  Error while reading plugin " + fileName + ": " + ex.getLocalizedMessage());

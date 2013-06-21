@@ -1,5 +1,3 @@
-
-
 package pt.ua.ieeta.geneoptimizer.geneDB;
 
 /**
@@ -36,7 +34,7 @@ public class BioStructure
     }
 
     /* Structure data. Sequence of biological words. */
-    private ByteString sequence;
+    private String sequence;
 
     /* List of the global positions of each word. Each pos identifies where each word is positioned in relation to its respective codon. */
     private int[] globalPos;
@@ -54,13 +52,13 @@ public class BioStructure
     private int sequenceOccupation;
 
     //TODO: ESTA CLASSE NECESSITA REFACTORING !!! algumas coisas ja nao sao usadas!
-    public BioStructure(ByteString nucSequence, Type type)
+    public BioStructure(String nucSequence, Type type)
     {
         assert nucSequence != null;
         //assert (nucSequence.getLength() % type.getWordSize()) == 0;
         assert type != null;
 
-        int numberOfWords = (nucSequence.getLength() / type.getWordSize());
+        int numberOfWords = (nucSequence.length() / type.getWordSize());
 
         this.sequence = nucSequence;
         this.globalPos = new int[numberOfWords];
@@ -126,14 +124,14 @@ public class BioStructure
     /** Returns structure sequence. */
     public String getSequence()
     {
-        return sequence.getString();
-    }
-
-    /** Returns structure sequence. */
-    public ByteString getByteSequence()
-    {
         return sequence;
     }
+
+//    /** Returns structure sequence. */
+//    public ByteString getByteSequence()
+//    {
+//        return sequence;
+//    }
 
     /** Returns length of structure in number of words. */
     public int getLength()
@@ -150,7 +148,7 @@ public class BioStructure
         int wordPosition = globalPos[wordNumber];
         int wordLength = globalSpan[wordNumber];
 
-        return new String(sequence.getDataReference(), wordPosition, wordLength);
+        return sequence.substring(wordPosition, wordPosition + wordLength);
     }
 
     /* Return sub-string from the sequence. From start (inclusive) to end (exclusive). */

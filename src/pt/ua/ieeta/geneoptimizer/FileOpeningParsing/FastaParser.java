@@ -23,7 +23,6 @@ public class FastaParser extends IGenomeFileParser {
     /* Num rejected genes while reading the file. */
     private int numRejectedGenes = 0;
     private int rejectedSize = 0; //special case of a single rejected gene. Just to see if the gene was really big
-   
     private GenomeFilters filters;
 
 //    public synchronized static FastaParser getInstance()
@@ -33,9 +32,9 @@ public class FastaParser extends IGenomeFileParser {
 //
 //        return instance;
 //    }
-    public FastaParser(GenomeFilters filters) {        
+    public FastaParser(GenomeFilters filters) {
         this.filters = filters;
-        
+
         /* Add the GUI as observer of this class. */
         addObserver(GenePoolGUI.getInstance());
     }
@@ -121,7 +120,7 @@ public class FastaParser extends IGenomeFileParser {
         return resultGene;
     }
 
-    /* Given a ByteString object with a fasta sequence, read the genes in it and put them into the vector. */
+    /* Given a String object with a fasta sequence, read the genes in it and put them into the vector. */
     public synchronized void readGenesFromString(BufferedReader genesStream, long size, GeneticCodeTable geneticCodeTable, Genome genome) {
         /* Pre-conditions */
         assert genesStream != null;
@@ -190,7 +189,7 @@ public class FastaParser extends IGenomeFileParser {
                     Gene newGene = new Gene(currentName.replaceAll(">", "").trim(), genome);
 
                     /* Make sequence uppercase, replace Tinamin by Uracil, and set new gene as this sequence. */
-                    newGene.createStructure(new ByteString(SequenceValidator.makeCorrectionsToGene(geneSequence)), BioStructure.Type.mRNAPrimaryStructure);
+                    newGene.createStructure(SequenceValidator.makeCorrectionsToGene(geneSequence), BioStructure.Type.mRNAPrimaryStructure);
 
                     /**
                      * ************** TESTE *****************
@@ -286,7 +285,7 @@ public class FastaParser extends IGenomeFileParser {
                     newGene = new Gene(currentName.replaceAll(">", "").trim(), genome);
 
                     /* Make sequence uppercase, replace Tinamin by Uracil, and set new gene as this sequence. */
-                    newGene.createStructure(new ByteString(SequenceValidator.makeCorrectionsToGene(geneSequence)), BioStructure.Type.mRNAPrimaryStructure);
+                    newGene.createStructure(SequenceValidator.makeCorrectionsToGene(geneSequence), BioStructure.Type.mRNAPrimaryStructure);
 
                     if (newGene.getSequenceLength() == size) {
                         /* Add parsed gene to parsed genes list */

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JScrollPane;
@@ -16,7 +18,6 @@ import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.FastaParser;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.GeneticCodeTableParser;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.IGenomeFileParser;
 import pt.ua.ieeta.geneoptimizer.GUI.MessageWindow;
-import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.GeneticCodeTable;
@@ -37,6 +38,7 @@ public class GenomeHomePage implements Observer {
     private javax.swing.JTable genesTable = null;
     private javax.swing.JScrollPane scrollPane = null;
     private String lastSearchingText = "";
+    private List<String> manuallyAddedGenes;
 
     public GenomeHomePage(Genome geno) {
         this.genome = geno;
@@ -60,20 +62,31 @@ public class GenomeHomePage implements Observer {
         this.sorter.setRowFilter(null);
         this.genesTable.setRowSorter(sorter);
 
+        this.manuallyAddedGenes = new ArrayList<String>();
+
         genesTable.getSelectionModel().setSelectionInterval(0, 0);
 
         /* Create event to handle the double click on a gene of the list. */
         this.genesTable.addMouseListener(
                 new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        GenePoolGUI.getUploadGeneButton().setEnabled(true);
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                /* check if clicked row is a custom gene */
+                String geneHeader = model.getHeaderAt(sorter.convertRowIndexToModel(genesTable.getSelectedRow()));
+                if (manuallyAddedGenes.contains(geneHeader)) {
+                    GenePoolGUI.getInstance().setAddOrRemoveLabel(false);
+                } else {
+                    GenePoolGUI.getInstance().setAddOrRemoveLabel(true);
+                }
 
-                        if ((e.getClickCount() == 2) && (ProjectManager.getInstance().getSelectedProject() != null) && genesTable.isEnabled()) {
-                            uploadSelectedGeneToWorkSpace();
-                        }
-                    }
-                });
+
+                GenePoolGUI.getUploadGeneButton().setEnabled(true);
+
+                if ((e.getClickCount() == 2) && (ProjectManager.getInstance().getSelectedProject() != null) && genesTable.isEnabled()) {
+                    uploadSelectedGeneToWorkSpace();
+                }
+            }
+        });
 
         genome.getUsageAndContextTables().addObserver(this);
     }
@@ -107,7 +120,7 @@ public class GenomeHomePage implements Observer {
                     String[] genesFiles = selectedGenome.getGenesFiles();
 
                     IGenomeFileParser parser;
-                    Gene selectedGene;
+                    Gene selectedGene;                    
                     selectedGene = selectedGenome.getManuallyAddedGene(geneHeader, size);
                     if (selectedGene == null) {
                         for (int i = 0; i < genesFiles.length; i++) {
@@ -117,15 +130,12 @@ public class GenomeHomePage implements Observer {
                             } else {
                                 parser = new DefaultFileParser(genome.getFilters());
                             }
-
-
                             selectedGene = parser.readGeneFromFile(genesFiles[i], geneHeader, size, geneticCodeTable, genome);
                             if (selectedGene != null) {
                                 break;
                             }
                         }
                     }
-
                     if (selectedGene == null) {
                         System.out.println("An error occured while uploading the gene to the workspace.");
                         messageW.interrupt();
@@ -134,7 +144,6 @@ public class GenomeHomePage implements Observer {
 
                         return;
                     }
-
                     ProjectManager.getInstance().getSelectedProject().importGeneToCurrentProject(selectedGene);
                 } catch (IOException ex) {
                     messageW.interrupt();
@@ -169,12 +178,13 @@ public class GenomeHomePage implements Observer {
 //    			{
 //    				model.insertRow(new Object[]{g.getGeneHeader(), g.getSequenceLength(), g.getGenome()});
 //    			}
-        int i = 0;
+        int i = 0;        
         for (String g : genome.getGenesHeaders()) //model.insertRow(genesTable.getRowCount(), new Object[]{g.getName(), g.getSequenceLength(), g});
         {
-            model.insertRow(new Object[]{
-                        g, genome.getGeneLength(i), genome
-                    });
+            if (genome.getManuallyAddedGene(g, genome.getGeneLength(i)) != null) {
+                manuallyAddedGenes.add(g);
+            }
+            model.insertRow(new Object[]{g, genome.getGeneLength(i), genome});
             i++;
         }
 
@@ -184,9 +194,28 @@ public class GenomeHomePage implements Observer {
             genesTable.setEnabled(false);
             genesTable.setBackground(Color.LIGHT_GRAY);
         }
+        genesTable.getColumnModel().getColumn(0).setCellRenderer(new CustomTableCellRenderer(manuallyAddedGenes, 0));
+        genesTable.getColumnModel().getColumn(1).setCellRenderer(new CustomTableCellRenderer(manuallyAddedGenes, 1));
+
+
 
         /* Update GUI. */
         genesTable.updateUI();
+    }
+
+    public boolean removeSelectedGene() {
+        String geneHeader = model.getHeaderAt(sorter.convertRowIndexToModel(genesTable.getSelectedRow()));
+        int size = model.getSizeAt(sorter.convertRowIndexToModel(genesTable.getSelectedRow()));
+        if (!manuallyAddedGenes.contains(geneHeader)) {
+            return false;
+        }
+        Gene g = genome.getManuallyAddedGene(geneHeader, size);
+        genome.removeManuallyAddedGenes(g);
+        manuallyAddedGenes.remove(geneHeader);
+
+        fillGenesTable();
+
+        return true;
     }
 
     public void filterTable() {

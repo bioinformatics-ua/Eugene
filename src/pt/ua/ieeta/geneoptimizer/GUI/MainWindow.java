@@ -5,12 +5,10 @@
  */
 package pt.ua.ieeta.geneoptimizer.GUI;
 
-import pt.ua.ieeta.geneoptimizer.Main.SaveXMLProject;
 import java.awt.BorderLayout;
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.HeadlessException;
 import java.io.File;
-import java.io.FileReader;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Vector;
@@ -22,103 +20,113 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.SingleGenePanel;
 import pt.ua.ieeta.geneoptimizer.GUI.RedesignPanel.StudyMakerPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
-import pt.ua.ieeta.geneoptimizer.Main.LoadXMLProject;
-import pt.ua.ieeta.geneoptimizer.Main.Main;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
 import pt.ua.ieeta.geneoptimizer.geneDB.GenePool;
 
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class MainWindow extends javax.swing.JFrame {
-	/* List of container panels in the main window. */
+    /* List of container panels in the main window. */
 
-	private static Vector<ContainerPanel> containerPanels;
-	private static boolean isInformationZoneVisible;
-	private static boolean isStudiesZoneVisible;
+    private static Vector<ContainerPanel> containerPanels;
+    private static boolean isInformationZoneVisible;
+    private static boolean isStudiesZoneVisible;
 
-	/* Singleton instance of MainWindow. */
-	private static MainWindow instance = null;
+    /* Singleton instance of MainWindow. */
+    private static volatile MainWindow instance = null;
 
-	/** Creates new form MainWindow */
-	public synchronized static MainWindow getInstance() {
-		/* If there isn't an instance yet, create one. */
-		if (instance == null) {
-			instance = new MainWindow();
-			instance.initComponents();
-			instance.setTitle("Eugene - Gene Redesign and Analysis for Heterologous Expression");
-			instance.setExtendedState(MAXIMIZED_BOTH);
+    /**
+     * Creates new form MainWindow
+     */
+    public static MainWindow getInstance() {
+        /* If there isn't an instance yet, create one. */
 
-			instance.mainContent.setLayout(new BorderLayout());
+        if (instance == null) {
+            synchronized (MainWindow.class) {
+                if (instance == null) {
+                    instance = new MainWindow();
+                    instance.initComponents();
+                    instance.setTitle("Eugene - Gene Redesign and Analysis for Heterologous Expression");
+                    instance.setExtendedState(MAXIMIZED_BOTH);
 
-			/* Flags. */
-			isInformationZoneVisible = true;
-			isStudiesZoneVisible = true;
+                    instance.mainContent.setLayout(new BorderLayout());
 
-			/* Instantiate list of container panels. */
-			containerPanels = new Vector<ContainerPanel>();
+                    /* Flags. */
+                    isInformationZoneVisible = true;
+                    isStudiesZoneVisible = true;
 
-			/* Create three panels to add to the main content panel. These will be the three main areas of the window. */
-			containerPanels.add(new ContainerPanel(null)); //studies panel
-			containerPanels.add(new ContainerPanel(null)); //information panel
+                    /* Instantiate list of container panels. */
+                    containerPanels = new Vector<ContainerPanel>();
 
-			/* Add the three main areas to the main window. */
-			instance.mainContent.add(containerPanels.elementAt(0), BorderLayout.WEST);
-			instance.mainContent.add(TabbedProjectsPanel.getInstance(), BorderLayout.CENTER);
-			instance.mainContent.add(containerPanels.elementAt(1), BorderLayout.EAST);
+                    /* Create three panels to add to the main content panel. These will be the three main areas of the window. */
+                    containerPanels.add(new ContainerPanel(null)); //studies panel
+                    containerPanels.add(new ContainerPanel(null)); //information panel
 
-			/* Create a default project. */
-			ProjectManager.getInstance().createNewProject();
+                    /* Add the three main areas to the main window. */
+                    instance.mainContent.add(containerPanels.elementAt(0), BorderLayout.WEST);
+                    instance.mainContent.add(TabbedProjectsPanel.getInstance(), BorderLayout.CENTER);
+                    instance.mainContent.add(containerPanels.elementAt(1), BorderLayout.EAST);
 
-			/* Create protein 3D viewer panel. */
-			new Thread(Protein3DViewerPanel.getInstance()).start();
+                    /* Create a default project. */
+                    ProjectManager.getInstance().createNewProject();
 
-			/* Add studies panel and information panel to main window. */
-			toggleContentPanelVisibility(0, ProgressPanel.getInstance(), true);
-			toggleContentPanelVisibility(0, StudyMakerPanel.getInstance(), true);
-			toggleContentPanelVisibility(1, GeneInformationPanel.getInstance(), true);
-			toggleContentPanelVisibility(1, Protein3DViewerPanel.getInstance(), true);
+                    /* Create protein 3D viewer panel. */
+                    new Thread(Protein3DViewerPanel.getInstance()).start();
 
-			instance.pack();
-			instance.setLocationRelativeTo(null);
-		}
+                    /* Add studies panel and information panel to main window. */
+                    toggleContentPanelVisibility(0, ProgressPanel.getInstance(), true);
+                    toggleContentPanelVisibility(0, StudyMakerPanel.getInstance(), true);
+                    toggleContentPanelVisibility(1, GeneInformationPanel.getInstance(), true);
+                    toggleContentPanelVisibility(1, Protein3DViewerPanel.getInstance(), true);
 
-		return instance;
-	}
+                    instance.pack();
+                    instance.setLocationRelativeTo(null);
+                }
+            }
+        }
 
-	/* Avoid instantiations. */
-	private MainWindow() {
-	}
+        return instance;
+    }
 
-	public void addC(JComponent c) {
-		instance.mainContent.add(c);
-	}
+    /* Avoid instantiations. */
+    private MainWindow() {
+    }
 
-	/** Show or hide a given content panel in a container. */
-	public static void toggleContentPanelVisibility(int containerID, ContentPanel panel, boolean showPanel) {
-		assert containerPanels != null;
-		assert containerID >= 0;
-		assert containerID < containerPanels.size();
-		assert panel != null;
-		assert containerPanels.elementAt(containerID) != null;
+    public void addC(JComponent c) {
+        instance.mainContent.add(c);
+    }
 
-
-
-		/* Add or remove panel from container. */
-		if (showPanel) {
-			containerPanels.elementAt(containerID).addContentPanel(panel);
-		} else {
-			containerPanels.elementAt(containerID).removeContentPanel(panel);
-		}
-	}
-
+    /**
+     * Show or hide a given content panel in a container.
+     */
+    public static void toggleContentPanelVisibility(int containerID, ContentPanel panel, boolean showPanel) {
+        assert containerPanels != null;
+        assert containerID >= 0;
+        assert containerID < containerPanels.size();
+        assert panel != null;
+        assert containerPanels.elementAt(containerID) != null;
 
 
-	/***************************************************************************/
-	/*                                  SWING                                  */
-	/***************************************************************************/
-	@SuppressWarnings("unchecked")
+
+        /* Add or remove panel from container. */
+        if (showPanel) {
+            containerPanels.elementAt(containerID).addContentPanel(panel);
+        } else {
+            containerPanels.elementAt(containerID).removeContentPanel(panel);
+        }
+    }
+
+    /**
+     * ************************************************************************
+     */
+    /*                                  SWING                                  */
+    /**
+     * ************************************************************************
+     */
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -391,43 +399,43 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuOpenGenePoolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenGenePoolActionPerformed
-			GenePool.getInstance().showGenePool();
+        GenePool.getInstance().showGenePool();
 }//GEN-LAST:event_menuOpenGenePoolActionPerformed
 
     private void menuNewProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNewProjectActionPerformed
-			ProjectManager.getInstance().createNewProject();
+        ProjectManager.getInstance().createNewProject();
     }//GEN-LAST:event_menuNewProjectActionPerformed
 
     private void menuHideInformationZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHideInformationZoneActionPerformed
-			isInformationZoneVisible = !isInformationZoneVisible;
+        isInformationZoneVisible = !isInformationZoneVisible;
 
-			if (!isInformationZoneVisible) {
-				instance.mainContent.remove(containerPanels.elementAt(1));
-				menuHideInformationZone.setText("Show Information Zone");
-			} else {
-				instance.mainContent.add(containerPanels.elementAt(1), BorderLayout.EAST);
-				menuHideInformationZone.setText("Hide Information Zone");
-			}
+        if (!isInformationZoneVisible) {
+            instance.mainContent.remove(containerPanels.elementAt(1));
+            menuHideInformationZone.setText("Show Information Zone");
+        } else {
+            instance.mainContent.add(containerPanels.elementAt(1), BorderLayout.EAST);
+            menuHideInformationZone.setText("Hide Information Zone");
+        }
 
-			instance.mainContent.updateUI();
+        instance.mainContent.updateUI();
     }//GEN-LAST:event_menuHideInformationZoneActionPerformed
 
     private void menuHideStudiesZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHideStudiesZoneActionPerformed
-			isStudiesZoneVisible = !isStudiesZoneVisible;
+        isStudiesZoneVisible = !isStudiesZoneVisible;
 
-			if (!isStudiesZoneVisible) {
-				instance.mainContent.remove(containerPanels.elementAt(0));
-				menuHideStudiesZone.setText("Show Operations Zone");
-			} else {
-				instance.mainContent.add(containerPanels.elementAt(0), BorderLayout.WEST);
-				menuHideStudiesZone.setText("Hide Operations Zone");
-			}
+        if (!isStudiesZoneVisible) {
+            instance.mainContent.remove(containerPanels.elementAt(0));
+            menuHideStudiesZone.setText("Show Operations Zone");
+        } else {
+            instance.mainContent.add(containerPanels.elementAt(0), BorderLayout.WEST);
+            menuHideStudiesZone.setText("Hide Operations Zone");
+        }
 
-			instance.mainContent.updateUI();
+        instance.mainContent.updateUI();
     }//GEN-LAST:event_menuHideStudiesZoneActionPerformed
 
     private void menuOpenGenomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenGenomeActionPerformed
-			GenePool.getInstance().showGenePool();
+        GenePool.getInstance().showGenePool();
     }//GEN-LAST:event_menuOpenGenomeActionPerformed
 
     private void menuCloseProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCloseProjectActionPerformed
@@ -444,29 +452,27 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_menuQuitAppActionPerformed
 
     private void saveProjectEvent(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveProjectEvent
-               
+
         System.out.println("SAVING PROJECT...");
         File saveFile = null;
-        
+
         saveFile = choseSaveFile();
-        
+
         // save project
         if (saveFile != null) {
             saveFile = verifyFile(saveFile);
 
             // Save project
-            if (    ProjectManager.getInstance().saveProject(
-                                 ProjectManager.getInstance().getSelectedProject(),
-                                 saveFile)
-                    ) {
+            if (ProjectManager.getInstance().saveProject(
+                    ProjectManager.getInstance().getSelectedProject(),
+                    saveFile)) {
                 JOptionPane.showMessageDialog(MainWindow.getInstance(), "Project successfully saved.");
                 System.out.println("PROJECT SUCCESSFULLY SAVED.");
             } else {
                 JOptionPane.showMessageDialog(MainWindow.getInstance(), "Project save failed.");
                 System.out.println("PROJECT SAVE FAILED.");
             }
-        }
-        else {
+        } else {
             System.out.println("File is null! Cancel saving project.");
         }
 
@@ -474,7 +480,7 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private File choseSaveFile() throws HeadlessException {
         File saveFile = null;
-        
+
         // create default name
         String defaultName = ProjectManager.getInstance().getSelectedProject().getName()
                 + "_"
@@ -494,37 +500,39 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
         return saveFile;
     }
+
     private File verifyFile(File file) {
         // verify extention
-            String extension = null;
-            String name = file.getName();
-            int i = name.lastIndexOf('.');
-            if (i > 0 && i < name.length() - 1) {
-                extension = name.substring(i + 1).toLowerCase();
+        String extension = null;
+        String name = file.getName();
+        int i = name.lastIndexOf('.');
+        if (i > 0 && i < name.length() - 1) {
+            extension = name.substring(i + 1).toLowerCase();
+        }
+        if (extension == null) {
+            file = new File(file.getParent(), (file.getName() + ".euj"));
+        } else {
+            if (!extension.equals("euj")) {
+                file = new File(file.getParent(), name.substring(0, i) + ".euj");
             }
-            if (extension == null) {
-                file = new File(file.getParent(), (file.getName()+".euj") );
-            } else {
-                if (!extension.equals("euj")) {
-                    file = new File(file.getParent(), name.substring(0, i) + ".euj");
-                }
-            }
-            // Verify if file already exists
-            if(file.exists())
-                file = new File(file.getParent(), ("copy_"+file.getName()) );
-            
-            return file;
+        }
+        // Verify if file already exists
+        if (file.exists()) {
+            file = new File(file.getParent(), ("copy_" + file.getName()));
+        }
+
+        return file;
     }
-    
+
     /**
-     * Method used to load a project from File
-     * Open the file chooser and call ProjectManager to load project
-     * 
+     * Method used to load a project from File Open the file chooser and call
+     * ProjectManager to load project
+     *
      * @param evt event that cause this action
      */
     private void loadProjectEvent(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadProjectEvent
         System.out.println("OPEN PROJECT...");
-        
+
         /* Load default directory instance. */
         String eugeneDir = (String) ApplicationSettings.getProperty("eugene_dir", String.class);
         String projectsPath = (String) ApplicationSettings.getProperty("projectsPath", String.class);
@@ -535,14 +543,13 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         JFileChooser fileChooser = new JFileChooser(projectsDirectory);
         FileFilter filter = new FileNameExtensionFilter("EuGene Project File", "euj");
         fileChooser.setFileFilter(filter);
-        if ( fileChooser.showOpenDialog(MainWindow.getInstance()) == JFileChooser.APPROVE_OPTION ) {
+        if (fileChooser.showOpenDialog(MainWindow.getInstance()) == JFileChooser.APPROVE_OPTION) {
             projectFile = fileChooser.getSelectedFile();
             System.out.println("Opening project...  " + projectFile.getName());
-        }
-        else {
+        } else {
             System.out.println("Cancel opening file...");
             return;
-        }        
+        }
         /* Load project from Project Manager */
         ProjectManager.getInstance().loadProject(projectFile);
     }//GEN-LAST:event_loadProjectEvent
@@ -554,13 +561,11 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem10ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem10ActionPerformed
-        try
-        {
-            
+        try {
+
             java.awt.Desktop.getDesktop().browse(new URI("http://bioinformatics.ua.pt/eugene"));
 
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             System.out.println("Error while trying to open eugene tutorial web page.");
         }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
@@ -574,12 +579,15 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem12ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem12ActionPerformed
-        if (ProjectManager.getInstance().getSelectedProject() == null)
+        if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+        }
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             return;
-        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel))
+        }
+        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel)) {
             return;
+        }
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.addNewAASequence();
@@ -587,12 +595,15 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem6ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem6ActionPerformed
-        if (ProjectManager.getInstance().getSelectedProject() == null)
+        if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+        }
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             return;
-        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel))
+        }
+        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel)) {
             return;
+        }
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.viewOrthologsAsAminoacids();
@@ -600,12 +611,15 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem5ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem5ActionPerformed
-        if (ProjectManager.getInstance().getSelectedProject() == null)
+        if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+        }
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             return;
-        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel))
+        }
+        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel)) {
             return;
+        }
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.viewOrthologsAsCodons();
@@ -613,12 +627,15 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem4ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem4ActionPerformed
-        if (ProjectManager.getInstance().getSelectedProject() == null)
+        if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+        }
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             return;
-        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel))
+        }
+        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel)) {
             return;
+        }
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.showHideOrthologs();
@@ -626,12 +643,15 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem3ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem3ActionPerformed
-        if (ProjectManager.getInstance().getSelectedProject() == null)
+        if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+        }
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             return;
-        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel))
+        }
+        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel)) {
             return;
+        }
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.showHideProteinSecondaryStructure();
@@ -639,12 +659,15 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem2ActionPerformed
-        if (ProjectManager.getInstance().getSelectedProject() == null)
+        if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+        }
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             return;
-        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel))
+        }
+        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel)) {
             return;
+        }
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.copyAminoacidSequenceToClipboard();
@@ -653,17 +676,19 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
 
-        if (ProjectManager.getInstance().getSelectedProject() == null)
+        if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+        }
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             return;
-        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel))
+        }
+        if (!(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel() instanceof SingleGenePanel)) {
             return;
+        }
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.copyCodonSequenceToClipboard();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu jMenu1;

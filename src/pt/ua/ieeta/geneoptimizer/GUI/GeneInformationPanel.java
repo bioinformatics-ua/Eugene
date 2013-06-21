@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.GUI;
 
 import java.awt.Color;
@@ -22,25 +21,23 @@ import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
  *
  * @author Paulo Gaspar
  */
-public class GeneInformationPanel extends ContentPanel implements Observer
-{
-    private static GeneInformationPanel instance = null;
+public class GeneInformationPanel extends ContentPanel implements Observer {
 
+    private static volatile GeneInformationPanel instance = null;
     private static JPanel content;
 
-    private class InformationZone extends JPanel
-    {
-        public InformationZone(String title, String info)
-        {
+    private class InformationZone extends JPanel {
+
+        public InformationZone(String title, String info) {
             this(title, info, false);
         }
 
-        public InformationZone(String title, String info, boolean horizontal)
-        {
-            if (!horizontal)
-                this.setLayout(new GridLayout(2,1));
-            else
+        public InformationZone(String title, String info, boolean horizontal) {
+            if (!horizontal) {
+                this.setLayout(new GridLayout(2, 1));
+            } else {
                 this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+            }
 
             JTextArea area = new JTextArea();
             area.setFont(UIManager.getFont("Label.font"));
@@ -49,98 +46,97 @@ public class GeneInformationPanel extends ContentPanel implements Observer
             area.setWrapStyleWord(true);
             area.setLineWrap(true);
             area.setText(info);
-            
-            add(new JLabel("<html><b>"+title+"</b></html>"));
+
+            add(new JLabel("<html><b>" + title + "</b></html>"));
             //add(new JLabel("<html>"+info+"</html>"));
             add(area);
 
-            setBorder(BorderFactory.createEmptyBorder(0,0,4,0) );
+            setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 0));
         }
 
-        public InformationZone(String title, String info1, String info2)
-        {
+        public InformationZone(String title, String info1, String info2) {
             this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-            add(new JLabel("<html><b>"+title+"</b></html>"));
-            add(new JLabel("<html>"+info1+"</html>"));
-            add(new JLabel("<html>"+info2+"</html>"));
+            add(new JLabel("<html><b>" + title + "</b></html>"));
+            add(new JLabel("<html>" + info1 + "</html>"));
+            add(new JLabel("<html>" + info2 + "</html>"));
             add(Box.createHorizontalGlue());
         }
     }
 
-    public static GeneInformationPanel getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new GeneInformationPanel();
-            instance.setLayout(new BoxLayout(instance, BoxLayout.Y_AXIS));
-            content = new JPanel();
-            content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-            instance.add(content);
-            
-            JLabel label = new JLabel("<html><b>No gene selected</b></html>", JLabel.CENTER);
-            
-            content.add(Box.createHorizontalGlue());
-            content.add(label);
-            content.add(Box.createHorizontalGlue());
+    public static GeneInformationPanel getInstance() {
+        if (instance == null) {
+            synchronized (GeneInformationPanel.class) {
+                if (instance == null) {
+                    instance = new GeneInformationPanel();
+                    instance.setLayout(new BoxLayout(instance, BoxLayout.Y_AXIS));
+                    content = new JPanel();
+                    content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+                    instance.add(content);
+
+                    JLabel label = new JLabel("<html><b>No gene selected</b></html>", JLabel.CENTER);
+
+                    content.add(Box.createHorizontalGlue());
+                    content.add(label);
+                    content.add(Box.createHorizontalGlue());
+                }
+            }
         }
 
         return instance;
     }
 
-    /** Creates new form GeneInformationPanel */
-    private GeneInformationPanel()
-    {
-        super ("Gene Information Panel", false);
+    /**
+     * Creates new form GeneInformationPanel
+     */
+    private GeneInformationPanel() {
+        super("Gene Information Panel", false);
     }
 
     @Override
-    public void update(Observable o, Object arg)
-    {
-        Study study = (Study)arg;
+    public void update(Observable o, Object arg) {
+        Study study = (Study) arg;
 
-        if (study.isMultiGeneStudy())
-            updateInformationMultiSequence((Study)arg);
-        else
-            updateInformationSingleGene((Study)arg);
+        if (study.isMultiGeneStudy()) {
+            updateInformationMultiSequence((Study) arg);
+        } else {
+            updateInformationSingleGene((Study) arg);
+        }
     }
-    
-    public void updateInformationForSelectedStudy()
-    {
+
+    public void updateInformationForSelectedStudy() {
         assert ProjectManager.getInstance() != null;
         assert ProjectManager.getInstance().getSelectedProject() != null;
-        
+
         Study s = ProjectManager.getInstance().getSelectedProject().getSelectedStudy();
-        if ((s == null) || !s.isMultiGeneStudy())
+        if ((s == null) || !s.isMultiGeneStudy()) {
             updateInformationSingleGene(ProjectManager.getInstance().getSelectedProject().getSelectedStudy());
-        else
+        } else {
             updateInformationMultiSequence(ProjectManager.getInstance().getSelectedProject().getSelectedStudy());
+        }
     }
 
-    public void updateInformationSingleGene(Study study)
-    {
+    public void updateInformationSingleGene(Study study) {
         content.removeAll();
 
         /* When no study is selected. */
-        if (study == null)
-        {
+        if (study == null) {
             JLabel label = new JLabel("<html><b>No gene selected</b></html>", JLabel.CENTER);
-            
+
             content.add(Box.createHorizontalGlue());
             content.add(label);
             content.add(Box.createHorizontalGlue());
-            
+
             return;
         }
-        
+
         content.add(new JLabel("<html><b><font color='#999999'>[Species and Gene]</font></b>"));
         content.add(new InformationZone("Genome name", study.getResultingGene().getGenome().getName()));
         content.add(new InformationZone("Gene name", study.getResultingGene().getName()));
         content.add(new JSeparator());
 
         /* If gene originally came from another genome, show information about that. */
-        if ( !study.getOriginalGene().getGenome().getName().equals(study.getResultingGene().getGenome().getName())
-           || (!study.getOriginalGene().getName().equals(study.getResultingGene().getName())) )
-        {
+        if (!study.getOriginalGene().getGenome().getName().equals(study.getResultingGene().getGenome().getName())
+                || (!study.getOriginalGene().getName().equals(study.getResultingGene().getName()))) {
             content.add(new JLabel("<html><b><font color='#999999'>[Original Species and Gene]</font></b>"));
             content.add(new InformationZone("Original genome", study.getOriginalGene().getGenome().getName()));
             content.add(new InformationZone("Original gene", study.getOriginalGene().getName()));
@@ -149,57 +145,56 @@ public class GeneInformationPanel extends ContentPanel implements Observer
 
         /* General information. */
         content.add(new JLabel("<html><b><font color='#999999'>[General information]</font></b>"));
-        content.add(new InformationZone("Number of codons: ", ""+study.getResultingGene().getSequenceLength(), true));
-        content.add(new InformationZone("GC content: ", ""+new DecimalFormat("##.##").format(study.getResultingGene().getGCContent()*100) +"%", true));
-        content.add(new InformationZone("Average RSCU: ", ""+new DecimalFormat("##.###").format(study.getResultingGene().getAverageRSCU()), true));
-        content.add(new InformationZone("Codon Pair Bias: ", ""+new DecimalFormat("##.###").format(study.getResultingGene().getCPB()), true));
-        content.add(new InformationZone("Effective Number of Codons: ", ""+new DecimalFormat("##.###").format(study.getResultingGene().getEffectiveNumberOfCodons()), true));
-        if (study.getResultingGene().hasCAI())
-            content.add(new InformationZone("CAI: ", ""+new DecimalFormat("##.###").format(study.getResultingGene().getCAI()), true));
+        content.add(new InformationZone("Number of codons: ", "" + study.getResultingGene().getSequenceLength(), true));
+        content.add(new InformationZone("GC content: ", "" + new DecimalFormat("##.##").format(study.getResultingGene().getGCContent() * 100) + "%", true));
+        content.add(new InformationZone("Average RSCU: ", "" + new DecimalFormat("##.###").format(study.getResultingGene().getAverageRSCU()), true));
+        content.add(new InformationZone("Codon Pair Bias: ", "" + new DecimalFormat("##.###").format(study.getResultingGene().getCPB()), true));
+        content.add(new InformationZone("Effective Number of Codons: ", "" + new DecimalFormat("##.###").format(study.getResultingGene().getEffectiveNumberOfCodons()), true));
+        if (study.getResultingGene().hasCAI()) {
+            content.add(new InformationZone("CAI: ", "" + new DecimalFormat("##.###").format(study.getResultingGene().getCAI()), true));
+        }
         content.add(new JSeparator());
 
         /* Optimizations information. */
-        if ((study.getOptimizationReports() != null) && !study.getOptimizationReports().isEmpty())
-        {
+        if ((study.getOptimizationReports() != null) && !study.getOptimizationReports().isEmpty()) {
             content.add(new JLabel("<html><b><font color='#999999'>[Optimizations Report]</font></b>"));
-            for (OptimizationReport report : study.getOptimizationReports())
-            {
-                for (Optimization optimization : report.getOptimizations())
-                    content.add(new InformationZone(optimization.getName()+":  ", new DecimalFormat("##.#").format(Float.parseFloat(optimization.getResult()))+"%", 
-                                                                             "("+new DecimalFormat("##.#").format(Float.parseFloat(optimization.getImprovement()))+"%)"));
+            for (OptimizationReport report : study.getOptimizationReports()) {
+                for (Optimization optimization : report.getOptimizations()) {
+                    content.add(new InformationZone(optimization.getName() + ":  ", new DecimalFormat("##.#").format(Float.parseFloat(optimization.getResult())) + "%",
+                            "(" + new DecimalFormat("##.#").format(Float.parseFloat(optimization.getImprovement())) + "%)"));
+                }
 
-                if (report != study.getOptimizationReports().lastElement())
+                if (report != study.getOptimizationReports().lastElement()) {
                     content.add(new InformationZone("    +", "", true));
+                }
             }
-            
+
             content.add(new JSeparator());
         }
-        
+
         /* Colour code information. */
         SingleGenePanel panel = (SingleGenePanel) study.getCurrentPanel();
-        if (panel != null)
-        {
+        if (panel != null) {
             IOptimizationPlugin colouringPlugin = panel.getColouringPlugin();
-            if (colouringPlugin != null)
-            {
+            if (colouringPlugin != null) {
                 JLabel description = new JLabel("<html><b><font color='#999999'>[Colour details]</font></b>");
                 content.add(description);
-                
+
                 content.add(new InformationZone(colouringPlugin.getScaleDescription(), "", true));
-                
+
                 Vector<Color> scale = (Vector<Color>) colouringPlugin.colorScale();
                 JPanel coloursPanel = new JPanel();
                 coloursPanel.setLayout(new BoxLayout(coloursPanel, BoxLayout.X_AXIS));
-                if (scale != null)
-                    for(int i=0; i < scale.size(); i++)
-                    {
+                if (scale != null) {
+                    for (int i = 0; i < scale.size(); i++) {
                         JPanel c = new JPanel();
                         c.setBackground(scale.get(i));
                         coloursPanel.add(c);
                     }
-                
+                }
+
                 content.add(coloursPanel);
-                
+
                 JPanel descriptionPanel = new JPanel();
                 descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.X_AXIS));
                 JLabel minDescription = new JLabel(colouringPlugin.getScaleMinDescription());
@@ -210,7 +205,7 @@ public class GeneInformationPanel extends ContentPanel implements Observer
                 descriptionPanel.add(minDescription);
                 descriptionPanel.add(Box.createHorizontalGlue());
                 descriptionPanel.add(maxDescription);
-                
+
                 content.add(descriptionPanel);
             }
         }
@@ -218,8 +213,7 @@ public class GeneInformationPanel extends ContentPanel implements Observer
         updateUI();
     }
 
-    private void updateInformationMultiSequence(Study study)
-    {
+    private void updateInformationMultiSequence(Study study) {
         content.removeAll();
 
         content.add(new InformationZone("Original genome:", study.getOriginalGene().getGenome().getName()));
@@ -227,39 +221,37 @@ public class GeneInformationPanel extends ContentPanel implements Observer
         content.add(new JSeparator());
 
         float GCcontent = 0;
-        for (Gene gene : study.getResultingGenes())
-            GCcontent += gene.getGCContent()*100;
+        for (Gene gene : study.getResultingGenes()) {
+            GCcontent += gene.getGCContent() * 100;
+        }
         GCcontent = GCcontent / study.getResultingGenes().size();
 
-        content.add(new InformationZone("GC content:", ""+new DecimalFormat("##.##").format(GCcontent) +"%"));
+        content.add(new InformationZone("GC content:", "" + new DecimalFormat("##.##").format(GCcontent) + "%"));
 
         /* Colour code information. */
         MultiSequencePanel panel = (MultiSequencePanel) study.getCurrentPanel();
-        if (panel != null)
-        {
+        if (panel != null) {
             Vector<IOptimizationPlugin> colouringPlugins = panel.getColouringPlugins();
-            if (colouringPlugins != null)
-            {
+            if (colouringPlugins != null) {
                 /* Add a separator and a title for this section. */
                 content.add(new JSeparator());
                 JLabel description = new JLabel("<html><b><font color='#999999'>[Colour details]</font></b>");
                 content.add(description);
-                
+
                 /* Add a zone for each plugins colour-description. */
-                for (IOptimizationPlugin colouringPlugin : colouringPlugins)
-                {
+                for (IOptimizationPlugin colouringPlugin : colouringPlugins) {
                     content.add(new InformationZone(colouringPlugin.getScaleDescription(), "", true));
 
                     Vector<Color> scale = (Vector<Color>) colouringPlugin.colorScale();
                     JPanel coloursPanel = new JPanel();
                     coloursPanel.setLayout(new BoxLayout(coloursPanel, BoxLayout.X_AXIS));
-                    if (scale != null)
-                        for(int i=0; i < scale.size(); i++)
-                        {
+                    if (scale != null) {
+                        for (int i = 0; i < scale.size(); i++) {
                             JPanel c = new JPanel();
                             c.setBackground(scale.get(i));
                             coloursPanel.add(c);
                         }
+                    }
 
                     content.add(coloursPanel);
 
@@ -275,13 +267,12 @@ public class GeneInformationPanel extends ContentPanel implements Observer
                     descriptionPanel.add(maxDescription);
 
                     content.add(descriptionPanel);
-                    
+
                     content.add(Box.createVerticalStrut(5));
                 }
             }
         }
-        
+
         updateUI();
     }
-
 }

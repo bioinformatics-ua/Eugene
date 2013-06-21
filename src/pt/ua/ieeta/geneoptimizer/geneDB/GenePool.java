@@ -10,6 +10,7 @@ import pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI.GenePoolGUI;
  *
  * @author Paulo Gaspar
  * @author Ricardo Gonzaga
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class GenePool extends Observable {
     /* List of genomes available on the gene pool. Genome pool itself. */
@@ -17,26 +18,29 @@ public class GenePool extends Observable {
     private static Vector<Genome> genomes = null;
 
     /* Singleton instance of genome pool. */
-    private static GenePool instance = null;
+    private static volatile GenePool instance = null;
 
     /* Variable to set ID of new genomes. */
     private static int lastGenomeID = 0;
 
     /* Create/return the only instance of this class. */
-    public synchronized static GenePool getInstance() {
+    public static GenePool getInstance() {
         if (instance == null) {
-            instance = new GenePool();
+            synchronized (GenePool.class) {
+                if (instance == null) {
+                    instance = new GenePool();
 
-            /* Create genome list (the pool itself). */
-            genomes = new Vector<Genome>();
+                    /* Create genome list (the pool itself). */
+                    genomes = new Vector<Genome>();
 
-            /* Create instance of gene pool. */
-            GenePoolGUI.getInstance();
+                    /* Create instance of gene pool. */
+                    GenePoolGUI.getInstance();
 
-            /* Add the GUI as observer of this class. */
-            registerObserver(GenePoolGUI.getInstance());
+                    /* Add the GUI as observer of this class. */
+                    registerObserver(GenePoolGUI.getInstance());
+                }
+            }
         }
-
         return instance;
     }
 
@@ -45,7 +49,7 @@ public class GenePool extends Observable {
     }
 
     /* Add a genome to the genome pool. */
-    public synchronized void addGenomeToPool(Genome genome) {        
+    public synchronized void addGenomeToPool(Genome genome) {
 
         /* Add genome to pool. */
         genomes.add(genome);

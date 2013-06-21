@@ -1,6 +1,5 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
-import java.util.List;
 import java.util.Vector;
 import pt.ua.ieeta.geneoptimizer.GUI.ContentPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.MultiSequencePanel;

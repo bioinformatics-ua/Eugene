@@ -17,7 +17,6 @@ import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterSet;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
-import pt.ua.ieeta.geneoptimizer.geneDB.ByteString;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 
@@ -99,7 +98,7 @@ public class OptimizationRunner extends Thread
                 
                 Gene newGene = new Gene("SubGene", originalStudy.getOriginalGene().getGenome());
                 String subGeneSequence = originalStudy.getOriginalGene().getCodonSubSequence(study.getSelectedStartIndex(), study.getSelectedEndIndex()+1);
-                newGene.createStructure(new ByteString(subGeneSequence), BioStructure.Type.mRNAPrimaryStructure);
+                newGene.createStructure(subGeneSequence, BioStructure.Type.mRNAPrimaryStructure);
                 study = new Study(newGene, newGene, "temp study");
             }
             else
@@ -170,7 +169,7 @@ public class OptimizationRunner extends Thread
                 newGeneSequence.append(originalStudy.getResultingGene().getCodonSubSequence(originalStudy.getSelectedEndIndex()+1, originalStudy.getResultingGene().getSequenceLength()));
 
                 /* Create remaining structures. */
-                gene.createStructure(new ByteString(newGeneSequence.toString()), BioStructure.Type.mRNAPrimaryStructure);
+                gene.createStructure(newGeneSequence.toString(), BioStructure.Type.mRNAPrimaryStructure);
                 gene.calculateAllStructures();
                 
                 /* Create study. */
@@ -207,13 +206,15 @@ public class OptimizationRunner extends Thread
         /* Main life cicle. */
         if (useQuickOptimization)
         {
-            finalSolutionSequence = SimulatedAnnealing.runSimulatedAnnealing(   study, 
+                int k = 100000;
+            
+                finalSolutionSequence = SimulatedAnnealing.runSimulatedAnnealing(   study, 
                                                                                 study.getResultingGene().getCodonSequence(), 
-                                                                                100000, 
+                                                                                k, 
                                                                                 selectedPlugins,                                                                                 
                                                                                 selecType, 
                                                                                 processPanel);
-            finalSolutionScore = SimulatedAnnealing.getScore();            
+                finalSolutionScore = SimulatedAnnealing.getScore();            
         }
         else
         {   
@@ -320,7 +321,7 @@ public class OptimizationRunner extends Thread
             newGene.insert(0, before);
             newGene.append(after);
         }
-        gene.createStructure(new ByteString(newGene.toString()), BioStructure.Type.mRNAPrimaryStructure);
+        gene.createStructure(newGene.toString(), BioStructure.Type.mRNAPrimaryStructure);
         gene.calculateAllStructures();
 
         /* define study name */
@@ -410,8 +411,8 @@ public class OptimizationRunner extends Thread
             String ID = study.getResultingGene().getOrthologId();
             String genomeName = study.getResultingGene().getGenomeName();
             newStudy.getResultingGene().setOrthologInfo(score, identity, ID, genomeName);
-            newStudy.getResultingGene().setAlignedStructure(study.getResultingGene().getAlignedStructure(BioStructure.Type.proteinPrimaryStructure).getByteSequence(), BioStructure.Type.proteinPrimaryStructure);
-            newStudy.getResultingGene().setAlignedStructure(study.getResultingGene().getAlignedStructure(BioStructure.Type.mRNAPrimaryStructure).getByteSequence(), BioStructure.Type.mRNAPrimaryStructure);
+            newStudy.getResultingGene().setAlignedStructure(study.getResultingGene().getAlignedStructure(BioStructure.Type.proteinPrimaryStructure).getSequence(), BioStructure.Type.proteinPrimaryStructure);
+            newStudy.getResultingGene().setAlignedStructure(study.getResultingGene().getAlignedStructure(BioStructure.Type.mRNAPrimaryStructure).getSequence(), BioStructure.Type.mRNAPrimaryStructure);
         }
 
         /* Add study to project. */

@@ -25,12 +25,9 @@ import pt.ua.ieeta.geneoptimizer.GUI.LoadProjectFileProgPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationReport;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
-import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterDetails;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterSet;
-import pt.ua.ieeta.geneoptimizer.WebServices.GeneAutoDiscover;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
-import pt.ua.ieeta.geneoptimizer.geneDB.ByteString;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.GenePool;
 import pt.ua.ieeta.geneoptimizer.geneDB.GeneticCodeTable;
@@ -370,14 +367,14 @@ public class LoadXMLProject extends Thread {
                         //ensure all genomes are already loaded
                         Genome genome = GenePool.getInstance().getGenome(Integer.parseInt(getAttributeValue(studyInfo[j], "genomeid")));
                         originalGene = new Gene(getAttributeValue(studyInfo[j], "name"), genome);
-                        originalGene.createStructure(new ByteString(studyInfo[j].getTextContent()), BioStructure.Type.mRNAPrimaryStructure);
+                        originalGene.createStructure(studyInfo[j].getTextContent(), BioStructure.Type.mRNAPrimaryStructure);
                         originalGene.calculateAllStructures();
 
                     } else if (studyInfo[j].getNodeName().equalsIgnoreCase("resultinggene")) {
                         //ensure all genomes are already loaded
                         Genome genome = GenePool.getInstance().getGenome(Integer.parseInt(getAttributeValue(studyInfo[j], "genomeid")));
                         resultingGene = new Gene(getAttributeValue(studyInfo[j], "name"), genome);
-                        resultingGene.createStructure(new ByteString(studyInfo[j].getTextContent()), BioStructure.Type.mRNAPrimaryStructure);
+                        resultingGene.createStructure(studyInfo[j].getTextContent(), BioStructure.Type.mRNAPrimaryStructure);
                         resultingGene.calculateAllStructures();
 
                     } else if (studyInfo[j].getNodeName().equalsIgnoreCase("optimization_report")) {
@@ -407,7 +404,7 @@ public class LoadXMLProject extends Thread {
                                 for (int orthIdx = 0; orthIdx < orthologInfo.length; orthIdx++) {
                                     if (orthologInfo[orthIdx].getNodeName().equals("resulting_gene")) {
                                         resulting_gene = getAttributeValue(orthologInfo[orthIdx], "value");
-                                    } else if (orthologInfo[i].getNodeName().equals("protein")) {
+                                    } else if (orthologInfo[orthIdx].getNodeName().equals("protein")) {
                                         protein = getAttributeValue(orthologInfo[orthIdx], "value");
                                     }
                                 }
@@ -431,9 +428,9 @@ public class LoadXMLProject extends Thread {
 
             newStudy.getResultingGene().setOrthologList(orthologList);
 
-            if (protein != null && resultingGene != null && !protein.isEmpty() && !resulting_gene.isEmpty()) {
-                newStudy.getResultingGene().setAlignedStructure(new ByteString(resulting_gene), BioStructure.Type.mRNAPrimaryStructure);
-                newStudy.getResultingGene().setAlignedStructure(new ByteString(protein), BioStructure.Type.proteinPrimaryStructure);
+            if (protein != null && resulting_gene != null && !protein.isEmpty() && !resulting_gene.isEmpty()) {
+                newStudy.getResultingGene().setAlignedStructure(resulting_gene, BioStructure.Type.mRNAPrimaryStructure);
+                newStudy.getResultingGene().setAlignedStructure(protein, BioStructure.Type.proteinPrimaryStructure);
             }
 
             project.addNewStudy(newStudy);
@@ -594,10 +591,10 @@ public class LoadXMLProject extends Thread {
                             Double.parseDouble(getAttributeValue(orthologInfo[i], "identity")),
                             getAttributeValue(orthologInfo[i], "id"),
                             getAttributeValue(orthologInfo[i], "genome_name"));
-                    g.setAlignedStructure(new ByteString(getAttributeValue(orthologInfo[i], "sequence")), BioStructure.Type.mRNAPrimaryStructure);
-                    g.setAlignedStructure(new ByteString(getAttributeValue(orthologInfo[i], "protein")), BioStructure.Type.proteinPrimaryStructure);
-                    g.createStructure(new ByteString(getAttributeValue(orthologInfo[i], "sequence").replaceAll("-", "")), BioStructure.Type.mRNAPrimaryStructure);
-                    g.createStructure(new ByteString(getAttributeValue(orthologInfo[i], "protein").replaceAll("-", "")), BioStructure.Type.proteinPrimaryStructure);
+                    g.setAlignedStructure(getAttributeValue(orthologInfo[i], "sequence"), BioStructure.Type.mRNAPrimaryStructure);
+                    g.setAlignedStructure(getAttributeValue(orthologInfo[i], "protein"), BioStructure.Type.proteinPrimaryStructure);
+                    g.createStructure(getAttributeValue(orthologInfo[i], "sequence").replaceAll("-", ""), BioStructure.Type.mRNAPrimaryStructure);
+                    g.createStructure(getAttributeValue(orthologInfo[i], "protein").replaceAll("-", ""), BioStructure.Type.proteinPrimaryStructure);
                     genome.addGene(g);
                 }
             }
@@ -609,8 +606,8 @@ public class LoadXMLProject extends Thread {
                             Double.parseDouble(getAttributeValue(orthologInfo[i], "identity")),
                             getAttributeValue(orthologInfo[i], "id"),
                             getAttributeValue(orthologInfo[i], "genome_name"));
-                    g.createStructure(new ByteString(getAttributeValue(orthologInfo[i], "sequence")), BioStructure.Type.mRNAPrimaryStructure);
-                    g.createStructure(new ByteString(getAttributeValue(orthologInfo[i], "protein")), BioStructure.Type.proteinPrimaryStructure);
+                    g.createStructure(getAttributeValue(orthologInfo[i], "sequence"), BioStructure.Type.mRNAPrimaryStructure);
+                    g.createStructure(getAttributeValue(orthologInfo[i], "protein"), BioStructure.Type.proteinPrimaryStructure);
                     genome.addGene(g);
                 }
             }

@@ -10,9 +10,9 @@ import java.util.Vector;
  *
  * @author Paulo Gaspar
  */
-public class Genome
-{
+public class Genome {
     /* List of genes in this genome. */
+
     private Vector<Gene> genes = null;          // used in housekeeping and orthologs
     private String[] genesFiles = null;         // used in normal genome - reference to files
     private Vector<String> genesHeaders = null; // used in normal genome - headers of genes
@@ -32,7 +32,6 @@ public class Genome
 
     /* Genetic Code Table ID used for this genome. */
     private GeneticCodeTable geneticCodeTable;
-    
     /* Filters used in the genome */
     private GenomeFilters filters;
 
@@ -43,13 +42,11 @@ public class Genome
     private int numRejectedGenes = 0;
     private Genome houseKeepingGenes = null;
 
-    public Genome()
-    {
+    public Genome() {
         genes = new Vector<Gene>();
     }
 
-    public Genome(Vector<Gene> iGenes, GeneticCodeTable geneticCodeTable)
-    {
+    public Genome(Vector<Gene> iGenes, GeneticCodeTable geneticCodeTable) {
         assert iGenes != null;
         assert geneticCodeTable != null;
 
@@ -57,8 +54,7 @@ public class Genome
         this.geneticCodeTable = geneticCodeTable;
     }
 
-    public Genome(Vector<Gene> iGenes, String name, GeneticCodeTable geneticCodeTable)
-    {
+    public Genome(Vector<Gene> iGenes, String name, GeneticCodeTable geneticCodeTable) {
         assert iGenes != null;
         assert name != null;
         assert geneticCodeTable != null;
@@ -66,92 +62,83 @@ public class Genome
         this.genes = iGenes;
         this.genomeName = name;
         this.geneticCodeTable = geneticCodeTable;
-        
+
         makeSmallGenomeName();
     }
 
     /**
      * Create new empty genome.
-     * 
+     *
      * @param name name of genome
      * @param geneticCodeTable genetic code table to use
      */
-    public Genome(String name, GeneticCodeTable geneticCodeTable)
-    {
+    public Genome(String name, GeneticCodeTable geneticCodeTable) {
         assert name != null;
         assert geneticCodeTable != null;
 
         this.genes = new Vector<Gene>();
         this.genomeName = name;
         this.geneticCodeTable = geneticCodeTable;
-        
-        makeSmallGenomeName();
-    }
-    
-    public Genome(String name)
-    {
-        assert name != null;
-        
-        this.genes = new Vector<Gene>();
-        this.genomeName = name;
-        
+
         makeSmallGenomeName();
     }
 
-    public boolean hasNameConfirmation()
-    {
+    public Genome(String name) {
+        assert name != null;
+
+        this.genes = new Vector<Gene>();
+        this.genomeName = name;
+
+        makeSmallGenomeName();
+    }
+
+    public boolean hasNameConfirmation() {
         return hasNameConfirmation;
     }
 
-    public void setHasNameConfirmation(boolean hasNameConfirmation)
-    {
+    public void setHasNameConfirmation(boolean hasNameConfirmation) {
         this.hasNameConfirmation = hasNameConfirmation;
     }
-    
-    
+
     /* If a genome name is too big, use only the first two words. */
-    private void makeSmallGenomeName()
-    {
+    private void makeSmallGenomeName() {
         int MAX_CHARS = 10;  //16
-        
-        if (genomeName.length() > MAX_CHARS)
-        {
+
+        if (genomeName.length() > MAX_CHARS) {
             String splitChar;
-            if (genomeName.contains(" "))
+            if (genomeName.contains(" ")) {
                 splitChar = " ";
-            else if (genomeName.contains("_"))
+            } else if (genomeName.contains("_")) {
                 splitChar = "_";
-            else if (genomeName.contains("-"))
+            } else if (genomeName.contains("-")) {
                 splitChar = "-";
-            else
-            {
-                genomeSmallName = genomeName.substring(0, Math.min(MAX_CHARS,genomeName.length()));
+            } else {
+                genomeSmallName = genomeName.substring(0, Math.min(MAX_CHARS, genomeName.length()));
                 return;
             }
-            
+
             String words[] = genomeName.split(splitChar);
-            if (words.length >= 2)
+            if (words.length >= 2) {
                 genomeSmallName = words[0] + " " + words[1];
-            else
-                genomeSmallName = genomeName.substring(0, Math.min(MAX_CHARS,genomeName.length()));
-        }
-        else
+            } else {
+                genomeSmallName = genomeName.substring(0, Math.min(MAX_CHARS, genomeName.length()));
+            }
+        } else {
             genomeSmallName = genomeName;
+        }
     }
 
-    public synchronized String getName()
-    {
+    public synchronized String getName() {
         return genomeName;
     }
 
-    public String getSmallName()
-    {
+    public String getSmallName() {
         return genomeSmallName;
     }
 
     public void setFilters(GenomeFilters filters) {
         this.filters = filters;
-    }        
+    }
 
     public synchronized int getGenomeID() {
         return genomeID;
@@ -168,121 +155,127 @@ public class Genome
     public synchronized void setGenes(Vector<Gene> genes) {
         this.genes = genes;
     }
-    
+
     public synchronized void setGenesRef(String[] filelist, Vector<Gene> genes) {
         genesFiles = new String[filelist.length];
         for (int i = 0; i < filelist.length; i++) {
             genesFiles[i] = new String(filelist[i]);
         }
-        
+
         genesHeaders = new Vector<String>(100, 50);
-        genesLength = new Vector<Integer>(100,50);
+        genesLength = new Vector<Integer>(100, 50);
         for (Iterator<Gene> it = genes.iterator(); it.hasNext();) {
             Gene gene = it.next();
             genesHeaders.add(gene.getGeneHeader());
             genesLength.add(gene.getSequenceLength());
         }
     }
-    
-    public synchronized Vector<String> getGenesHeaders(){
+
+    public synchronized Vector<String> getGenesHeaders() {
         return genesHeaders;
     }
-    
-    public synchronized String[] getGenesFiles(){
+
+    public synchronized String[] getGenesFiles() {
         return genesFiles;
     }
-    
+
     public synchronized int getGeneLength(String geneHeader) {
         int index = genesHeaders.indexOf(geneHeader);
-        if( index == -1 )
+        if (index == -1) {
             throw new AssertionError("Gene not found in genome");
-        
+        }
+
         return genesLength.get(index);
     }
-    
+
     public synchronized int getGeneLength(int index) {
         return genesLength.get(index);
     }
 
-    public synchronized String getAminoAcidFromCodon (String codon)
-    {
+    public synchronized String getAminoAcidFromCodon(String codon) {
         assert geneticCodeTable != null;
         assert codon != null;
 
         return geneticCodeTable.getAminoAcidFromCodon(codon);
     }
 
-    public synchronized void setCodonUsageContextTables(UsageAndContextTables cut)
-    {
+    public synchronized void setCodonUsageContextTables(UsageAndContextTables cut) {
         codonUsageTable = cut;
     }
 
-    public synchronized UsageAndContextTables getUsageAndContextTables()
-    {
+    public synchronized UsageAndContextTables getUsageAndContextTables() {
         return codonUsageTable;
     }
 
-    public synchronized GeneticCodeTable getGeneticCodeTable()
-    {
+    public synchronized GeneticCodeTable getGeneticCodeTable() {
         return geneticCodeTable;
     }
 
-    public synchronized void setGeneticCodeTable(GeneticCodeTable geneticCodeTable) 
-    {
+    public synchronized void setGeneticCodeTable(GeneticCodeTable geneticCodeTable) {
         assert geneticCodeTable != null;
-        
+
         this.geneticCodeTable = geneticCodeTable;
     }
-    
-    /** To rapidly access the codon usage table and return the RSCU value for some codon. */
-    public synchronized float getCodonRSCU(String codon)
-    {
+
+    /**
+     * To rapidly access the codon usage table and return the RSCU value for
+     * some codon.
+     */
+    public synchronized float getCodonRSCU(String codon) {
         assert codon != null;
         assert codonUsageTable != null;
 
         return codonUsageTable.getCodonUsageRSCU(codon);
-    }    
+    }
 
-    public void addGene(Gene newGene)
-    {
+    public void addGene(Gene newGene) {
         assert newGene != null;
         assert genes != null;
-        
+
         genes.add(newGene);
     }
-    
-    public void addGeneManually(Gene newGene)
-    {
+
+    public void addGeneManually(Gene newGene) {
         assert newGene != null;
-        
-        if ( genesAdded == null ) {
+
+        if (genesAdded == null) {
             genesAdded = new Vector<Gene>();
         }
 
-        genesHeaders.add(newGene.getGeneHeader());
+        genesHeaders.add(newGene.getGeneHeader());        
         genesLength.add(newGene.getSequenceLength());
         genesAdded.add(newGene);
     }
 
     public Vector<Gene> getGenesAdded() {
         return genesAdded;
-    }      
+    }
 
     public GenomeFilters getFilters() {
         return filters;
-    }        
-    
-    public Gene getManuallyAddedGene(String geneHeader, int sequenceLength){
-        if( genesAdded == null ) 
+    }
+
+    public void removeManuallyAddedGenes(Gene gene) {
+        if (genesAdded == null) {
+            return;
+        }
+        genesAdded.remove(gene);                
+        
+        int index = genesHeaders.indexOf(gene.getGeneHeader());
+        genesLength.remove(index);
+        genesHeaders.remove(gene.getGeneHeader());
+    }
+
+    public Gene getManuallyAddedGene(String geneHeader, int sequenceLength) {
+        if (genesAdded == null) {
             return null;
-        
+        }
+
         Gene geneRes = null;
-        
+
         for (Gene gene : genesAdded) {
-            if(         gene.getGeneHeader().equals(geneHeader) 
-                    &&  gene.getSequenceLength() == sequenceLength
-                    )
-            {
+            if (gene.getGeneHeader().equals(geneHeader)
+                    && gene.getSequenceLength() == sequenceLength) {
                 geneRes = gene;
                 break;
             }
@@ -290,8 +283,9 @@ public class Genome
         return geneRes;
     }
 
-    public boolean OrthologsAreAligned()
-    { return orthologsAligned; }
+    public boolean OrthologsAreAligned() {
+        return orthologsAligned;
+    }
 
     public void setOrthologsAligned(boolean orthologsAligned) {
         this.orthologsAligned = orthologsAligned;
@@ -324,33 +318,27 @@ public class Genome
         makeSmallGenomeName();
     }
 
-    public void setHouseKeepingGenes(Genome result) 
-    {
+    public void setHouseKeepingGenes(Genome result) {
         assert result != null;
-        
+
         this.houseKeepingGenes = result;
     }
-    
-    public Genome getHouseKeepingGenes()
-    {
+
+    public Genome getHouseKeepingGenes() {
         return this.houseKeepingGenes;
     }
 
-    public void writeToFile(String filename) 
-    {
+    public void writeToFile(String filename) {
         try {
             PrintWriter out = new PrintWriter(new FileWriter(filename, false));
-            
-            for (Gene g : getGenes())
-            {
-                out.println(">"+g.getName());
+
+            for (Gene g : getGenes()) {
+                out.println(">" + g.getName());
                 out.println(g.getCodonSequence());
             }
-            
+
             out.close();
-        } 
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             //TODO: exceptions
         }

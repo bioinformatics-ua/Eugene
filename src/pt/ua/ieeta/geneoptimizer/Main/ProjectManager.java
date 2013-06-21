@@ -9,11 +9,12 @@ import pt.ua.ieeta.geneoptimizer.GUI.TabbedProjectsPanel;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class ProjectManager {
     /* Singleton instance. */
 
-    private static ProjectManager instance = null;
+    private static volatile ProjectManager instance = null;
 
     /* Global project ID. */
     private static int globalProjectID = 1;
@@ -26,10 +27,13 @@ public class ProjectManager {
 
     public static ProjectManager getInstance() {
         if (instance == null) {
-            instance = new ProjectManager();
-            projectList = new Vector<Project>();
+            synchronized (ProjectManager.class) {
+                if (instance == null) {
+                    instance = new ProjectManager();
+                    projectList = new Vector<Project>();
+                }
+            }
         }
-
         return instance;
     }
 
@@ -116,7 +120,7 @@ public class ProjectManager {
 
         /* Load all data from file (Genome, Genes, Studies, etc) */
         LoadXMLProject.getInstance().setDetails(newProject, projectFile, progressPanel);
-        LoadXMLProject.getInstance().start();        
+        LoadXMLProject.getInstance().start();
     }
 
     private boolean handleException(Exception exception, LoadProjectFileProgPanel progresPanel) {

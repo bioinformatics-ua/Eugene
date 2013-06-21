@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.GUI;
 
 import java.awt.Dimension;
@@ -11,46 +10,47 @@ import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
-public class TabbedProjectsPanel extends JTabbedPane
-{
-    private static TabbedProjectsPanel instance = null;
+public class TabbedProjectsPanel extends JTabbedPane {
 
-    public static synchronized TabbedProjectsPanel getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new TabbedProjectsPanel();
-            instance.setTabPlacement(JTabbedPane.BOTTOM);
+    private static volatile TabbedProjectsPanel instance = null;
 
-            /* Listener for when the user selects a project tab. */
-            instance.addChangeListener(
-                        new ChangeListener() {
-                                public void stateChanged(ChangeEvent evt)
-                                {
-                                    Project selected = ((ContainerPanel)instance.getSelectedComponent()).getProject();
-                                    ProjectManager.getInstance().setSelectedProject(selected);
-                                }
-                        });
+    public static TabbedProjectsPanel getInstance() {
+        if (instance == null) {
+            synchronized (TabbedProjectsPanel.class) {
+                if (instance == null) {
+                    instance = new TabbedProjectsPanel();
+                    instance.setTabPlacement(JTabbedPane.BOTTOM);
+
+                    /* Listener for when the user selects a project tab. */
+                    instance.addChangeListener(
+                            new ChangeListener() {
+                        public void stateChanged(ChangeEvent evt) {
+                            Project selected = ((ContainerPanel) instance.getSelectedComponent()).getProject();
+                            ProjectManager.getInstance().setSelectedProject(selected);
+                        }
+                    });
+                }
+            }
         }
 
         return instance;
     }
 
-    private TabbedProjectsPanel()
-    {}
+    private TabbedProjectsPanel() {
+    }
 
-    public synchronized int addNewProject(Project project)
-    {
+    public synchronized int addNewProject(Project project) {
         assert project != null;
 
         /* Create new container for this project. */
         ContainerPanel newPanel = new ContainerPanel(project);
         newPanel.setMinimumSize(new Dimension(1000, 580));
-        
+
         /* Add new tab and select it. */
         addTab(project.getName(), newPanel);
-        setSelectedIndex(getTabCount()-1);
+        setSelectedIndex(getTabCount() - 1);
 
         /* Set project container as the newly created one. */
         project.setContainerPanel(newPanel);
@@ -65,12 +65,11 @@ public class TabbedProjectsPanel extends JTabbedPane
 //            public void focusLost(FocusEvent e){
 //            }
 //        });
-        
-        return getTabCount()-1;
+
+        return getTabCount() - 1;
     }
 
-    public void removeProject(Project project) 
-    {
+    public void removeProject(Project project) {
         remove(project.getContainerPanel());
     }
 }

@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * StudySaveFrame.java
  *
  * Created on 30/Mar/2010, 20:19:23
@@ -11,8 +6,6 @@
 package pt.ua.ieeta.geneoptimizer.GUI;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import pt.ua.ieeta.geneoptimizer.GUI.RedesignPanel.StudyMakerPanel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationModel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationReport;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.RedesignProtocolReaderWriter;
@@ -20,14 +13,19 @@ import pt.ua.ieeta.geneoptimizer.GeneRedesign.RedesignProtocolReaderWriter;
 /**
  *
  * @author Paulo
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class StudySaveFrame extends javax.swing.JFrame {
 
-    private static StudySaveFrame instance = null;
+    private static volatile StudySaveFrame instance = null;
 
     public static StudySaveFrame getInstance() {
         if (instance == null) {
-            instance = new StudySaveFrame();
+            synchronized(StudySaveFrame.class){
+                if (instance == null){
+                    instance = new StudySaveFrame();
+                }
+            }            
         }
 
         return instance;

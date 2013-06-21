@@ -6,7 +6,6 @@ package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -16,19 +15,15 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import pt.ua.ieeta.geneoptimizer.ExternalTools.Muscle;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.Psipred;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.SequenceValidator;
@@ -44,7 +39,6 @@ import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterSet;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.PluginLoader;
 import pt.ua.ieeta.geneoptimizer.geneDB.*;
-import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure.Type;
 
 /**
  * Extends ContentPanel to show one sequence
@@ -496,7 +490,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         new Thread(msgWin).start();
 
         extraGene = new Gene("new gene", study.getResultingGene().getGenome());
-        extraGene.createStructure(new ByteString(aaSequence), BioStructure.Type.proteinPrimaryStructure);
+        extraGene.createStructure(aaSequence, BioStructure.Type.proteinPrimaryStructure);
         remakePanel();
 
         msgWin.closeWindow();

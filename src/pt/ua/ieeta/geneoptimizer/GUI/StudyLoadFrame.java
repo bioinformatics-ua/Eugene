@@ -14,18 +14,22 @@ import pt.ua.ieeta.geneoptimizer.GeneRedesign.RedesignProtocolReaderWriter;
 /**
  *
  * @author Paulo
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class StudyLoadFrame extends javax.swing.JFrame
 {
-    private static StudyLoadFrame instance = null;
+    private static volatile StudyLoadFrame instance = null;
 
     public static StudyLoadFrame getInstance()
     {
         if (instance == null)
         {
-            instance = new StudyLoadFrame();
+            synchronized(StudyLoadFrame.class){
+                if (instance == null){
+                    instance = new StudyLoadFrame();
+                }
+            }            
         }
-
         reloadTable();
         return instance;
     }

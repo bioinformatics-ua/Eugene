@@ -13,13 +13,14 @@ import pt.ua.ieeta.geneoptimizer.WebServices.GenomeAutoDiscovery;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  *
  * Singleton class that deals with the configuration of new or running
  * optimizations.
  */
 public class OptimizationModel implements Observer {
 
-    private static OptimizationModel instance = null;
+    private static volatile OptimizationModel instance = null;
     private static Vector<OptimizationRunner> runningOpts;
     private static Vector<IOptimizationPlugin> optimizationList;
 
@@ -36,9 +37,12 @@ public class OptimizationModel implements Observer {
      */
     public static OptimizationModel getInstance() {
         if (instance == null) {
-            instance = new OptimizationModel();
+            synchronized(OptimizationModel.class){
+                if (instance == null){
+                    instance = new OptimizationModel();
+                }
+            }            
         }
-
         return instance;
     }
 

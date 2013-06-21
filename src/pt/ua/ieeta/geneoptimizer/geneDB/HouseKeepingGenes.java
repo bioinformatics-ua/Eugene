@@ -1,4 +1,3 @@
-
 package pt.ua.ieeta.geneoptimizer.geneDB;
 
 import java.io.*;
@@ -10,6 +9,7 @@ import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class HouseKeepingGenes extends Thread
 {
@@ -18,7 +18,7 @@ public class HouseKeepingGenes extends Thread
     private String geneCodesFileName = null;
     private Vector<String> geneCodesEukaryots, geneCodesProkaryots;
     
-    private static HouseKeepingGenes instance = null;
+    private static volatile HouseKeepingGenes instance = null;
     
     private boolean finished = false;
     
@@ -26,8 +26,11 @@ public class HouseKeepingGenes extends Thread
     public static HouseKeepingGenes getInstance()
     {
         if (instance == null)
-            instance = new HouseKeepingGenes();
-        
+            synchronized(HouseKeepingGenes.class){
+                if (instance == null){
+                 instance = new HouseKeepingGenes();   
+                }
+            }                    
         return instance;
     }
     

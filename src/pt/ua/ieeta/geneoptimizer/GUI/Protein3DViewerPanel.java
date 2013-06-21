@@ -29,6 +29,7 @@ import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class Protein3DViewerPanel extends ContentPanel implements Observer, Runnable
 {
@@ -41,13 +42,17 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
     private JLabel textLink;
     private boolean isDetached = false;
     private JFrame newFrame;
-    private static Protein3DViewerPanel instance = null;
+    private static volatile Protein3DViewerPanel instance = null;
 
     public static Protein3DViewerPanel getInstance()
     {
         if (instance == null)
-            instance = new Protein3DViewerPanel();
-
+            synchronized(Protein3DViewerPanel.class){
+                if (instance == null){
+                    instance = new Protein3DViewerPanel();
+                }
+            }
+            
         return instance;
     }
 

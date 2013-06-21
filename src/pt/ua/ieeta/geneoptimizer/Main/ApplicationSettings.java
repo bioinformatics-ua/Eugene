@@ -19,6 +19,7 @@ import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
  * Class to manage application settings
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class ApplicationSettings
 {
@@ -33,14 +34,17 @@ public class ApplicationSettings
     private static Map<String, ImageIcon> imageMapForSecondaryStructure = null;
 
     private static Properties properties;
-    private static ApplicationSettings instance = null;
+    private static volatile ApplicationSettings instance = null;
 
     
     public static ApplicationSettings getInstance() {
         if (instance == null) {
-            instance = new ApplicationSettings();
+            synchronized(ApplicationSettings.class){
+                if (instance == null){
+                    instance = new ApplicationSettings();
+                }
+            }            
         }
-
         return instance;
     }
 

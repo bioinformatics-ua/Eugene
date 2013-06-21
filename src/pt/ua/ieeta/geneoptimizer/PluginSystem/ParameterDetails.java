@@ -1,7 +1,5 @@
 package pt.ua.ieeta.geneoptimizer.PluginSystem;
 
-import java.util.List;
-
 /**
  *
  * @author Nuno Silva <nuno.mogas@ua.pt>
