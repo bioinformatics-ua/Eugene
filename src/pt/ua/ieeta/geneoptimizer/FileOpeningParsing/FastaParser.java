@@ -1,7 +1,7 @@
 package pt.ua.ieeta.geneoptimizer.FileOpeningParsing;
 
 import java.io.*;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -14,9 +14,9 @@ import pt.ua.ieeta.geneoptimizer.geneDB.*;
  * @author Paulo Gaspar
  */
 public class FastaParser extends IGenomeFileParser {
-    /* Vector to keep record of parsed genes. */
+    /* List to keep record of parsed genes. */
 
-    private static Vector<Gene> genes;
+    private static List<Gene> genes;
 //    /* Singleton instance of FastaParser. */
 //    private static FastaParser instance = null;
 
@@ -40,7 +40,7 @@ public class FastaParser extends IGenomeFileParser {
     }
 
     @Override
-    public synchronized boolean readGenesFromFile(String filename, GeneticCodeTable geneticCodeTable, Genome genome, Vector<Gene> genes) throws FileNotFoundException {
+    public synchronized boolean readGenesFromFile(String filename, GeneticCodeTable geneticCodeTable, Genome genome, List<Gene> genes) throws FileNotFoundException {
         assert filename != null;
         assert geneticCodeTable != null;
         assert genome != null;
@@ -313,13 +313,14 @@ public class FastaParser extends IGenomeFileParser {
         notifyObservers(new GenePoolObserverMessage(GenePoolObserverMessage.MessageType.LOAD_COMPLETE, null));
     }
 
-    public Vector<Gene> getGenes() {
+    public List<Gene> getGenes() {
         return genes;
     }
 
     /**
      * @return the numRejectedGenes
      */
+    @Override
     public int getNumRejectedGenes() {
         return numRejectedGenes;
     }

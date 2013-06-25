@@ -1,6 +1,8 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  *
@@ -8,8 +10,8 @@ import java.util.Vector;
  */
 public class OptimizationSolution
 {
-    private Vector<String> redesignNames;
-    private Vector<Float> redesignScores;
+    private List<String> redesignNames;
+    private List<Float> redesignScores;
 
     private String sequence;
     private int ID;
@@ -20,8 +22,8 @@ public class OptimizationSolution
 
         this.sequence = sequence;
 
-        redesignNames = new Vector<String>();
-        redesignScores = new Vector<Float>();
+        redesignNames = new ArrayList<String>();
+        redesignScores = new ArrayList<Float>();
     }
 
     public void addRedesignScore(String name, float score)
@@ -51,7 +53,7 @@ public class OptimizationSolution
     /**
      * @return the redesignNames
      */
-    public Vector<String> getRedesignNames() 
+    public List<String> getRedesignNames() 
     {
         assert redesignScores != null;
 

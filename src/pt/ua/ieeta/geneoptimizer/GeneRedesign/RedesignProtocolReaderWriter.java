@@ -6,8 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map.Entry;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
@@ -40,7 +41,7 @@ import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterSet;
 public class RedesignProtocolReaderWriter extends Thread {
     /* List of loaded studies. */
 
-    private static Vector<OptimizationReport> studyList;
+    private static List<OptimizationReport> studyList;
 
     /* Singleton instance. */
     private static volatile RedesignProtocolReaderWriter instance = null;
@@ -73,7 +74,7 @@ public class RedesignProtocolReaderWriter extends Thread {
 
     public synchronized boolean loadParametersFromFile() {
 
-        studyList = new Vector<OptimizationReport>();
+        studyList = Collections.synchronizedList(new ArrayList<OptimizationReport>());
 
         /* Load default directory instance. */
         String eugeneDir = (String) ApplicationSettings.getProperty("eugene_dir", String.class);
@@ -288,7 +289,7 @@ public class RedesignProtocolReaderWriter extends Thread {
         return true;
     }
 
-    public Vector<OptimizationReport> getStudies() {
+    public List<OptimizationReport> getStudies() {
         return studyList;
     }
 

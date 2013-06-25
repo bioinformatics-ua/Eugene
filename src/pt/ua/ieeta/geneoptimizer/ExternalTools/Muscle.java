@@ -1,9 +1,8 @@
-
 package pt.ua.ieeta.geneoptimizer.ExternalTools;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,9 +20,9 @@ import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 public class Muscle extends AlignmentTool
 {
     private ResultKeeper resultKeeper;
-    private Vector<Gene> sequences;
+    private List<Gene> sequences;
 
-    public Muscle(Vector<Gene> sequences, ResultKeeper resultKeeper)
+    public Muscle(List<Gene> sequences, ResultKeeper resultKeeper)
     {
         assert sequences != null;
         assert resultKeeper != null;

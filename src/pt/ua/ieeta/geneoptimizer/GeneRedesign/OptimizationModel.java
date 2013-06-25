@@ -1,8 +1,10 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import pt.ua.ieeta.geneoptimizer.GUI.RedesignPanel.StudyMakerPanel;
 import pt.ua.ieeta.geneoptimizer.Main.Project;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
@@ -21,15 +23,15 @@ import pt.ua.ieeta.geneoptimizer.WebServices.GenomeAutoDiscovery;
 public class OptimizationModel implements Observer {
 
     private static volatile OptimizationModel instance = null;
-    private static Vector<OptimizationRunner> runningOpts;
-    private static Vector<IOptimizationPlugin> optimizationList;
+    private static List<OptimizationRunner> runningOpts;
+    private static List<IOptimizationPlugin> optimizationList;
 
     /**
      * Constructor. Its private to avoid instantiation. Use getInstance instead.
      */
     private OptimizationModel() {
-        runningOpts = new Vector<OptimizationRunner>(1, 1);
-        optimizationList = new Vector<IOptimizationPlugin>(7, 1);
+        runningOpts = Collections.synchronizedList(new ArrayList<OptimizationRunner>(1));
+        optimizationList =  Collections.synchronizedList(new ArrayList<IOptimizationPlugin>(7));
     }
 
     /**
@@ -56,7 +58,7 @@ public class OptimizationModel implements Observer {
         Project selectedProject = ProjectManager.getInstance().getSelectedProject();
         Study selectedStudy = selectedProject.getSelectedStudy();
 
-        Vector<IOptimizationPlugin> selectedPlugins = new Vector<IOptimizationPlugin>();
+        List<IOptimizationPlugin> selectedPlugins = new ArrayList<IOptimizationPlugin>();
         for (IOptimizationPlugin plugin : optimizationList) {
             if (plugin.isSelected()) {
                 selectedPlugins.add(plugin);
@@ -67,7 +69,7 @@ public class OptimizationModel implements Observer {
         OptimizationRunner newOpt = new OptimizationRunner(selectedPlugins, selectedStudy, quickOptimization);
 
         /* Save optimization runner to list. */
-        runningOpts.removeAllElements(); // temporary! only while only a single runner at a time is supported
+        runningOpts.clear();// temporary! only while only a single runner at a time is supported
         runningOpts.add(newOpt);
 
         /* Start optimization. */
@@ -90,7 +92,7 @@ public class OptimizationModel implements Observer {
         assert runningOpts != null;
         assert !runningOpts.isEmpty();
 
-        OptimizationRunner opt = runningOpts.firstElement();
+        OptimizationRunner opt = runningOpts.get(0);
         opt.stopOptimization();
     }
 
@@ -174,7 +176,7 @@ public class OptimizationModel implements Observer {
             return;
         }
 
-        Vector<IOptimizationPlugin> selectedPlugins = new Vector<IOptimizationPlugin>();
+        List<IOptimizationPlugin> selectedPlugins = new ArrayList<IOptimizationPlugin>();
         for (IOptimizationPlugin plugin : optimizationList) {
             if (plugin.isSelected()) {
                 selectedPlugins.add(plugin);
@@ -213,7 +215,7 @@ public class OptimizationModel implements Observer {
         }
     }
 
-    public Vector<IOptimizationPlugin> getOptimizationMethods() {
+    public List<IOptimizationPlugin> getOptimizationMethods() {
         return optimizationList;
     }
 }

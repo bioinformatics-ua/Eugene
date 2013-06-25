@@ -3,8 +3,9 @@
  */
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.JOptionPane;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
@@ -23,12 +24,13 @@ import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 /**
  *
  * @author Paulo Gaspar
+ * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class OptimizationRunner extends Thread
 {
-    private Vector<IOptimizationPlugin> selectedPlugins;
-    private Vector<ParameterSet> parametersList;
-    private Vector<Float> originalScores;
+    private List<IOptimizationPlugin> selectedPlugins;
+    private List<ParameterSet> parametersList;
+    private List<Float> originalScores;
     private Study study, originalStudy;
     private boolean obtainParetoFront;
     private boolean useQuickOptimization;
@@ -43,15 +45,15 @@ public class OptimizationRunner extends Thread
         NOT_OPTIMIZE_SELECTION
     }
 
-    public OptimizationRunner(Vector<IOptimizationPlugin> selectedPlugins, Study study, boolean useQuickOptimization)
+    public OptimizationRunner(List<IOptimizationPlugin> selectedPlugins, Study study, boolean useQuickOptimization)
     {
         this.selectedPlugins = selectedPlugins;
         this.originalStudy = study;
         this.study = study;
         this.useQuickOptimization = useQuickOptimization;
         
-        this.parametersList = new Vector<ParameterSet>(selectedPlugins.size());
-        this.originalScores = new Vector<Float>(selectedPlugins.size());
+        this.parametersList = new ArrayList<ParameterSet>(selectedPlugins.size());
+        this.originalScores = new ArrayList<Float>(selectedPlugins.size());
 
         this.obtainParetoFront = (Boolean) ApplicationSettings.getProperty("obtainParetoFront", Boolean.class);
         
@@ -198,7 +200,7 @@ public class OptimizationRunner extends Thread
                 + "Selection mode is: " + selecType.toString());
         
         /* Create empty set to take the pareto optimal set. */
-        Vector<String> paretoOptimalSet = new Vector<String>(10);
+        List<String> paretoOptimalSet = new ArrayList<String>(10);
         
         String finalSolutionSequence = null;
         float finalSolutionScore = 0;
@@ -206,15 +208,30 @@ public class OptimizationRunner extends Thread
         /* Main life cicle. */
         if (useQuickOptimization)
         {
-                int k = 100000;
-            
+            int k = 51200;
+            long start;            
+            do{
+                int aux = 0;
+                float score = 0;
+                start  = System.currentTimeMillis();                
+                do{                    
                 finalSolutionSequence = SimulatedAnnealing.runSimulatedAnnealing(   study, 
                                                                                 study.getResultingGene().getCodonSequence(), 
                                                                                 k, 
                                                                                 selectedPlugins,                                                                                 
                                                                                 selecType, 
                                                                                 processPanel);
-                finalSolutionScore = SimulatedAnnealing.getScore();            
+                finalSolutionScore = SimulatedAnnealing.getScore();
+                score += finalSolutionScore;
+                aux++;
+                }while (aux < 5);
+                
+                score = score / aux;
+                
+                System.out.println(k + "\t" + String.valueOf(score).replaceAll("\\.", ",") + "\t" + (System.currentTimeMillis() - start) / aux);
+                
+                k = k * 2;
+            }while(k <= 102400);
         }
         else
         {   

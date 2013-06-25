@@ -1,10 +1,11 @@
 package pt.ua.ieeta.geneoptimizer.WebServices;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.Random;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,9 +29,9 @@ import pt.ua.ieeta.geneoptimizer.geneDB.UsageAndContextTables;
 public class GenomeAutoDiscovery extends Observable implements Runnable
 { 
     private Genome genome;
-    private Vector<Gene> genes;
+    private List<Gene> genes;
     
-    public GenomeAutoDiscovery(Genome genome, Vector<Gene> genesRef)
+    public GenomeAutoDiscovery(Genome genome, List<Gene> genesRef)
     {
         this.genome = genome;
         this.genes = genesRef;
@@ -51,7 +52,7 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
         int numGenesToUse = 3;
         
         /* Randomly pick a few genes from the genome, to use as reference. */
-        Vector<Gene> someGenes = new Vector<Gene>(numGenesToUse);
+        List<Gene> someGenes = new ArrayList<Gene>(numGenesToUse);
         Random rand = new Random();
         for (int i=0; i<numGenesToUse; i++)
             someGenes.add(genes.get(rand.nextInt(genes.size())));
@@ -184,7 +185,7 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
             /* Read housekeeping genes from file. */
             FastaParser parser = new FastaParser(genome.getFilters());
             try {
-                parser.readGenesFromFile(filename, genome.getGeneticCodeTable(), result, new Vector<Gene>());
+                parser.readGenesFromFile(filename, genome.getGeneticCodeTable(), result, new ArrayList<Gene>());
             } catch (Exception ex) 
             {
                 //TODO: exceptions

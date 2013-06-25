@@ -1,7 +1,13 @@
 package pt.ua.ieeta.geneoptimizer.GUI;
 
-import java.awt.*;
-import java.util.Vector;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -10,12 +16,12 @@ import javax.swing.*;
  * @author Nuno Silva <nuno.mogas@ua.pt>
  */
 public class ProgressPanel extends ContentPanel {
+    
     /* Sigleton instance. */
-
     private static volatile ProgressPanel instance = null;
 
     /* List of progress panels inside this panel. */
-    private Vector<ProcessPanel> processes;
+    private List<ProcessPanel> processes;
     private JPanel contentPanel;
 
     public static ProgressPanel getInstance() {
@@ -32,8 +38,8 @@ public class ProgressPanel extends ContentPanel {
 
     private ProgressPanel() {
         super("Progress Panel", false);
-        contentPanel = new JPanel();
-        processes = new Vector<ProcessPanel>();
+        this.contentPanel = new JPanel();
+        processes = new ArrayList<ProcessPanel>();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         this.setMaximumSize(new Dimension(230, 200));
         this.setPreferredSize(new Dimension(230, 117));
@@ -60,11 +66,19 @@ public class ProgressPanel extends ContentPanel {
 
         contentPanel.add(newPanel, 0);
         contentPanel.add(Box.createRigidArea(new Dimension(10, 4)), 1);
+        
+        processes.add(newProcess);
 
         this.updateUI();
 
         return newProcess;
     }
+
+    public List<ProcessPanel> getProcessesList() {
+        return processes;
+    }
+    
+    
 
     public class ProcessPanel extends JPanel {
 

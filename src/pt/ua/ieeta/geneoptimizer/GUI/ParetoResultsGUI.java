@@ -11,8 +11,8 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -34,7 +34,7 @@ public class ParetoResultsGUI extends javax.swing.JFrame implements Runnable
 {
     private ParetoResultsTableModel model;
 
-    private Vector<Float> highest, lowest;
+    private List<Float> highest, lowest;
 
     private OptimizationSolutionSet solutionSet;
     private ResultKeeper resultKeeper;
@@ -46,7 +46,7 @@ public class ParetoResultsGUI extends javax.swing.JFrame implements Runnable
     {
          initComponents();
 
-         Vector<String> columnNames = solutionSet.getRedesignNames();
+         List<String> columnNames = solutionSet.getRedesignNames();
          this.solutionSet = solutionSet;
          this.selectedSolutionIndex = solutionSet.getBestSolutionIndex();
 
@@ -55,8 +55,8 @@ public class ParetoResultsGUI extends javax.swing.JFrame implements Runnable
 
          int numberOfColumns = solutionSet.getNumValuesPerSolution();
 
-         highest = new Vector<Float>(numberOfColumns);
-         lowest = new Vector<Float>(numberOfColumns);
+         highest = new ArrayList<Float>(numberOfColumns);
+         lowest = new ArrayList<Float>(numberOfColumns);
 
          /* Create sorter.*/
          final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(model);

@@ -16,10 +16,12 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -74,7 +76,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
     /* Selected color schemes for main gene and orthologs. */
     private IOptimizationPlugin geneColorSchemePlugin;
     private ParameterSet geneColorSchemeParameters;
-    private Vector<Vector<Color>> orthologsColorScheme = null;
+    private List<List<Color>> orthologsColorScheme = null;
     /* Extra gene to align its AA sequence with this gene AA sequence and find differences. */
     private Gene extraGene;
     private JFrame detachFrame;
@@ -167,10 +169,10 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
 
         try {
             /* Create main interior panel, with genes sequence. */
-            Vector<GenePanelEntry> entries = new Vector<GenePanelEntry>(2);
+            List<GenePanelEntry> entries = Collections.synchronizedList(new ArrayList<GenePanelEntry>(2));
 
             /* Main codon sequence entry. */
-            Vector<Color> codonColorScheme = (geneColorSchemePlugin != null) ? geneColorSchemePlugin.makeAnalysis(study, showOrthologs) : null;
+            List<Color> codonColorScheme = (geneColorSchemePlugin != null) ? geneColorSchemePlugin.makeAnalysis(study, showOrthologs) : null;
             GenePanelEntry codonEntry = new GenePanelEntry(study.getResultingGene().getName(), study.getResultingGene(), codonColorScheme, BioStructure.Type.mRNAPrimaryStructure, GenePanelEntry.EntryType.MAIN_CODON_SEQ);
             entries.add(codonEntry);
 
@@ -291,25 +293,32 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
                 detachFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 detachFrame.setAlwaysOnTop(true);
                 detachFrame.addWindowListener(new WindowListener() {
+                    @Override
                     public void windowClosing(WindowEvent we) {
                         detachWindow(false);
                     }
 
+                    @Override
                     public void windowClosed(WindowEvent we) {
                     }
 
+                    @Override
                     public void windowOpened(WindowEvent we) {
                     }
 
+                    @Override
                     public void windowIconified(WindowEvent we) {
                     }
 
+                    @Override
                     public void windowDeiconified(WindowEvent we) {
                     }
 
+                    @Override
                     public void windowActivated(WindowEvent we) {
                     }
 
+                    @Override
                     public void windowDeactivated(WindowEvent we) {
                     }
                 });
@@ -551,6 +560,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         JMenuItem menuItem = new JMenuItem("<html>Copy <b>codon</b> sequence</html>");
         menuItem.addActionListener(
                 new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 copyCodonSequenceToClipboard();
             }
@@ -561,6 +571,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         menuItem = new JMenuItem("<html>Copy <b>aminoacid</b> sequence</html>");
         menuItem.addActionListener(
                 new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 copyAminoacidSequenceToClipboard();
             }
@@ -578,6 +589,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         menuItem = new JMenuItem("<html>Show/Hide <b>Protein secondary structure</b></html>");
         menuItem.addActionListener(
                 new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showHideProteinSecondaryStructure();
             }
@@ -596,6 +608,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         menuItem = new JMenuItem("<html>Show/Hide <b>orthologs</b></html>");
         menuItem.addActionListener(
                 new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showHideOrthologs();
             }
@@ -606,6 +619,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         menuItem = new JMenuItem("<html>View orthologs as <b>codon</b> sequences</html>");
         menuItem.addActionListener(
                 new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 viewOrthologsAsCodons();
             }
@@ -616,6 +630,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         menuItem = new JMenuItem("<html>View orthologs as <b>aminoacid</b> sequences</html>");
         menuItem.addActionListener(
                 new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 viewOrthologsAsAminoacids();
             }
@@ -637,6 +652,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
             final IOptimizationPlugin colorPlugin = plugin;
             schemeButton.addActionListener(
                     new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     geneColorSchemePlugin = colorPlugin;
                     geneColorSchemeParameters = colorPlugin.getParameters();
@@ -679,6 +695,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
     /**
      * ***********************************************************
      */
+    @Override
     public void mousePressed(MouseEvent e) {
         /* If left mouse button cliked, select the clicked study. 
          * However, if CTRL is also pressed (in MAC), popup the trigger. */
@@ -687,15 +704,19 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
         }
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         tryShowPopup(e);
     }
@@ -715,6 +736,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
     /**
      * ***********************************************************
      */
+    @Override
     public void lostOwnership(Clipboard clipboard, Transferable contents) {
     }
 
@@ -725,6 +747,7 @@ public final class SingleGenePanel extends ContentPanel implements ClipboardOwne
     /**
      * ***********************************************************
      */
+    @Override
     public void update(Observable o, Object arg) {
         if (!(o instanceof ResultKeeper)) {
             return;

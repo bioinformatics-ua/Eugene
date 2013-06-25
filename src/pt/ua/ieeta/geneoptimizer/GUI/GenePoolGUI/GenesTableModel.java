@@ -1,6 +1,7 @@
 package pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
@@ -13,12 +14,14 @@ import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 public class GenesTableModel extends AbstractTableModel {
 
     private String[] columnNames = {"Gene Name", "Size (codons)"};
-    private Vector<Object[]> data = new Vector<Object[]>();
+    private List<Object[]> data = new ArrayList<Object[]>();
 
+    @Override
     public int getRowCount() {
         return data.size();
     }
 
+    @Override
     public int getColumnCount() {
         return 2;
     }
@@ -28,6 +31,7 @@ public class GenesTableModel extends AbstractTableModel {
         return columnNames[col];
     }
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return ((Object[]) data.get(rowIndex))[columnIndex];
     }
@@ -62,7 +66,7 @@ public class GenesTableModel extends AbstractTableModel {
         data.add(rowData);
     }
 
-    public Vector getDataVector() {
+    public List getDataList() {
         return data;
     }
 

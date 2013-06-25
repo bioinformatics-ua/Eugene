@@ -1,8 +1,9 @@
 package pt.ua.ieeta.geneoptimizer.FileOpeningParsing;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +23,7 @@ public class FastaHeaderParser
     private String geneStart;
     private String geneEnd;
 
-    private static Vector<Pattern> patterns = null;
+    private static List<Pattern> patterns = null;
     private Matcher matcher;
 
     public FastaHeaderParser()
@@ -31,7 +32,7 @@ public class FastaHeaderParser
         if (patterns == null)
         {
             System.out.println("Compiling FASTA header patterns for the first time.");
-            patterns = new Vector<Pattern>();
+            patterns = new ArrayList<Pattern>();
             patterns.add(Pattern.compile("gb[|]([A-Z]+\\d+)[|][A-Z]+\\d+:\\D?(\\d+)-(\\d+).*", Pattern.DOTALL));
             patterns.add(Pattern.compile("[(]?gi[|](\\d+):\\s*\\D?(\\d+)-(\\d+).*", Pattern.DOTALL));
             patterns.add(Pattern.compile(".*[|].*[|].*[|].*[|].*[|].*[|].*[|].*[|].*", Pattern.DOTALL));
@@ -46,7 +47,7 @@ public class FastaHeaderParser
     {
         System.out.println("Parsing FASTA header: <" + header + ">");
 
-        extractedInfo = new HashMap<HeaderInfo, String>();
+        extractedInfo = new EnumMap<HeaderInfo, String>(HeaderInfo.class);
 
         /* Case 1:   gb|AE000657|AE000657:1-2100,fusA */
         if (patterns.get(0).matcher(header).matches())

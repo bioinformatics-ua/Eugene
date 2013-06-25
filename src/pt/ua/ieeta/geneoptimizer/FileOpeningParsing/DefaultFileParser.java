@@ -3,9 +3,11 @@ package pt.ua.ieeta.geneoptimizer.FileOpeningParsing;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Vector;
 import org.biojava.bio.BioException;
 import org.biojava.bio.seq.Feature;
 import org.biojavax.Note;
@@ -32,7 +34,7 @@ public class DefaultFileParser extends IGenomeFileParser
     /* Destiny genome and gene vector. Genetic code table to use. */
     private GeneticCodeTable geneticCodeTable;
     private Genome genome;
-    private Vector<Gene> genes;
+    private List<Gene> genes;
     
     /* Total number of genes that was rejected after parsing and validating. */
     private int numRejectedGenes, numAcceptedGenes;
@@ -45,7 +47,7 @@ public class DefaultFileParser extends IGenomeFileParser
     }
     
     @Override
-    public boolean readGenesFromFile(String filename, GeneticCodeTable geneticCodeTable, Genome genome, Vector<Gene> genes)
+    public boolean readGenesFromFile(String filename, GeneticCodeTable geneticCodeTable, Genome genome, List<Gene> genes)
     {
         assert filename != null;
         assert !filename.isEmpty();
@@ -89,7 +91,7 @@ public class DefaultFileParser extends IGenomeFileParser
     /** Load a genome file, and create genes from it.
      * @param getGenomeName If there's a genome name, change the input genome name to it.
      * @param geneToFind Annotation of a single gene to find. If is null, get all genes. */
-    private boolean loadFile(boolean getGenomeName, Vector<String> genesToFind) throws ClassNotFoundException, IOException, NoSuchElementException, BioException
+    private boolean loadFile(boolean getGenomeName, List<String> genesToFind) throws ClassNotFoundException, IOException, NoSuchElementException, BioException
     {        
         try
         {
@@ -217,9 +219,9 @@ public class DefaultFileParser extends IGenomeFileParser
         
         this.geneticCodeTable = geneticCodeTable;
         this.genome = genome;
-        this.genes = new Vector<Gene>();
+        this.genes = Collections.synchronizedList(new ArrayList());
         
-        Vector<String> genesToFind = new Vector<String>();
+        List<String> genesToFind = new ArrayList<String>();
         genesToFind.add(targetGeneAnnotation);
         try
         {
@@ -236,7 +238,8 @@ public class DefaultFileParser extends IGenomeFileParser
             return null;
         }
         
-        return genes.firstElement();
+        //gets first element
+        return genes.get(0);
     }
     
     @Override
@@ -264,7 +267,7 @@ public class DefaultFileParser extends IGenomeFileParser
         {
 //            loader.readGenesFromFile("../Genomes/cor.bmp", GeneticCodeTableParser.getInstance().getCodeTableByID(1), new Genome(), new Vector<Gene>(50, 50));
 //            loader.readGenesFromFile("../Genomes/Escherichia coli.gbk", GeneticCodeTableParser.getInstance().getCodeTableByID(1), new Genome(), new Vector<Gene>(50, 50));
-            loader.readGenesFromFile("../Genomes/Escherichia coli.fa", GeneticCodeTableParser.getInstance().getCodeTableByID(1), new Genome(), new Vector<Gene>(50, 50));
+            loader.readGenesFromFile("../Genomes/Escherichia coli.fa", GeneticCodeTableParser.getInstance().getCodeTableByID(1), new Genome(), new ArrayList<Gene>(50));
             System.out.println("# Rejected genes: " + loader.getNumRejectedGenes());
             System.out.println("# Accepted genes: " + loader.getNumAcceptedGenes());
         } 

@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
@@ -197,7 +196,7 @@ public class LoadXMLProject extends Thread {
         }
 
         /* Load available genomes */
-        Vector<Genome> avaiGenomes = GenePool.getInstance().getGenomes();
+        List<Genome> avaiGenomes = GenePool.getInstance().getGenomes();
 
         int progressAUX;
         int beginIdx = 20;
@@ -340,7 +339,7 @@ public class LoadXMLProject extends Thread {
 
         for (int i = 0; i < study.length; i++) {
 
-            Vector<OptimizationReport> optList = null;
+            List<OptimizationReport> optList = null;
             Gene originalGene = null, resultingGene = null;
             Genome orthologList = null;
             String studyName = null, pdb = null;
@@ -380,7 +379,7 @@ public class LoadXMLProject extends Thread {
                     } else if (studyInfo[j].getNodeName().equalsIgnoreCase("optimization_report")) {
                         Node[] optimizationList = getAllSubNodes(studyInfo[j]);
                         if (optimizationList.length > 0) {
-                            optList = new Vector<OptimizationReport>();
+                            optList = new ArrayList<OptimizationReport>();
                             for (int optimizationIdx = 0; optimizationIdx < optimizationList.length; optimizationIdx++) {
                                 optList.add(getOptimizationReport(optimizationList[optimizationIdx]));
                             }
@@ -490,7 +489,7 @@ public class LoadXMLProject extends Thread {
      * Fix genomes ID's in gene pool need to be updated and update them
      */
     private void fixGenomeIDs() {
-        Vector<Genome> genomeList = GenePool.getInstance().getGenomes();
+        List<Genome> genomeList = GenePool.getInstance().getGenomes();
         for (Genome g : genomeList) {
             String id = new String();
             for (String geneFile : g.getGenesFiles()) {

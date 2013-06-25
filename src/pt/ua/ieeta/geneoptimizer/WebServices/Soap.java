@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * @author David Campos
@@ -114,10 +113,10 @@ public class Soap {
         ((org.apache.axis.client.Call) call).setProperty(ElementDeserializer.DESERIALIZE_CURRENT_ELEMENT, Boolean.TRUE);
 
         // Output types and names
-        Vector<String> outNames = new Vector<String>();
+        List<String> outNames = new ArrayList<String>();
         // Input types and names
-        Vector<String> inNames = new Vector<String>();
-        Vector<Parameter> inTypes = new Vector<Parameter>();
+        List<String> inNames = new ArrayList<String>();
+        List<Parameter> inTypes = new ArrayList<Parameter>();
 
         SymbolTable symbolTable = wsdlParser.getSymbolTable();
         BindingEntry bEntry = symbolTable.getBindingEntry(binding.getQName());
@@ -174,7 +173,7 @@ public class Soap {
         }
 
         // Set input arguments
-        Vector<Object> inputs = new Vector<Object>();
+        List<Object> inputs = new ArrayList<Object>();
         for (int j = 0; j < inNames.size(); j++) {
 
             String arg = (String) params.get(j + 1).getValue();
@@ -252,11 +251,11 @@ public class Soap {
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
             QName key = (QName) entry.getKey();
-            Vector v = (Vector) entry.getValue();
+            List v = (List) entry.getValue();
 
             if ((qname == null) || qname.equals(qname)) {
                 for (int i = 0; i < v.size(); ++i) {
-                    SymTabEntry symTabEntry = (SymTabEntry) v.elementAt(i);
+                    SymTabEntry symTabEntry = (SymTabEntry) v.get(i);
                     if (cls.isInstance(symTabEntry)) {
                         return symTabEntry;
                     }

@@ -1,7 +1,14 @@
 package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
-import java.awt.*;
-import java.util.Vector;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.*;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
@@ -21,7 +28,7 @@ public final class InteriorContentPanel extends JPanel
     private Box contentBox;
 
     /* List of sequence panels in this content panel. */
-    private Vector<SequencePanel> sequencePanels;
+    private List<SequencePanel> sequencePanels;
 
 //    /* Names of each sequence that is shown in the panel. Described before each sequence. */
 //    private Vector<String> names;
@@ -35,7 +42,7 @@ public final class InteriorContentPanel extends JPanel
 //    /* Color maps to paint the sequence panels. */
 //    private Vector<Vector<Color>>  colorVector;
 
-    private Vector<GenePanelEntry> sequencePanelEntries;
+    private List<GenePanelEntry> sequencePanelEntries;
     
     /* Content panel where this panel is inserted. */
     private SingleGenePanel container;
@@ -51,7 +58,7 @@ public final class InteriorContentPanel extends JPanel
     private boolean isDetach;
     private JScrollPane detachScrollPane;
 
-    public InteriorContentPanel(Study study, SingleGenePanel container, Vector<GenePanelEntry> entries, boolean alignSequences, boolean showProtSecondStruct, boolean showNumbering, boolean detach)
+    public InteriorContentPanel(Study study, SingleGenePanel container, List<GenePanelEntry> entries, boolean alignSequences, boolean showProtSecondStruct, boolean showNumbering, boolean detach)
     {
         assert entries != null;
         assert !entries.isEmpty();
@@ -74,7 +81,7 @@ public final class InteriorContentPanel extends JPanel
         
         /* Create box to hold everything, and create a list to save labels. */
         this.contentBox = new Box(BoxLayout.X_AXIS);
-        this.sequencePanels = new Vector<SequencePanel>();
+        this.sequencePanels = Collections.synchronizedList(new ArrayList<SequencePanel>());
         
         /* Create a new border layout to dispose components. */
         this.setLayout(new BorderLayout());
@@ -95,7 +102,7 @@ public final class InteriorContentPanel extends JPanel
         /* Clear content box, scrolling content and sequencePanels list. */
         this.contentBox.removeAll();
         this.scrollContent.removeAll();
-        this.sequencePanels.removeAllElements();
+        this.sequencePanels.clear();
         
         if(this.detachScrollPane != null) {
             this.detachScrollPane.removeAll();
@@ -169,7 +176,7 @@ public final class InteriorContentPanel extends JPanel
         }
     }
 
-    public void setNewInfo(Vector<GenePanelEntry> entries, boolean alignSequences, boolean showProtSecondStruct, boolean showNumbering, boolean isDetach)
+    public void setNewInfo(List<GenePanelEntry> entries, boolean alignSequences, boolean showProtSecondStruct, boolean showNumbering, boolean isDetach)
     {
         assert entries != null;
 
@@ -181,7 +188,7 @@ public final class InteriorContentPanel extends JPanel
         fillContentBox();
     }
 
-    private void addSequence(BioStructure structure, Vector<Color> colorScheme)
+    private void addSequence(BioStructure structure, List<Color> colorScheme)
     {
         assert structure != null;
 

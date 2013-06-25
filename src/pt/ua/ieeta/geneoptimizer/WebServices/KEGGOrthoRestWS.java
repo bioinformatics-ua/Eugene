@@ -3,8 +3,8 @@ package pt.ua.ieeta.geneoptimizer.WebServices;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -179,7 +179,7 @@ public class KEGGOrthoRestWS extends Thread {
         int minimumNeededGenes = (Integer) ApplicationSettings.getProperty("CAIOrthologsThreshold", Integer.class);
         int prokaryotCount = 0, eukaryotCount = 0;
         Gene newGene1 = null, newGene2 = null;
-        Vector<Gene> prokaryots = new Vector<Gene>(), eukaryots = new Vector<Gene>();
+        List<Gene> prokaryots = new ArrayList<Gene>(), eukaryots = new ArrayList<Gene>();
 
         /* Test for eukaryots. */
         for (int i = 0; i < MAX_ORTHOLOGS; i++) {

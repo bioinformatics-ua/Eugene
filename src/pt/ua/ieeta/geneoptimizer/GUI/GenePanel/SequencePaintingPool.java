@@ -1,8 +1,10 @@
 package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure.Type;
@@ -31,12 +33,12 @@ public class SequencePaintingPool {
     private SequencePaintingPool() {
     }
 
-    public Vector<Color> getAADifferences(String aaSequence1, String aaSequence2) {
+    public List<Color> getAADifferences(String aaSequence1, String aaSequence2) {
         assert aaSequence1 != null;
         assert aaSequence2 != null;
         assert aaSequence1.length() == aaSequence2.length();
 
-        Vector<Color> colourScheme = new Vector<Color>();
+        List<Color> colourScheme = Collections.synchronizedList(new ArrayList<Color>());
         Color gray = new Color(212, 212, 212);
         Color dif = new Color(215, 125, 125);
         for (int i = 0; i < aaSequence1.length(); i++) {
@@ -52,18 +54,18 @@ public class SequencePaintingPool {
         return colourScheme;
     }
 
-    public Vector<Vector<Color>> getOrthologsColorSchemes(Study study) {
+    public List<List<Color>> getOrthologsColorSchemes(Study study) {
         assert study != null;
         assert study.getResultingGene().hasOrthologs();
         assert study.getResultingGene().hasAlignedStructure(Type.proteinPrimaryStructure);
 
-        Vector<Vector<Color>> colorSchemes = new Vector<Vector<Color>>();
+        List<List<Color>> colorSchemes = new ArrayList<List<Color>>();
 
-        Vector<Gene> orthologs = study.getResultingGene().getOrthologList().getGenes();
+        List<Gene> orthologs = study.getResultingGene().getOrthologList().getGenes();
         BioStructure originalGene = study.getResultingGene().getAlignedStructure(Type.proteinPrimaryStructure);
 
         for (int i = 0; i < orthologs.size(); i++) {
-            colorSchemes.add(new Vector<Color>());
+            colorSchemes.add(new ArrayList<Color>());
         }
 
         Color gray = new Color(240, 240, 240);
@@ -98,7 +100,7 @@ public class SequencePaintingPool {
 
         /* All the orthologs, after aligned, must have the same size. */
         int alignedSize = orthologs.get(0).getAlignedStructure(Type.mRNAPrimaryStructure).getLength(); //study.getResultingGene().getAlignedStructure(Type.proteinPrimaryStructure).getLength();
-        for (Vector<Color> vector : colorSchemes) {
+        for (List<Color> vector : colorSchemes) {
             assert vector.size() == alignedSize;
         }
 

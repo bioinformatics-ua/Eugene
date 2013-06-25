@@ -2,8 +2,10 @@ package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,7 +20,7 @@ import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
 public class ImageSequencePanel extends SequencePanel
 {
     /* List of all labels of this panel. */
-    private Vector<JLabel> labelSequence;
+    private List<JLabel> labelSequence;
 
     private BioStructure.Type sequenceType;
 
@@ -33,7 +35,7 @@ public class ImageSequencePanel extends SequencePanel
 //        this.setLayout(new GridLayout(1,structure.getLength(), 0, 1));
 
         /* Create label list. */
-        labelSequence = new Vector<JLabel>(structure.getLength());
+        labelSequence =  Collections.synchronizedList(new ArrayList<JLabel>(structure.getLength()));
 
         /* Create labels, and place them into the JPanel. */
         int sequenceLabelWidthPixel = (Integer) ApplicationSettings.getProperty("sequenceLabelWidthPixel", Integer.class);

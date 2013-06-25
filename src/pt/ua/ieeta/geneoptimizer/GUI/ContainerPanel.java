@@ -2,7 +2,9 @@
 package pt.ua.ieeta.geneoptimizer.GUI;
 
 import com.l2fprod.common.swing.JTaskPane;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -20,7 +22,7 @@ public class ContainerPanel extends JPanel
     private Project project;
 
     /* List of panels in this container. */
-    private Vector<ContentPanel> contentPanels;
+    private List<ContentPanel> contentPanels;
 
     /* Panel to take all the content panels inside. */
     private JTaskPane contentPanel;
@@ -36,7 +38,8 @@ public class ContainerPanel extends JPanel
         /* Box layout to display content panels in a page axis (vertically). */
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        contentPanels = new Vector<ContentPanel>();
+        //add thread safe list
+        contentPanels = Collections.synchronizedList(new ArrayList());
         
         /* Create content panel to take all the contentPanels. */
         contentPanel = new JTaskPane();

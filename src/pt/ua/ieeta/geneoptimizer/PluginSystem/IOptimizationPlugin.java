@@ -2,7 +2,6 @@ package pt.ua.ieeta.geneoptimizer.PluginSystem;
 
 import java.awt.Color;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.JPanel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
 import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
@@ -48,7 +47,7 @@ public interface IOptimizationPlugin extends IPlugin
     
     
     /* Make an analysis to the sequence and return a vector of colors representing the result. */
-    public Vector<Color> makeAnalysis(Study study, boolean useAlignedGene);
+    public List<Color> makeAnalysis(Study study, boolean useAlignedGene);
 
     /* Returns the available colors*/
     public List<Color> colorScale();

@@ -1,8 +1,9 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel.ProcessPanel;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
@@ -32,7 +33,7 @@ public class SimulatedAnnealing
     public static String runSimulatedAnnealing( Study study, 
                                                 String seed, 
                                                 int kmax, 
-                                                Vector<IOptimizationPlugin> selectedPlugins,                                                 
+                                                List<IOptimizationPlugin> selectedPlugins,                                                 
                                                 OptimizationRunner.selectionType selecType,
                                                 ProcessPanel processPanel)
     {
@@ -51,7 +52,7 @@ public class SimulatedAnnealing
         double pacceptance;
 
         GeneticCodeTable geneticCodeTable = OptimizationRunner.getSelectedHost().getGeneticCodeTable();
-        Vector<Vector<String>> synonymous = new Vector<Vector<String>>();
+        List<List<String>> synonymous = new ArrayList<List<String>>();
         for (int i=0; i<study.getResultingGene().getSequenceLength(); i++)
             synonymous.add(i,geneticCodeTable.getSynonymousFromAA(study.getResultingGene().getStructure(BioStructure.Type.proteinPrimaryStructure).getWordAt(i)));
 
@@ -115,7 +116,7 @@ public class SimulatedAnnealing
         
     private static float calculateEnergy(   Study study, 
                                             String sequence, 
-                                            Vector<IOptimizationPlugin> selectedPlugins)
+                                            List<IOptimizationPlugin> selectedPlugins)
     {
         float e = 0;
         

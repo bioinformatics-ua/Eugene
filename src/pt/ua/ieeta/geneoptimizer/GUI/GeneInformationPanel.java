@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import javax.swing.*;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.MultiSequencePanel;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.SingleGenePanel;
@@ -164,7 +164,7 @@ public class GeneInformationPanel extends ContentPanel implements Observer {
                             "(" + new DecimalFormat("##.#").format(Float.parseFloat(optimization.getImprovement())) + "%)"));
                 }
 
-                if (report != study.getOptimizationReports().lastElement()) {
+                if (report != study.getOptimizationReports().get(study.getOptimizationReports().size() - 1)) {
                     content.add(new InformationZone("    +", "", true));
                 }
             }
@@ -182,7 +182,7 @@ public class GeneInformationPanel extends ContentPanel implements Observer {
 
                 content.add(new InformationZone(colouringPlugin.getScaleDescription(), "", true));
 
-                Vector<Color> scale = (Vector<Color>) colouringPlugin.colorScale();
+                List<Color> scale = (List<Color>) colouringPlugin.colorScale();
                 JPanel coloursPanel = new JPanel();
                 coloursPanel.setLayout(new BoxLayout(coloursPanel, BoxLayout.X_AXIS));
                 if (scale != null) {
@@ -231,7 +231,7 @@ public class GeneInformationPanel extends ContentPanel implements Observer {
         /* Colour code information. */
         MultiSequencePanel panel = (MultiSequencePanel) study.getCurrentPanel();
         if (panel != null) {
-            Vector<IOptimizationPlugin> colouringPlugins = panel.getColouringPlugins();
+            List<IOptimizationPlugin> colouringPlugins = panel.getColouringPlugins();
             if (colouringPlugins != null) {
                 /* Add a separator and a title for this section. */
                 content.add(new JSeparator());
@@ -242,7 +242,7 @@ public class GeneInformationPanel extends ContentPanel implements Observer {
                 for (IOptimizationPlugin colouringPlugin : colouringPlugins) {
                     content.add(new InformationZone(colouringPlugin.getScaleDescription(), "", true));
 
-                    Vector<Color> scale = (Vector<Color>) colouringPlugin.colorScale();
+                    List<Color> scale = (List<Color>) colouringPlugin.colorScale();
                     JPanel coloursPanel = new JPanel();
                     coloursPanel.setLayout(new BoxLayout(coloursPanel, BoxLayout.X_AXIS));
                     if (scale != null) {

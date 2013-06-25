@@ -1,6 +1,7 @@
 package pt.ua.ieeta.geneoptimizer.GUI;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationSolutionSet;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
@@ -11,25 +12,27 @@ import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
  */
 public final class ParetoResultsTableModel  extends AbstractTableModel
 {
-       private Vector<String> columnNames;;
-       private Vector<Object[]> data;
+       private List<String> columnNames;;
+       private List<Object[]> data;
        private int numColumns;
 
-       public ParetoResultsTableModel(Vector<String> columnNames, OptimizationSolutionSet solutionSet)
+       public ParetoResultsTableModel(List<String> columnNames, OptimizationSolutionSet solutionSet)
        {
-            this.columnNames = new Vector<String>(columnNames.size()+1);
+            this.columnNames = new ArrayList<String>(columnNames.size()+1);
             this.columnNames.addAll(columnNames);
             this.columnNames.add(0, "Total Score");
-            data = new Vector<Object[]>();
+            data = new ArrayList<Object[]>();
             numColumns = this.columnNames.size();
             for (int i=0; i < solutionSet.getSize(); i++)
                 insertRow(solutionSet.getSolutionValues(i), solutionSet.getSolutionFinalScore(i));
        }
 
+       @Override
         public int getRowCount() {
             return data.size();
         }
 
+       @Override
         public int getColumnCount() {
             return numColumns;
         }
@@ -39,6 +42,7 @@ public final class ParetoResultsTableModel  extends AbstractTableModel
            return columnNames.get(col);
        }
 
+       @Override
        public Object getValueAt(int rowIndex, int columnIndex)
        {
            return ((Object[])data.get(rowIndex))[columnIndex];
@@ -65,7 +69,7 @@ public final class ParetoResultsTableModel  extends AbstractTableModel
            data.add(newData);
        }
 
-       public Vector getDataVector()
+       public List getDataList()
        {
             return data;
        }

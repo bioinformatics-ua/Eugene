@@ -2,7 +2,9 @@ package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -15,7 +17,7 @@ import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 public class NumberingSequencePanel extends SequencePanel // implements MouseListener, MouseMotionListener
 {
     /* List of all labels of this panel. */
-    private Vector<JLabel> labelSequence;
+    private List<JLabel> labelSequence;
     
     private BoxLayout layoutBox;
 
@@ -28,7 +30,7 @@ public class NumberingSequencePanel extends SequencePanel // implements MouseLis
         this.setLayout(layoutBox);
 
         /* Create label list. */
-        labelSequence = new Vector<JLabel>(size);
+        labelSequence = Collections.synchronizedList(new ArrayList<JLabel>(size));
 
         int sequenceLabelWidthPixel = (Integer) ApplicationSettings.getProperty("sequenceLabelWidthPixel", Integer.class);
         Dimension labelSize = new Dimension(sequenceLabelWidthPixel, 22);
@@ -63,5 +65,4 @@ public class NumberingSequencePanel extends SequencePanel // implements MouseLis
 
         assert sequenceSize > 0;
     }
-    
 }

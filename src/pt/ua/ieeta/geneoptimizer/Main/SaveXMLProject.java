@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map.Entry;
-import java.util.Vector;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -423,7 +423,7 @@ public class SaveXMLProject {
                 return;
             }
 
-            Vector<Gene> orthologs = study.getResultingGene().getOrthologList().getGenes();
+            List<Gene> orthologs = study.getResultingGene().getOrthologList().getGenes();
 
             if (aligned) {
                 outWriter.writeAttribute("aligned", Boolean.TRUE.toString());

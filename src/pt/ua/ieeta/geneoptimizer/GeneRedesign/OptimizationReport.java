@@ -1,6 +1,7 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.ParameterSet;
 
@@ -48,19 +49,19 @@ public class OptimizationReport
         }                
     }
 
-    private Vector<Optimization> optimizationList;
+    private List<Optimization> optimizationList;
     private String reportName;
     private int order;
 
     public OptimizationReport()
     {
-        optimizationList = new Vector<Optimization>();
+        optimizationList = new ArrayList<Optimization>();
     }
     
     public OptimizationReport(int order)
     {
         this.order = order;
-        optimizationList = new Vector<Optimization>();
+        optimizationList = new ArrayList<Optimization>();
     }
 
     public void addOptimization(String name, ParameterSet parameters, String result, String improvement, IOptimizationPlugin plugin)
@@ -71,7 +72,7 @@ public class OptimizationReport
         optimizationList.add(new Optimization(name, parameters, result, improvement, plugin));
     }
 
-    public Vector<Optimization> getOptimizations()
+    public List<Optimization> getOptimizations()
     {
         assert optimizationList != null;
 

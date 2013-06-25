@@ -1,7 +1,9 @@
 package pt.ua.ieeta.geneoptimizer.Main;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import pt.ua.ieeta.geneoptimizer.GUI.LoadProjectFileProgPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
 import pt.ua.ieeta.geneoptimizer.GUI.TabbedProjectsPanel;
@@ -20,7 +22,7 @@ public class ProjectManager {
     private static int globalProjectID = 1;
 
     /* List of open projects. */
-    private static Vector<Project> projectList;
+    private static List<Project> projectList;
 
     /* Reference to the active project (the project selected in the tabs. */
     private static Project selectedProject = null;
@@ -30,7 +32,7 @@ public class ProjectManager {
             synchronized (ProjectManager.class) {
                 if (instance == null) {
                     instance = new ProjectManager();
-                    projectList = new Vector<Project>();
+                    projectList = Collections.synchronizedList(new ArrayList<Project>());
                 }
             }
         }

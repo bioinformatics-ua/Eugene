@@ -1,8 +1,14 @@
 package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.*;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.*;
 import pt.ua.ieeta.geneoptimizer.GUI.ContainerPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.ContentPanel;
@@ -30,7 +36,7 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
     private Box contentBox;
 
     /* List of sequence panels in this content panel. */
-    private Vector<SequencePanel> sequencePanels;
+    private List<SequencePanel> sequencePanels;
 
     /* Selected structure type to be displayed. */
     private BioStructure.Type selectedStructureType;
@@ -39,10 +45,10 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
     private JPopupMenu popup;
 
     /* Color maps to paint the sequence panels. */
-    private Vector<Vector<Color>>  colorVector;
+    private List<List<Color>>  colorList;
 
     /* Names of each sequence that is shown in the panel. Described before each sequence. */
-    private Vector<IOptimizationPlugin> plugins;
+    private List<IOptimizationPlugin> plugins;
 
     private int height;
 
@@ -51,7 +57,7 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
         this(study, title, null, null);
     }
 
-    public MultiSequencePanel(Study study, String title, Vector<Vector<Color>> colorMap, Vector<IOptimizationPlugin> plugins)
+    public MultiSequencePanel(Study study, String title, List<List<Color>> colorMap, List<IOptimizationPlugin> plugins)
     {
         super(title, true);
 
@@ -63,7 +69,7 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
         super.getContentPanel().setStudy(study);
 
         this.study = study;
-        this.colorVector = colorMap;
+        this.colorList = colorMap;
         this.plugins = plugins;
 
         /* Create scrolling suport to take sequence panels. */
@@ -75,7 +81,7 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
 
         /* Create box to hold everything, and create a list to keep each sequence panel. */
         this.contentBox = new Box(BoxLayout.X_AXIS);
-        this.sequencePanels = new Vector<SequencePanel>();
+        this.sequencePanels = Collections.synchronizedList(new ArrayList<SequencePanel>());
 
         /* Create a new border layout to dispose components. */
         setLayout(new BorderLayout());
@@ -107,10 +113,10 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
         /* Clear content box, scrolling content and sequencePanels list. */
         this.contentBox.removeAll();
         this.scrollContent.removeAll();
-        this.sequencePanels.removeAllElements();
+        this.sequencePanels.clear();
 
         /* Get genes. */
-        Vector<Gene> genes = study.getResultingGenes();
+        List<Gene> genes = study.getResultingGenes();
 
         /* Create and fill panel with names of sequences. */
         JPanel namesPanel = new JPanel();
@@ -144,7 +150,7 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
     }
     
     /* Returns the plugin currently being used to colour the codon sequence. */
-    public Vector<IOptimizationPlugin> getColouringPlugins()
+    public List<IOptimizationPlugin> getColouringPlugins()
     {
         return plugins;
     }
@@ -156,8 +162,8 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
         /* Create new sequence panel. */
         SequencePanel sequence = null;
 
-        if (colorVector != null)
-            sequence = new TextSequencePanel(null, structure, colorVector.get(index), false);
+        if (colorList != null)
+            sequence = new TextSequencePanel(null, structure, colorList.get(index), false);
         else
             sequence = new TextSequencePanel(null, structure, false);
 
@@ -198,7 +204,8 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
         JMenuItem menuItem = new JMenuItem("<html>View as <b>codon</b> sequences</html>");
         menuItem.addActionListener(
                 new ActionListener()
-                {public void actionPerformed(ActionEvent e)
+                {@Override
+                public void actionPerformed(ActionEvent e)
                  {
                         selectedStructureType = BioStructure.Type.mRNAPrimaryStructure;
                         fillContentBox();
@@ -209,7 +216,8 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
         menuItem = new JMenuItem("<html>View as <b>aminoacid</b> sequences</html>");
         menuItem.addActionListener(
                 new ActionListener()
-                {public void actionPerformed(ActionEvent e)
+                {@Override
+                public void actionPerformed(ActionEvent e)
                  {
                         selectedStructureType = BioStructure.Type.proteinPrimaryStructure;
                         fillContentBox();
@@ -260,6 +268,7 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
     /**************************************************************/
 
 
+    @Override
     public void mousePressed(MouseEvent e)
     {
         /* If CTRL is pressed, then user wants to join two studies into one. */
@@ -286,20 +295,24 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
             ProjectManager.getInstance().getSelectedProject().setSelectedStudy(this.study);
     }
 
+    @Override
     public void mouseEntered(MouseEvent e)
     {
         Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
         setCursor(cursor);
     }
 
+    @Override
     public void mouseExited(MouseEvent e)
     {
         Cursor cursor = new Cursor(Cursor.DEFAULT_CURSOR);
         setCursor(cursor);
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) { }
 
+    @Override
     public void mouseReleased(MouseEvent e)
     {
         showPopup(e);
@@ -311,8 +324,10 @@ public class MultiSequencePanel extends ContentPanel implements MouseListener, M
                 popup.show(e.getComponent(), e.getX(), e.getY());
     }
 
+    @Override
     public void mouseDragged(MouseEvent e) {}
 
+    @Override
     public void mouseMoved(MouseEvent e) { }
     
 }

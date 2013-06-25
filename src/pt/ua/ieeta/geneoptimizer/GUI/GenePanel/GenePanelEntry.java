@@ -1,7 +1,7 @@
 package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
 import java.awt.Color;
-import java.util.Vector;
+import java.util.List;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure.Type;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
@@ -26,7 +26,7 @@ public class GenePanelEntry
     
     private String name; // entry label
     private Gene gene; // entry gene
-    private Vector<Color> colorScheme; // color scheme to paint the sequence panel
+    private List<Color> colorScheme; // color scheme to paint the sequence panel
     private BioStructure.Type sequenceType;
     private EntryType entryType;
 
@@ -36,7 +36,7 @@ public class GenePanelEntry
      * @param colorScheme The colour scheme for this sequence panel. The size must be equal to the sequence size.
      * @param The type of sequence panel. Can be a codon sequence, AA sequence, ortholog, etc.
      */
-    public GenePanelEntry(String name, Gene gene, Vector<Color> colorScheme, Type sequenceType, EntryType entryType)
+    public GenePanelEntry(String name, Gene gene, List<Color> colorScheme, Type sequenceType, EntryType entryType)
     {
         assert name != null;
         assert gene != null;
@@ -50,12 +50,12 @@ public class GenePanelEntry
         this.entryType = entryType;
     }
 
-    public Vector<Color> getColorScheme()
+    public List<Color> getColorScheme()
     {
         return colorScheme;
     }
 
-    public void setColorScheme(Vector<Color> colorScheme)
+    public void setColorScheme(List<Color> colorScheme)
     {
         this.colorScheme = colorScheme;
     }

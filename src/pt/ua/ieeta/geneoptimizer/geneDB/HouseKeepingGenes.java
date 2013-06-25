@@ -1,7 +1,8 @@
 package pt.ua.ieeta.geneoptimizer.geneDB;
 
 import java.io.*;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
@@ -16,7 +17,7 @@ public class HouseKeepingGenes extends Thread
     private String eugeneDir = null;
     private String geneCodesFolder = null;
     private String geneCodesFileName = null;
-    private Vector<String> geneCodesEukaryots, geneCodesProkaryots;
+    private List<String> geneCodesEukaryots, geneCodesProkaryots;
     
     private static volatile HouseKeepingGenes instance = null;
     
@@ -40,8 +41,8 @@ public class HouseKeepingGenes extends Thread
         eugeneDir = (String) ApplicationSettings.getProperty("eugene_dir", String.class);
         geneCodesFolder = (String) ApplicationSettings.getInstance().getProperty("highlyExpressedGenesFolder", String.class);
         geneCodesFileName = (String) ApplicationSettings.getProperty("highlyExpressedGenesFileName", String.class);
-        geneCodesEukaryots = new Vector<String>(76, 5);
-        geneCodesProkaryots = new Vector<String>(64, 5);
+        geneCodesEukaryots = new ArrayList<String>(76);
+        geneCodesProkaryots = new ArrayList<String>(64);
     }
     
     public boolean isFinished()

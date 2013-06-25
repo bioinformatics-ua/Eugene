@@ -1,6 +1,7 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -8,12 +9,12 @@ import java.util.Vector;
  */
 public class OptimizationSolutionSet
 {
-    private Vector<OptimizationSolution> solutionSet;
+    private List<OptimizationSolution> solutionSet;
     private int bestSolution;
 
     public OptimizationSolutionSet()
     {
-        solutionSet = new Vector<OptimizationSolution>();
+        solutionSet = new ArrayList<OptimizationSolution>();
     }
     
     public void addSolution(OptimizationSolution newSolution)
@@ -51,7 +52,7 @@ public class OptimizationSolutionSet
         return solutionSet.get(0).getRedesignName(redesignIndex);
     }
 
-    public Vector<String> getRedesignNames()
+    public List<String> getRedesignNames()
     {
         assert solutionSet != null;
         assert !solutionSet.isEmpty();

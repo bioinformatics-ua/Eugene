@@ -1,9 +1,9 @@
 package pt.ua.ieeta.geneoptimizer.geneDB;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel;
@@ -30,7 +30,7 @@ public class UsageAndContextTables extends Observable implements Runnable
     /* Reference to the genome this codon usage table refers to. */
     private Genome genome;
     /* Genes present in genome */
-    private Vector<Gene> genes;
+    private List<Gene> genes;
 
     /* Flag indicating that this thread hasn't finished yet. */
     private boolean hasFinished = false;
@@ -51,7 +51,7 @@ public class UsageAndContextTables extends Observable implements Runnable
     ProcessPanel processPanel;
 
     
-    public UsageAndContextTables(Genome genomeReference, Vector<Gene> genesReference)
+    public UsageAndContextTables(Genome genomeReference, List<Gene> genesReference)
     {
         codonUsageTable = new HashMap<String, Integer>(70);
         codonContextTable = new HashMap<String, Integer>(4100);
@@ -236,7 +236,7 @@ public class UsageAndContextTables extends Observable implements Runnable
 
         waitUntilFinished();
         
-        Vector<String> syn = genome.getGeneticCodeTable().getSynonymousFromCodon(codon);
+        List<String> syn = genome.getGeneticCodeTable().getSynonymousFromCodon(codon);
         int maxIndex = 0;
         for (int i=1; i<syn.size(); i++)
             if (getCodonUsageFrequency(syn.get(i)) > getCodonUsageFrequency(syn.get(maxIndex)))

@@ -3,8 +3,10 @@ package pt.ua.ieeta.geneoptimizer.geneDB;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 /**
  *
@@ -13,11 +15,11 @@ import java.util.Vector;
 public class Genome {
     /* List of genes in this genome. */
 
-    private Vector<Gene> genes = null;          // used in housekeeping and orthologs
+    private List<Gene> genes = null;          // used in housekeeping and orthologs
     private String[] genesFiles = null;         // used in normal genome - reference to files
-    private Vector<String> genesHeaders = null; // used in normal genome - headers of genes
-    private Vector<Integer> genesLength = null; // used in normal genome - lengths of genes
-    private Vector<Gene> genesAdded = null;     // used to save genes added manually
+    private List<String> genesHeaders = null; // used in normal genome - headers of genes
+    private List<Integer> genesLength = null; // used in normal genome - lengths of genes
+    private List<Gene> genesAdded = null;     // used to save genes added manually
 
     /* ID of this genome. To identify it in the pool. */
     private int genomeID;
@@ -43,10 +45,10 @@ public class Genome {
     private Genome houseKeepingGenes = null;
 
     public Genome() {
-        genes = new Vector<Gene>();
+        genes = Collections.synchronizedList(new ArrayList<Gene>());
     }
 
-    public Genome(Vector<Gene> iGenes, GeneticCodeTable geneticCodeTable) {
+    public Genome(List<Gene> iGenes, GeneticCodeTable geneticCodeTable) {
         assert iGenes != null;
         assert geneticCodeTable != null;
 
@@ -54,7 +56,7 @@ public class Genome {
         this.geneticCodeTable = geneticCodeTable;
     }
 
-    public Genome(Vector<Gene> iGenes, String name, GeneticCodeTable geneticCodeTable) {
+    public Genome(List<Gene> iGenes, String name, GeneticCodeTable geneticCodeTable) {
         assert iGenes != null;
         assert name != null;
         assert geneticCodeTable != null;
@@ -76,7 +78,7 @@ public class Genome {
         assert name != null;
         assert geneticCodeTable != null;
 
-        this.genes = new Vector<Gene>();
+        this.genes = Collections.synchronizedList(new ArrayList<Gene>());
         this.genomeName = name;
         this.geneticCodeTable = geneticCodeTable;
 
@@ -86,7 +88,7 @@ public class Genome {
     public Genome(String name) {
         assert name != null;
 
-        this.genes = new Vector<Gene>();
+        this.genes = Collections.synchronizedList(new ArrayList<Gene>());
         this.genomeName = name;
 
         makeSmallGenomeName();
@@ -148,22 +150,22 @@ public class Genome {
         this.genomeID = genomeID;
     }
 
-    public synchronized Vector<Gene> getGenes() {
+    public synchronized List<Gene> getGenes() {
         return genes;
     }
 
-    public synchronized void setGenes(Vector<Gene> genes) {
+    public synchronized void setGenes(List<Gene> genes) {
         this.genes = genes;
     }
 
-    public synchronized void setGenesRef(String[] filelist, Vector<Gene> genes) {
+    public synchronized void setGenesRef(String[] filelist, List<Gene> genes) {
         genesFiles = new String[filelist.length];
         for (int i = 0; i < filelist.length; i++) {
             genesFiles[i] = new String(filelist[i]);
         }
 
-        genesHeaders = new Vector<String>(100, 50);
-        genesLength = new Vector<Integer>(100, 50);
+        genesHeaders = new ArrayList<String>(100);
+        genesLength = new ArrayList<Integer>(100);
         for (Iterator<Gene> it = genes.iterator(); it.hasNext();) {
             Gene gene = it.next();
             genesHeaders.add(gene.getGeneHeader());
@@ -171,7 +173,7 @@ public class Genome {
         }
     }
 
-    public synchronized Vector<String> getGenesHeaders() {
+    public synchronized List<String> getGenesHeaders() {
         return genesHeaders;
     }
 
@@ -239,7 +241,7 @@ public class Genome {
         assert newGene != null;
 
         if (genesAdded == null) {
-            genesAdded = new Vector<Gene>();
+            genesAdded = new ArrayList<Gene>();
         }
 
         genesHeaders.add(newGene.getGeneHeader());        
@@ -247,7 +249,7 @@ public class Genome {
         genesAdded.add(newGene);
     }
 
-    public Vector<Gene> getGenesAdded() {
+    public List<Gene> getGenesAdded() {
         return genesAdded;
     }
 

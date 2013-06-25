@@ -8,9 +8,11 @@ package pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -39,7 +41,7 @@ public class GenePoolGUI extends javax.swing.JDialog implements Observer, Runnab
     private static volatile GenePoolGUI instance = null;
 
     /* Selected Genome. */
-    private static Vector<GenomeHomePage> tabbedGenomes = null;
+    private static List<GenomeHomePage> tabbedGenomes = null;
 
     /* Filtering text. */
     private static String filteringText = null;
@@ -58,7 +60,7 @@ public class GenePoolGUI extends javax.swing.JDialog implements Observer, Runnab
                     /*
                      * Create new vector to hold loaded genomes info.
                      */
-                    tabbedGenomes = new Vector<GenomeHomePage>();
+                    tabbedGenomes = Collections.synchronizedList(new ArrayList<GenomeHomePage>());
 
                     instance.initComponents();
 
@@ -128,6 +130,7 @@ public class GenePoolGUI extends javax.swing.JDialog implements Observer, Runnab
         }
     }
 
+    @Override
     public void run() {
         /* Avoid accessing this method when it was already called. */
         if (Thread.currentThread().isAlive()) {

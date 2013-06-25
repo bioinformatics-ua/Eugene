@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package pt.ua.ieeta.geneoptimizer.ExternalTools;
 
 import java.io.BufferedInputStream;
@@ -10,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.HeaderInfo;
@@ -42,7 +38,7 @@ public class NCBIwebFetcher implements Runnable
    public NCBIwebFetcher(ResultKeeper resultKeeper)
    {
        this.resultKeeper = resultKeeper;
-       this.fetchedInformation = new HashMap<HeaderInfo, String>();
+       this.fetchedInformation = new EnumMap<HeaderInfo, String>(HeaderInfo.class);
    }
    
     public void setValue(String value)

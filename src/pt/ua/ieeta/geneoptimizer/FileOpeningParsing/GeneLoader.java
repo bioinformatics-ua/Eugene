@@ -4,11 +4,12 @@
 package pt.ua.ieeta.geneoptimizer.FileOpeningParsing;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -168,7 +169,7 @@ public class GeneLoader extends Thread {
         Genome genome = new Genome(genomeName, geneticCodeTable);
         genome.setFilters(genomeFilters);
         /* Create new set of genes. */
-        Vector<Gene> genes = new Vector<Gene>(200, 100);
+        List<Gene> genes = new ArrayList<Gene>(200);
 
         /* For each file, read its genes, and create a new entry in the gene pool. */
         for (String path : genomeFiles) {
@@ -271,7 +272,7 @@ public class GeneLoader extends Thread {
     private synchronized void loadChromossomesFromFiles() {
         GeneticCodeTable geneticCodeTable = null;
         Genome genome;
-        Vector<Gene> genes;
+        List<Gene> genes;
         
 
         try {
@@ -293,7 +294,7 @@ public class GeneLoader extends Thread {
         genome.setFilters(genomeFilters);
 
         /* Create new set of genes. */
-        genes = new Vector<Gene>(200, 100);
+        genes = new ArrayList<Gene>(200);
 
         /* For each file, read its genes, and create a new entry in the gene pool. */
         for (String path : genomeFiles) {

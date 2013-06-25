@@ -1,6 +1,8 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import pt.ua.ieeta.geneoptimizer.GUI.ContentPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.MultiSequencePanel;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.SingleGenePanel;
@@ -20,13 +22,13 @@ public class Study
     private final Gene originalGene;
 
     /* Resulting gene of the study. */
-    private final Vector<Gene> resultingGenes;
+    private final List<Gene> resultingGenes;
 
     /* Content Panel where the study is shown. */
     private ContentPanel studyPanel = null;
 
     /* Report of the studies. The last report corresponds to the last study. */
-    private Vector<OptimizationReport> optimizationReports;
+    private List<OptimizationReport> optimizationReports;
        
     /* Project where this study is inserted. */
     private Project project;
@@ -42,16 +44,16 @@ public class Study
         assert resulting != null;
 
         this.originalGene = original;
-        this.resultingGenes = new Vector<Gene>();
+        this.resultingGenes = Collections.synchronizedList(new ArrayList<Gene>());
         this.resultingGenes.add(resulting);
         this.name = studyName;
-        this.optimizationReports = new Vector<OptimizationReport>();
+        this.optimizationReports = Collections.synchronizedList(new ArrayList<OptimizationReport>());
 
         /* Ask gene to generate all possible structures. */
         resulting.calculateAllStructures();
     }
 
-    public Study(Gene original, Vector<Gene> resulting, String studyName)
+    public Study(Gene original, List<Gene> resulting, String studyName)
     {
         assert original != null;
         assert studyName != null;
@@ -60,7 +62,7 @@ public class Study
         this.originalGene = original;
         this.resultingGenes = resulting;
         this.name = studyName;
-        this.optimizationReports = new Vector<OptimizationReport>();
+        this.optimizationReports = Collections.synchronizedList(new ArrayList<OptimizationReport>());
 
         /* Ask gene to generate all possible structures. */
         for(Gene gene : resulting)
@@ -74,9 +76,9 @@ public class Study
         assert study2 != null;
 
         this.originalGene = study1.getOriginalGene();
-        this.resultingGenes = new Vector<Gene>();
+        this.resultingGenes = Collections.synchronizedList(new ArrayList<Gene>());
         this.name = study1.getName();
-        this.optimizationReports = new Vector<OptimizationReport>();
+        this.optimizationReports = Collections.synchronizedList(new ArrayList<OptimizationReport>());
 
         /* Add genes from first study. */
         for(Gene gene : study1.getResultingGenes())
@@ -109,7 +111,7 @@ public class Study
     /** Creates the study panel from a given gene. */
     private ContentPanel makePanelFromGene()
     {
-        this.studyPanel = new SingleGenePanel(this, originalGene != resultingGenes.firstElement());
+        this.studyPanel = new SingleGenePanel(this, originalGene != resultingGenes.get(0));
         return this.studyPanel;
     }
 
@@ -128,10 +130,10 @@ public class Study
         assert resultingGenes != null;
         assert resultingGenes.size() > 0;
 
-        return resultingGenes.firstElement();
+        return resultingGenes.get(0);
     }
 
-    public Vector<Gene> getResultingGenes()
+    public List<Gene> getResultingGenes()
     {
         assert resultingGenes != null;
 
@@ -157,11 +159,11 @@ public class Study
         return name;
     }
 
-    public Vector<OptimizationReport> getOptimizationReports() {
+    public List<OptimizationReport> getOptimizationReports() {
         return optimizationReports;
     }
     
-    public void setOptimizationReport(Vector<OptimizationReport> report){
+    public void setOptimizationReport(List<OptimizationReport> report){
         assert report != null;
         
         this.optimizationReports = report;
@@ -173,8 +175,8 @@ public class Study
         assert this.optimizationReports != null;
         assert previousStudy != null;
 
-        Vector<OptimizationReport> previousReport = previousStudy.getOptimizationReports();
-        Vector<OptimizationReport> newReport = new Vector<OptimizationReport>(previousReport);
+        List<OptimizationReport> previousReport = previousStudy.getOptimizationReports();
+        List<OptimizationReport> newReport = new ArrayList<OptimizationReport>(previousReport);
 
         newReport.add(report);
 

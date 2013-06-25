@@ -1,8 +1,10 @@
 package pt.ua.ieeta.geneoptimizer.PluginSystem;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Observable;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationModel;
@@ -15,7 +17,7 @@ import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
  */
 public class PluginLoader extends Observable implements Runnable {
 
-    private static Vector<Class> pluginList;
+    private static List<Class> pluginList;
 
     /* Singleton instance. */
     private static volatile PluginLoader instance = null;
@@ -31,7 +33,7 @@ public class PluginLoader extends Observable implements Runnable {
             synchronized (PluginLoader.class) {
                 if (instance == null) {
                     instance = new PluginLoader();
-                    pluginList = new Vector<Class>();
+                    pluginList = Collections.synchronizedList(new ArrayList<Class>());
 
                     /* Add StudyMakerPanel as an observer so each optimization plugin is automatically loaded into the Panel. */
                     instance.addObserver(OptimizationModel.getInstance());                    
@@ -132,7 +134,7 @@ public class PluginLoader extends Observable implements Runnable {
         }
     }
 
-    public synchronized Vector<Class> getPluginList(PluginType type) {
+    public synchronized List<Class> getPluginList(PluginType type) {
         assert pluginList != null;
 
         while (!doneLoading) {
@@ -143,7 +145,7 @@ public class PluginLoader extends Observable implements Runnable {
             }
         }
 
-        Vector<Class> list = new Vector<Class>();
+        List<Class> list = Collections.synchronizedList(new ArrayList<Class>());
         for (Class c : pluginList) {
             for (Class cl : c.getInterfaces()) {
                 if (type == null) {

@@ -3,11 +3,17 @@
  */
 package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -25,10 +31,10 @@ import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
 public class TextSequencePanel extends SequencePanel implements MouseListener, MouseMotionListener
 {
     /* List of all labels of this panel. */
-    private Vector<JLabel> labelSequence;
+    private List<JLabel> labelSequence;
 
     /* Color vector, if there is one, to ilustrate labels. */
-    private Vector<Color> colorVector;
+    private List<Color> colorVector;
 
     /* Original bio structure for this panel. */
     private BioStructure structure;
@@ -47,7 +53,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
         this(container, structure, null, detach);
     }
 
-    public TextSequencePanel(SingleGenePanel container, BioStructure structure, Vector<Color> colorVector, boolean detach)
+    public TextSequencePanel(SingleGenePanel container, BioStructure structure, List<Color> colorVector, boolean detach)
     {
         assert structure != null;
         if (colorVector != null)
@@ -77,7 +83,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
         this.setOpaque(true);
 
         /* Create label list. */
-        labelSequence = new Vector<JLabel>(structure.getLength());
+        labelSequence = Collections.synchronizedList(new ArrayList<JLabel>(structure.getLength()));
 
         /* Create labels, and place them into the JPanel. */
         int sequenceLabelWidthPixel = (Integer) ApplicationSettings.getProperty("sequenceLabelWidthPixel", Integer.class);
@@ -167,6 +173,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
     }
 
     /* When clicking the mouse, remove any selection. */
+    @Override
     public void mouseClicked(MouseEvent e)
     {
         ProjectManager.getInstance().getSelectedProject().setSelectedStudy(container.getStudy());
@@ -178,6 +185,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent e)
     {
         if ((e.getButton() == MouseEvent.BUTTON1) && (ProjectManager.getInstance().getSelectedProject().getSelectedStudy().equals(container.getStudy())))
@@ -197,6 +205,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
         }
     }
 
+    @Override
     public void mouseReleased(MouseEvent e)
     {
         if (e.isPopupTrigger())
@@ -240,6 +249,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
         Protein3DViewerPanel.getInstance().selectAminoAcid(dragStartIndex, dragEndIndex);
     }
 
+    @Override
     public void mouseEntered(MouseEvent e)
     {
         isOut = false;
@@ -261,6 +271,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
             Protein3DViewerPanel.getInstance().selectAminoAcid(dragEndIndex, dragEndIndex);
     }
 
+    @Override
     public void mouseExited(MouseEvent e)
     {
        isOut = true;
@@ -275,8 +286,10 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
             Protein3DViewerPanel.getInstance().unselectAll();
     }
 
+    @Override
     public void mouseDragged(MouseEvent e) {}
 
+    @Override
     public void mouseMoved(MouseEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

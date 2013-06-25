@@ -1,8 +1,10 @@
 package pt.ua.ieeta.geneoptimizer.geneDB;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI.GenePoolGUI;
 
 /**
@@ -15,7 +17,7 @@ import pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI.GenePoolGUI;
 public class GenePool extends Observable {
     /* List of genomes available on the gene pool. Genome pool itself. */
 
-    private static Vector<Genome> genomes = null;
+    private static List<Genome> genomes = null;
 
     /* Singleton instance of genome pool. */
     private static volatile GenePool instance = null;
@@ -31,7 +33,7 @@ public class GenePool extends Observable {
                     instance = new GenePool();
 
                     /* Create genome list (the pool itself). */
-                    genomes = new Vector<Genome>();
+                    genomes = Collections.synchronizedList(new ArrayList<Genome>());
 
                     /* Create instance of gene pool. */
                     GenePoolGUI.getInstance();
@@ -69,11 +71,11 @@ public class GenePool extends Observable {
         assert genomes != null;
         assert !genomes.isEmpty();
 
-        return genomes.lastElement();
+        return genomes.get(genomes.size() - 1);
     }
 
     /* Return genome list. */
-    public synchronized Vector<Genome> getGenomes() {
+    public synchronized List<Genome> getGenomes() {
         return genomes;
     }
 

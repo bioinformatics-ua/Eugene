@@ -15,11 +15,13 @@ public class ChartSequencePanel extends SequencePanel
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
     }
 
+    @Override
     public int getSequenceWidthInChars()
     {
         return 100;
     }
 
+    @Override
     public void setPaddingLabels(int finalSize)
     {
         

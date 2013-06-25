@@ -4,9 +4,10 @@
 package pt.ua.ieeta.geneoptimizer.GeneRedesign;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel.ProcessPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.PluginSystem.IOptimizationPlugin;
@@ -22,7 +23,7 @@ import pt.ua.ieeta.geneoptimizer.geneDB.GeneticCodeTable;
 public class GeneticAlgorithm
 {
     private final static Random rand = new Random();
-    private static Vector<Vector<String>> synonymous;
+    private static List<List<String>> synonymous;
 
     //high k leads to low probability of mutation
     static int k = (Integer) ApplicationSettings.getInstance().getProperty("probabilityOfMutationRegulator", Integer.class); // 33;
@@ -40,9 +41,9 @@ public class GeneticAlgorithm
      */
     public static Population generatePopulationFromSequence(    Study study, 
                                                                 int populationSize, 
-                                                                Vector<IOptimizationPlugin> plugins, 
-                                                                Vector<ParameterSet> parametersList, 
-                                                                Vector<Float> originalScores,
+                                                                List<IOptimizationPlugin> plugins, 
+                                                                List<ParameterSet> parametersList, 
+                                                                List<Float> originalScores,
                                                                 OptimizationRunner.selectionType selecType)
     {
         assert study != null;
@@ -55,7 +56,7 @@ public class GeneticAlgorithm
         int sequence_length = study.getResultingGene().getSequenceLength();
         
         /* Fill synonymous list. */
-        synonymous = new Vector<Vector<String>>();
+        synonymous = new ArrayList<List<String>>();
         for (int i=0; i< sequence_length; i++)
             synonymous.add(i,geneticCodeTable.getSynonymousFromAA(study.getResultingGene().getStructure(Type.proteinPrimaryStructure).getWordAt(i)));
 
@@ -103,7 +104,7 @@ public class GeneticAlgorithm
     }
 
     static float score;
-    public static float getFitnessScore(Study study, String sequence, Vector<IOptimizationPlugin> selectedPlugins, Vector<ParameterSet> parametersList, Vector<Float> originalScores)
+    public static float getFitnessScore(Study study, String sequence, List<IOptimizationPlugin> selectedPlugins, List<ParameterSet> parametersList, List<Float> originalScores)
     {
         assert study != null;
         assert sequence != null;
@@ -126,7 +127,7 @@ public class GeneticAlgorithm
 
     static StringBuilder offSpring1 = new StringBuilder();
     static StringBuilder offSpring2 = new StringBuilder();
-    public static Vector<String> makeCrossover(Vector<String> parents, int generation, int maxGeneration)
+    public static List<String> makeCrossover(List<String> parents, int generation, int maxGeneration)
     {
         assert parents != null;
         assert parents.size() >= 2;
@@ -139,7 +140,7 @@ public class GeneticAlgorithm
 
         //System.out.println(100/Math.pow(generation, 0.6));
 
-        for (int i=0; i<parents.firstElement().length(); i+=3)
+        for (int i=0; i<parents.get(0).length(); i+=3)
         {
             /* Introduce random change with a variable probability */
             if (rand.nextInt(100) <= ((maxGeneration-generation)*100)/(k*maxGeneration))
@@ -155,7 +156,7 @@ public class GeneticAlgorithm
             }
         }
 
-        Vector<String> offSpring = new Vector<String>(2);
+        List<String> offSpring = new ArrayList<String>(2);
         offSpring.add(offSpring1.toString());
         offSpring.add(offSpring2.toString());
 
@@ -171,11 +172,11 @@ public class GeneticAlgorithm
                                             Population population, 
                                             float reproductivePercentage, 
                                             Study study, 
-                                            Vector<IOptimizationPlugin> selectedPlugins, 
-                                            Vector<Float> originalScores, 
-                                            Vector<ParameterSet> parametersList, 
+                                            List<IOptimizationPlugin> selectedPlugins, 
+                                            List<Float> originalScores, 
+                                            List<ParameterSet> parametersList, 
                                             boolean obtainParetoFront, 
-                                            Vector<String> paretoOptimalSet, 
+                                            List<String> paretoOptimalSet, 
                                             ProcessPanel processPanel,
                                             OptimizationRunner.selectionType selecType)
     {
@@ -193,9 +194,9 @@ public class GeneticAlgorithm
             originalScore += originalScores.get(i);
         originalScore /= originalScores.size();
 
-        Vector<String> parents = new Vector<String>(2);
+        List<String> parents = new ArrayList<String>(2);
         parents.add(""); parents.add("");
-        Vector<String> reproductionResult;
+        List<String> reproductionResult;
 
         /* In the main loop, stop only when there is no evolution during 50 generations, or a fraction of maxGenerations and the current generation (see formula). */
         while ((convergenceCounter < maxGenerations*40/generationNumber) && (convergenceCounter<50) && !OptimizationRunner.isStopOptimization())
@@ -249,7 +250,7 @@ public class GeneticAlgorithm
                     for (int i = 0; i < reproductionResult.size(); i++) {
                         seqBuilder = new StringBuilder(reproductionResult.get(i));
                         seqBuilder.replace(startIndex * 3, endIndex * 3 + 3, originalSubSeq);
-                        reproductionResult.setElementAt(seqBuilder.toString(), i);
+                        reproductionResult.set(i, seqBuilder.toString());
                     }
                 }
 
@@ -295,7 +296,7 @@ public class GeneticAlgorithm
     }
 
     /* Add an individual to the pareto optimal set, if that individual fills the requirements. */
-    private static void addToParetoFront(Vector<String> paretoOptimalSet, String newIndividual, Vector<IOptimizationPlugin> selectedPlugins, Study study, Vector<ParameterSet> parametersList)
+    private static void addToParetoFront(List<String> paretoOptimalSet, String newIndividual, List<IOptimizationPlugin> selectedPlugins, Study study, List<ParameterSet> parametersList)
     {
         if (paretoOptimalSet.isEmpty())
         {
@@ -303,7 +304,7 @@ public class GeneticAlgorithm
             return;
         }
 
-        Vector<Float> newIndividualScores = new Vector<Float>();
+        List<Float> newIndividualScores = new ArrayList<Float>();
          for (int j=0; j<selectedPlugins.size(); j++)
              newIndividualScores.add(selectedPlugins.get(j).getScoreOfSequence(study, newIndividual));
 
@@ -338,7 +339,7 @@ public class GeneticAlgorithm
     }
 
     /* Returns true if sequence in solution1 dominates sequence in solution2. */
-    private static boolean dominates(String solution1, String solution2, Vector<IOptimizationPlugin> selectedPlugins, Study study, Vector<ParameterSet> parametersList)
+    private static boolean dominates(String solution1, String solution2, List<IOptimizationPlugin> selectedPlugins, Study study, List<ParameterSet> parametersList)
     {
         boolean dominates = false;
         for (int j=0; j<selectedPlugins.size(); j++)
@@ -358,7 +359,7 @@ public class GeneticAlgorithm
 
     public static class Population
     {
-        private Vector<Individual> population;
+        private List<Individual> population;
         private Individual bestIndividual;
         private float bestScore = Float.NEGATIVE_INFINITY;
 
@@ -369,7 +370,7 @@ public class GeneticAlgorithm
             assert initialCapacity > 0;
 
             //population = new Vector<Individual>();
-            population = new Vector<Individual>(initialCapacity);
+            population = new ArrayList<Individual>(initialCapacity);
         }
 
         public void addIndividual(String individualSequence, int score)
@@ -439,6 +440,7 @@ public class GeneticAlgorithm
     public static class IndividualComparator implements Comparator<Individual>
     {
 
+        @Override
         public int compare(Individual o1, Individual o2)
         {
             if (o1.getScore() > o2.getScore())

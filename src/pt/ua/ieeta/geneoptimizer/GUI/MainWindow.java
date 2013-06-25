@@ -10,8 +10,10 @@ import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Vector;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -31,7 +33,7 @@ import pt.ua.ieeta.geneoptimizer.geneDB.GenePool;
 public class MainWindow extends javax.swing.JFrame {
     /* List of container panels in the main window. */
 
-    private static Vector<ContainerPanel> containerPanels;
+    private static List<ContainerPanel> containerPanels;
     private static boolean isInformationZoneVisible;
     private static boolean isStudiesZoneVisible;
 
@@ -59,16 +61,16 @@ public class MainWindow extends javax.swing.JFrame {
                     isStudiesZoneVisible = true;
 
                     /* Instantiate list of container panels. */
-                    containerPanels = new Vector<ContainerPanel>();
+                    containerPanels = Collections.synchronizedList(new ArrayList<ContainerPanel>());
 
                     /* Create three panels to add to the main content panel. These will be the three main areas of the window. */
                     containerPanels.add(new ContainerPanel(null)); //studies panel
                     containerPanels.add(new ContainerPanel(null)); //information panel
 
                     /* Add the three main areas to the main window. */
-                    instance.mainContent.add(containerPanels.elementAt(0), BorderLayout.WEST);
+                    instance.mainContent.add(containerPanels.get(0), BorderLayout.WEST);
                     instance.mainContent.add(TabbedProjectsPanel.getInstance(), BorderLayout.CENTER);
-                    instance.mainContent.add(containerPanels.elementAt(1), BorderLayout.EAST);
+                    instance.mainContent.add(containerPanels.get(1), BorderLayout.EAST);
 
                     /* Create a default project. */
                     ProjectManager.getInstance().createNewProject();
@@ -107,15 +109,15 @@ public class MainWindow extends javax.swing.JFrame {
         assert containerID >= 0;
         assert containerID < containerPanels.size();
         assert panel != null;
-        assert containerPanels.elementAt(containerID) != null;
+        assert containerPanels.get(containerID) != null;
 
 
 
         /* Add or remove panel from container. */
         if (showPanel) {
-            containerPanels.elementAt(containerID).addContentPanel(panel);
+            containerPanels.get(containerID).addContentPanel(panel);
         } else {
-            containerPanels.elementAt(containerID).removeContentPanel(panel);
+            containerPanels.get(containerID).removeContentPanel(panel);
         }
     }
 
@@ -410,10 +412,10 @@ public class MainWindow extends javax.swing.JFrame {
         isInformationZoneVisible = !isInformationZoneVisible;
 
         if (!isInformationZoneVisible) {
-            instance.mainContent.remove(containerPanels.elementAt(1));
+            instance.mainContent.remove(containerPanels.get(1));
             menuHideInformationZone.setText("Show Information Zone");
         } else {
-            instance.mainContent.add(containerPanels.elementAt(1), BorderLayout.EAST);
+            instance.mainContent.add(containerPanels.get(1), BorderLayout.EAST);
             menuHideInformationZone.setText("Hide Information Zone");
         }
 
@@ -424,10 +426,10 @@ public class MainWindow extends javax.swing.JFrame {
         isStudiesZoneVisible = !isStudiesZoneVisible;
 
         if (!isStudiesZoneVisible) {
-            instance.mainContent.remove(containerPanels.elementAt(0));
+            instance.mainContent.remove(containerPanels.get(0));
             menuHideStudiesZone.setText("Show Operations Zone");
         } else {
-            instance.mainContent.add(containerPanels.elementAt(0), BorderLayout.WEST);
+            instance.mainContent.add(containerPanels.get(0), BorderLayout.WEST);
             menuHideStudiesZone.setText("Hide Operations Zone");
         }
 

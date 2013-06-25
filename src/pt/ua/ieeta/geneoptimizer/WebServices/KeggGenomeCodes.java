@@ -1,6 +1,9 @@
 package pt.ua.ieeta.geneoptimizer.WebServices;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  *
@@ -10,7 +13,7 @@ import java.util.Vector;
 public class KeggGenomeCodes {
 
     private static volatile KeggGenomeCodes instance;
-    private Vector<String> species;
+    private List<String> species;
 
     public static KeggGenomeCodes getInstance() {
         if (instance == null) {
@@ -25,7 +28,7 @@ public class KeggGenomeCodes {
 
     private KeggGenomeCodes() {
         /* Populate the species vector. */
-        species = new Vector<String>(genomeCodes.length);
+        species = Collections.synchronizedList(new ArrayList<String>(genomeCodes.length));
         for (int i = 0; i < genomeCodes.length; i++) {
             species.add(genomeCodes[i].getRight());
         }
@@ -49,7 +52,7 @@ public class KeggGenomeCodes {
         return bestPair;
     }
 
-    public Vector<String> getAvailableSpecies() {
+    public List<String> getAvailableSpecies() {
         assert species != null;
 
         return species;

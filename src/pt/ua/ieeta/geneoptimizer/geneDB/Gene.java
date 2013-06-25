@@ -1,11 +1,11 @@
 package pt.ua.ieeta.geneoptimizer.geneDB;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Vector;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 
 /**
@@ -52,7 +52,7 @@ public class Gene //implements Comparable<Gene>
         this.genomeName = genome.getName();
         this.orthologList = null;
         this.PDBCode = null;
-        this.bioStructures = new HashMap<BioStructure.Type, BioStructure>();
+        this.bioStructures = new EnumMap<BioStructure.Type, BioStructure>(BioStructure.Type.class);
 
         this.gotGeneNameConfirmation = false;
         this.gotProductNameConfirmation = false;
@@ -228,7 +228,7 @@ public class Gene //implements Comparable<Gene>
         assert genome.getGeneticCodeTable() != null;
         
         GeneticCodeTable gct = genome.getGeneticCodeTable();
-        Vector<String> aaList = gct.getAminoacidList();
+        List<String> aaList = gct.getAminoacidList();
         
         /* Keep track of the number of amino acids that have N synonymous codons (size of the class N). */
         int numberOfAminoAcids = 0;

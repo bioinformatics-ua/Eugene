@@ -24,7 +24,7 @@ public class Project extends Observable
     private ContainerPanel containerPanel;
 
     /* List of studies in this project. */
-    private Vector<Study> studiesList;
+    private List<Study> studiesList;
 
     /* Selected study. The selected study will serve as input to new studies. */
     private Study selectedStudy;
@@ -37,7 +37,7 @@ public class Project extends Observable
 
         this.name = "Project " + ID;
         this.ID = ID;
-        this.studiesList = new Vector<Study>();
+        this.studiesList = new ArrayList<Study>();
         this.selectedStudy = null;
 
         /* Add information panel as an observer, to change information every time a panel is selected. */
@@ -134,12 +134,12 @@ public class Project extends Observable
         new GeneAutoDiscover(newStudy).start(); 
     }
 
-    public synchronized void importGenesToCurrentProject(Vector<Gene> genes)
+    public synchronized void importGenesToCurrentProject(List<Gene> genes)
     {
         assert genes != null;
         assert genes.size() > 0;
 
-        Study newStudy = new Study(genes.firstElement(), genes, "Multiple genes");
+        Study newStudy = new Study(genes.get(0), genes, "Multiple genes");
         addNewStudy(newStudy);
     }
     
@@ -181,7 +181,7 @@ public class Project extends Observable
         return containerPanel;
     }
 
-    public synchronized Vector<Study> getStudiesList() {
+    public synchronized List<Study> getStudiesList() {
         return studiesList;
     }
 
@@ -194,7 +194,7 @@ public class Project extends Observable
 
         if (study.equals(getSelectedStudy()))
             if (!studiesList.isEmpty())
-                setSelectedStudy(studiesList.lastElement());
+                setSelectedStudy(studiesList.get(studiesList.size() - 1));
             else
                 selectedStudy = null;
         

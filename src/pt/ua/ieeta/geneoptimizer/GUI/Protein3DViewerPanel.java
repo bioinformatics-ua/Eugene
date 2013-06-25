@@ -74,23 +74,28 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         textLink.addMouseListener(new MouseListener()
         {
 
+            @Override
             public void mouseClicked(MouseEvent me)
             {
             }
 
+            @Override
             public void mousePressed(MouseEvent me)
             {
             }
 
+            @Override
             public void mouseReleased(MouseEvent me)
             {
                 detachWindow(!isDetached);
             }
 
+            @Override
             public void mouseEntered(MouseEvent me)
             {
             }
 
+            @Override
             public void mouseExited(MouseEvent me)
             {
             }
@@ -303,6 +308,7 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         }
     }
 
+    @Override
     public void run()
     {
         while (true)
@@ -323,6 +329,7 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         }
     }
 
+    @Override
     public void update(Observable o, Object arg)
     {
         assert arg != null;

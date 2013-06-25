@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -100,7 +101,7 @@ public class ApplicationSettings
     private void createDefaultSettingsFile() {
         System.out.println("Creating new settings file...");
 
-        Vector<Setting> defaultSettings = getDefaultSettings();
+        List<Setting> defaultSettings = getDefaultSettings();
         File settingsFile = new File(eugene_dir, settingsFileName);
 
         try {
@@ -126,7 +127,7 @@ public class ApplicationSettings
     private void verifySettingsFile() {
         System.out.println("Verifying the settings file...");
         
-        Vector<Setting> defaultSettings = getDefaultSettings();
+        List<Setting> defaultSettings = getDefaultSettings();
         
         for (Iterator<Setting> it = defaultSettings.iterator(); it.hasNext();) {
             Setting setting = it.next();
@@ -140,8 +141,8 @@ public class ApplicationSettings
     }
     
     
-    private Vector<Setting> getDefaultSettings() {
-        Vector<Setting> defaultSettings = new Vector<Setting>(31, 5);
+    private List<Setting> getDefaultSettings() {
+        List<Setting> defaultSettings = new ArrayList<Setting>(31);
         /* Gene filters. */
         defaultSettings.add(new Setting("checkUnknownLetters", true, Boolean.class));
         defaultSettings.add(new Setting("checkStartCodon", true, Boolean.class));
