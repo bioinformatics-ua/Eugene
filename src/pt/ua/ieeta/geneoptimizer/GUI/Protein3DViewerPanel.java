@@ -380,14 +380,15 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
             iViewer.evalString(rasmolScript);
         }
         final Dimension currentSize = new Dimension();
-        final Rectangle rectClip = new Rectangle();
+//        final Rectangle rectClip = new Rectangle();
 
         @Override
         public void paint(Graphics g)
         {
             getSize(currentSize);
-            g.getClipBounds(rectClip);
-            iViewer.renderScreenImage(g, currentSize, rectClip);
+//            g.getClipBounds(rectClip);
+            iViewer.renderScreenImage(g, currentSize.width, currentSize.height);
+            //iViewer.renderScreenImage(g, currentSize, rectClip);
         }
     }
 

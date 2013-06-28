@@ -208,30 +208,13 @@ public class OptimizationRunner extends Thread
         /* Main life cicle. */
         if (useQuickOptimization)
         {
-            int k = 51200;
-            long start;            
-            do{
-                int aux = 0;
-                float score = 0;
-                start  = System.currentTimeMillis();                
-                do{                    
                 finalSolutionSequence = SimulatedAnnealing.runSimulatedAnnealing(   study, 
                                                                                 study.getResultingGene().getCodonSequence(), 
-                                                                                k, 
+                                                                                100000, 
                                                                                 selectedPlugins,                                                                                 
                                                                                 selecType, 
                                                                                 processPanel);
-                finalSolutionScore = SimulatedAnnealing.getScore();
-                score += finalSolutionScore;
-                aux++;
-                }while (aux < 5);
-                
-                score = score / aux;
-                
-                System.out.println(k + "\t" + String.valueOf(score).replaceAll("\\.", ",") + "\t" + (System.currentTimeMillis() - start) / aux);
-                
-                k = k * 2;
-            }while(k <= 102400);
+                finalSolutionScore = SimulatedAnnealing.getScore();           
         }
         else
         {   
@@ -371,15 +354,7 @@ public class OptimizationRunner extends Thread
 
         System.out.println("Optimization ended.");
     }
-    
-    /* Estimate the k max (simulated annealing max iterations) based on codons length */
-    private int calculateKMaxValue(){
-        //y = 14,779x + 1606,8;
-        int nCodons = study.getResultingGene().getCodonSequence().length();
-        
-        return 100000;
-    }
-    
+
     public static boolean isRunning()
     {
         return isRunning;

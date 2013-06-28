@@ -34,6 +34,7 @@ public class KEGGOrthoRestWS extends Thread {
     private boolean getOrthologs = true;
     private static String keggURL = "http://rest.kegg.jp";
     private final static int MAX_ORTHOLOGS = 10;
+    private final static int MAX_BYTES_HTML_PAGE = 35000; // should be enough for around 50 orthologs
     /* Create semaphore to control access to the Kegg service. */
     private static Semaphore fluxControl = new Semaphore((Integer) ApplicationSettings.getInstance().getProperty("maxNumberOfKeggSimultaneousCalls", Integer.class), true);
 
@@ -66,7 +67,7 @@ public class KEGGOrthoRestWS extends Thread {
 
             /* Get gene entry from Kegg. This will give its kegg entry code. */
             System.out.println("KEGG-WS: Trying to find entry for kegg ID '" + keggID + "'");
-            doc = Jsoup.connect("http://www.kegg.jp/ssdb-bin/ssdb_best?org_gene=" + keggID).get();
+            doc = Jsoup.connect("http://www.kegg.jp/ssdb-bin/ssdb_best?org_gene=" + keggID).timeout(0).maxBodySize(MAX_BYTES_HTML_PAGE).get();
             fluxControl.release();
         } catch (Exception ex) {
             fluxControl.release();
