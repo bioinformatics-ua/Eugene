@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.HeaderInfo;
+import pt.ua.ieeta.geneoptimizer.FileHandling.HeaderInfo;
 
 
 /**

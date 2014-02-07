@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.NCBIBlastClient;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
-import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.SequenceValidator;
+import pt.ua.ieeta.geneoptimizer.FileHandling.SequenceValidator;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel.ProcessPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;

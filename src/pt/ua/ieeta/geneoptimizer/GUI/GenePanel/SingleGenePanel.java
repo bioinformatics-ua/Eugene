@@ -28,7 +28,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.Psipred;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
-import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.SequenceValidator;
+import pt.ua.ieeta.geneoptimizer.FileHandling.SequenceValidator;
 import pt.ua.ieeta.geneoptimizer.GUI.ContentPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.GeneInformationPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;

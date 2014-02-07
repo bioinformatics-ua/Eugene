@@ -14,7 +14,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
-import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.SequenceValidator;
+import pt.ua.ieeta.geneoptimizer.FileHandling.SequenceValidator;
 import pt.ua.ieeta.geneoptimizer.GUI.ProgressPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;

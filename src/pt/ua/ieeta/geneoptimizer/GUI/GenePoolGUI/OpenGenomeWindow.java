@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.GeneLoader;
-import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.GeneticCodeTableParser;
+import pt.ua.ieeta.geneoptimizer.FileHandling.GeneLoader;
+import pt.ua.ieeta.geneoptimizer.FileHandling.GeneticCodeTableParser;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.geneDB.GenomeFilters;
 

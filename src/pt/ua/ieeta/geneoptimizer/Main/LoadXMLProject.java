@@ -19,7 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import pt.ua.ieeta.geneoptimizer.FileOpeningParsing.GeneLoader;
+import pt.ua.ieeta.geneoptimizer.FileHandling.GeneLoader;
 import pt.ua.ieeta.geneoptimizer.GUI.LoadProjectFileProgPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.OptimizationReport;
