@@ -133,36 +133,38 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         mainContent = new javax.swing.JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        mainMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        menuOpenGenome = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        menuNewProject = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
-        menuCloseProject = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        menuQuitApp = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem12 = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        menuHideInformationZone = new javax.swing.JMenuItem();
-        menuHideStudiesZone = new javax.swing.JMenuItem();
-        menuGenePool = new javax.swing.JMenu();
-        menuOpenGenePool = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jMenuItem11 = new javax.swing.JMenuItem();
+        fileMenuOpenGenome = new javax.swing.JMenuItem();
+        fileMenuSeparator1 = new javax.swing.JPopupMenu.Separator();
+        fileMenuNewProject = new javax.swing.JMenuItem();
+        fileMenuSaveProject = new javax.swing.JMenuItem();
+        fileMenuLoadProject = new javax.swing.JMenuItem();
+        fileMenuCloseProject = new javax.swing.JMenuItem();
+        fileMenuSeparator2 = new javax.swing.JPopupMenu.Separator();
+        fileMenuQuit = new javax.swing.JMenuItem();
+        editMenu = new javax.swing.JMenu();
+        editMenuCopyCodon = new javax.swing.JMenuItem();
+        editMenuCopyAminoAcid = new javax.swing.JMenuItem();
+        editMenuSeparator1 = new javax.swing.JPopupMenu.Separator();
+        editMenuExportTSV = new javax.swing.JMenuItem();
+        editMenuSeparator2 = new javax.swing.JPopupMenu.Separator();
+        editMenuCalculateProtein = new javax.swing.JMenuItem();
+        editMenuOrthologsMenu = new javax.swing.JMenu();
+        orthologsMenuShowHide = new javax.swing.JMenuItem();
+        orthologsMenuViewCodonSeq = new javax.swing.JMenuItem();
+        orthologsMenuViewAminoAcidSeq = new javax.swing.JMenuItem();
+        editMenuShowDiff = new javax.swing.JMenuItem();
+        editMenuSeparator3 = new javax.swing.JPopupMenu.Separator();
+        editMenuSettings = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        viewMenuHideInfoZone = new javax.swing.JMenuItem();
+        viewMenuHideOpsZone = new javax.swing.JMenuItem();
+        genePoolMenu = new javax.swing.JMenu();
+        genePoolMenuOpenGenePool = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        helpMenuTutorial = new javax.swing.JMenuItem();
+        helpMenuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Eugene - Gene Redesign and Analysis for Heterologous Expression");
@@ -183,208 +185,217 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 497, Short.MAX_VALUE)
         );
 
-        jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jMenuBar1.setPreferredSize(new java.awt.Dimension(119, 31));
+        mainMenuBar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        mainMenuBar.setPreferredSize(new java.awt.Dimension(119, 31));
 
         fileMenu.setText("File");
 
-        menuOpenGenome.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        menuOpenGenome.setText("Open Genome");
-        menuOpenGenome.addActionListener(new java.awt.event.ActionListener() {
+        fileMenuOpenGenome.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        fileMenuOpenGenome.setText("Open Genome");
+        fileMenuOpenGenome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuOpenGenomeActionPerformed(evt);
+                fileMenuOpenGenomeActionPerformed(evt);
             }
         });
-        fileMenu.add(menuOpenGenome);
-        fileMenu.add(jSeparator3);
+        fileMenu.add(fileMenuOpenGenome);
+        fileMenu.add(fileMenuSeparator1);
 
-        menuNewProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        menuNewProject.setText("New Project");
-        menuNewProject.addActionListener(new java.awt.event.ActionListener() {
+        fileMenuNewProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        fileMenuNewProject.setText("New Project");
+        fileMenuNewProject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuNewProjectActionPerformed(evt);
+                fileMenuNewProjectActionPerformed(evt);
             }
         });
-        fileMenu.add(menuNewProject);
+        fileMenu.add(fileMenuNewProject);
 
-        jMenuItem8.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem8.setText("Save Project...");
-        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+        fileMenuSaveProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        fileMenuSaveProject.setText("Save Project...");
+        fileMenuSaveProject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveProjectEvent(evt);
             }
         });
-        fileMenu.add(jMenuItem8);
+        fileMenu.add(fileMenuSaveProject);
 
-        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem9.setText("Load Project...");
-        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+        fileMenuLoadProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        fileMenuLoadProject.setText("Load Project...");
+        fileMenuLoadProject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadProjectEvent(evt);
             }
         });
-        fileMenu.add(jMenuItem9);
+        fileMenu.add(fileMenuLoadProject);
 
-        menuCloseProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
-        menuCloseProject.setText("Close current project");
-        menuCloseProject.addActionListener(new java.awt.event.ActionListener() {
+        fileMenuCloseProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        fileMenuCloseProject.setText("Close current project");
+        fileMenuCloseProject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuCloseProjectActionPerformed(evt);
+                fileMenuCloseProjectActionPerformed(evt);
             }
         });
-        fileMenu.add(menuCloseProject);
-        fileMenu.add(jSeparator4);
+        fileMenu.add(fileMenuCloseProject);
+        fileMenu.add(fileMenuSeparator2);
 
-        menuQuitApp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        menuQuitApp.setText("Quit");
-        menuQuitApp.addActionListener(new java.awt.event.ActionListener() {
+        fileMenuQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        fileMenuQuit.setText("Quit");
+        fileMenuQuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuQuitAppActionPerformed(evt);
+                fileMenuQuitActionPerformed(evt);
             }
         });
-        fileMenu.add(menuQuitApp);
+        fileMenu.add(fileMenuQuit);
 
-        jMenuBar1.add(fileMenu);
+        mainMenuBar.add(fileMenu);
 
-        jMenu2.setText("Edit");
+        editMenu.setText("Edit");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("<html>Copy <b>codon</b> sequence</html>");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        editMenuCopyCodon.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuCopyCodon.setText("<html>Copy <b>codon</b> sequence</html>");
+        editMenuCopyCodon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                editMenuCopyCodonActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        editMenu.add(editMenuCopyCodon);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("<html>Copy <b>amino acid</b> sequence</html>");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        editMenuCopyAminoAcid.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuCopyAminoAcid.setText("<html>Copy <b>amino acid</b> sequence</html>");
+        editMenuCopyAminoAcid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                editMenuCopyAminoAcidActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
-        jMenu2.add(jSeparator2);
+        editMenu.add(editMenuCopyAminoAcid);
+        editMenu.add(editMenuSeparator1);
 
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem3.setText("<html>Calculate <b>protein secondary structure</b></html>");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        editMenuExportTSV.setText("Export to TSV");
+        editMenuExportTSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                editMenuExportTSVActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        editMenu.add(editMenuExportTSV);
+        editMenu.add(editMenuSeparator2);
 
-        jMenu5.setText("Orthologs");
-
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem4.setText("<html>Show/Hide <b>orthologs</b></html>");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        editMenuCalculateProtein.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuCalculateProtein.setText("<html>Calculate <b>protein secondary structure</b></html>");
+        editMenuCalculateProtein.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                editMenuCalculateProteinActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem4);
+        editMenu.add(editMenuCalculateProtein);
 
-        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem5.setText("<html>View orthologs as <b>codon</b> sequences</html>");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        editMenuOrthologsMenu.setText("Orthologs");
+
+        orthologsMenuShowHide.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        orthologsMenuShowHide.setText("<html>Show/Hide <b>orthologs</b></html>");
+        orthologsMenuShowHide.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                orthologsMenuShowHideActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem5);
+        editMenuOrthologsMenu.add(orthologsMenuShowHide);
 
-        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem6.setText("<html>View orthologs as <b>aminoacid</b> sequences</html>");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        orthologsMenuViewCodonSeq.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
+        orthologsMenuViewCodonSeq.setText("<html>View orthologs as <b>codon</b> sequences</html>");
+        orthologsMenuViewCodonSeq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                orthologsMenuViewCodonSeqActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem6);
+        editMenuOrthologsMenu.add(orthologsMenuViewCodonSeq);
 
-        jMenu2.add(jMenu5);
-
-        jMenuItem12.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem12.setText("<html>Show <b>diff to another AA</b> sequence</html>");
-        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+        orthologsMenuViewAminoAcidSeq.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        orthologsMenuViewAminoAcidSeq.setText("<html>View orthologs as <b>aminoacid</b> sequences</html>");
+        orthologsMenuViewAminoAcidSeq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem12ActionPerformed(evt);
+                orthologsMenuViewAminoAcidSeqActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem12);
-        jMenu2.add(jSeparator1);
+        editMenuOrthologsMenu.add(orthologsMenuViewAminoAcidSeq);
 
-        jMenuItem7.setText("Settings");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+        editMenu.add(editMenuOrthologsMenu);
+
+        editMenuShowDiff.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        editMenuShowDiff.setText("<html>Show <b>diff to another AA</b> sequence</html>");
+        editMenuShowDiff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
+                editMenuShowDiffActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem7);
+        editMenu.add(editMenuShowDiff);
+        editMenu.add(editMenuSeparator3);
 
-        jMenuBar1.add(jMenu2);
-
-        jMenu1.setText("View");
-
-        menuHideInformationZone.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
-        menuHideInformationZone.setText("Hide Information Zone");
-        menuHideInformationZone.addActionListener(new java.awt.event.ActionListener() {
+        editMenuSettings.setText("Settings");
+        editMenuSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuHideInformationZoneActionPerformed(evt);
+                editMenuSettingsActionPerformed(evt);
             }
         });
-        jMenu1.add(menuHideInformationZone);
+        editMenu.add(editMenuSettings);
 
-        menuHideStudiesZone.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-        menuHideStudiesZone.setText("Hide Operations Zone");
-        menuHideStudiesZone.addActionListener(new java.awt.event.ActionListener() {
+        mainMenuBar.add(editMenu);
+
+        viewMenu.setText("View");
+
+        viewMenuHideInfoZone.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
+        viewMenuHideInfoZone.setText("Hide Information Zone");
+        viewMenuHideInfoZone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuHideStudiesZoneActionPerformed(evt);
+                viewMenuHideInfoZoneActionPerformed(evt);
             }
         });
-        jMenu1.add(menuHideStudiesZone);
+        viewMenu.add(viewMenuHideInfoZone);
 
-        jMenuBar1.add(jMenu1);
-
-        menuGenePool.setText("Gene Pool");
-        menuGenePool.setToolTipText("Access the genomes pool.");
-
-        menuOpenGenePool.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
-        menuOpenGenePool.setText("Open Gene Pool");
-        menuOpenGenePool.setToolTipText("The list of available genes/genomes to work with.");
-        menuOpenGenePool.addActionListener(new java.awt.event.ActionListener() {
+        viewMenuHideOpsZone.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
+        viewMenuHideOpsZone.setText("Hide Operations Zone");
+        viewMenuHideOpsZone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuOpenGenePoolActionPerformed(evt);
+                viewMenuHideOpsZoneActionPerformed(evt);
             }
         });
-        menuGenePool.add(menuOpenGenePool);
+        viewMenu.add(viewMenuHideOpsZone);
 
-        jMenuBar1.add(menuGenePool);
+        mainMenuBar.add(viewMenu);
 
-        jMenu4.setText("Help");
+        genePoolMenu.setText("Gene Pool");
+        genePoolMenu.setToolTipText("Access the genomes pool.");
 
-        jMenuItem10.setText("Tutorial");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+        genePoolMenuOpenGenePool.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        genePoolMenuOpenGenePool.setText("Open Gene Pool");
+        genePoolMenuOpenGenePool.setToolTipText("The list of available genes/genomes to work with.");
+        genePoolMenuOpenGenePool.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem10ActionPerformed(evt);
+                genePoolMenuOpenGenePoolActionPerformed(evt);
             }
         });
-        jMenu4.add(jMenuItem10);
+        genePoolMenu.add(genePoolMenuOpenGenePool);
 
-        jMenuItem11.setText("About");
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+        mainMenuBar.add(genePoolMenu);
+
+        helpMenu.setText("Help");
+
+        helpMenuTutorial.setText("Tutorial");
+        helpMenuTutorial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem11ActionPerformed(evt);
+                helpMenuTutorialActionPerformed(evt);
             }
         });
-        jMenu4.add(jMenuItem11);
+        helpMenu.add(helpMenuTutorial);
 
-        jMenuBar1.add(jMenu4);
+        helpMenuAbout.setText("About");
+        helpMenuAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                helpMenuAboutActionPerformed(evt);
+            }
+        });
+        helpMenu.add(helpMenuAbout);
 
-        setJMenuBar(jMenuBar1);
+        mainMenuBar.add(helpMenu);
+
+        setJMenuBar(mainMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -400,58 +411,58 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void menuOpenGenePoolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenGenePoolActionPerformed
+    private void genePoolMenuOpenGenePoolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genePoolMenuOpenGenePoolActionPerformed
         GenePool.getInstance().showGenePool();
-}//GEN-LAST:event_menuOpenGenePoolActionPerformed
+}//GEN-LAST:event_genePoolMenuOpenGenePoolActionPerformed
 
-    private void menuNewProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNewProjectActionPerformed
+    private void fileMenuNewProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuNewProjectActionPerformed
         ProjectManager.getInstance().createNewProject();
-    }//GEN-LAST:event_menuNewProjectActionPerformed
+    }//GEN-LAST:event_fileMenuNewProjectActionPerformed
 
-    private void menuHideInformationZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHideInformationZoneActionPerformed
+    private void viewMenuHideInfoZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMenuHideInfoZoneActionPerformed
         isInformationZoneVisible = !isInformationZoneVisible;
 
         if (!isInformationZoneVisible) {
             instance.mainContent.remove(containerPanels.get(1));
-            menuHideInformationZone.setText("Show Information Zone");
+            viewMenuHideInfoZone.setText("Show Information Zone");
         } else {
             instance.mainContent.add(containerPanels.get(1), BorderLayout.EAST);
-            menuHideInformationZone.setText("Hide Information Zone");
+            viewMenuHideInfoZone.setText("Hide Information Zone");
         }
 
         instance.mainContent.updateUI();
-    }//GEN-LAST:event_menuHideInformationZoneActionPerformed
+    }//GEN-LAST:event_viewMenuHideInfoZoneActionPerformed
 
-    private void menuHideStudiesZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHideStudiesZoneActionPerformed
+    private void viewMenuHideOpsZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMenuHideOpsZoneActionPerformed
         isStudiesZoneVisible = !isStudiesZoneVisible;
 
         if (!isStudiesZoneVisible) {
             instance.mainContent.remove(containerPanels.get(0));
-            menuHideStudiesZone.setText("Show Operations Zone");
+            viewMenuHideOpsZone.setText("Show Operations Zone");
         } else {
             instance.mainContent.add(containerPanels.get(0), BorderLayout.WEST);
-            menuHideStudiesZone.setText("Hide Operations Zone");
+            viewMenuHideOpsZone.setText("Hide Operations Zone");
         }
 
         instance.mainContent.updateUI();
-    }//GEN-LAST:event_menuHideStudiesZoneActionPerformed
+    }//GEN-LAST:event_viewMenuHideOpsZoneActionPerformed
 
-    private void menuOpenGenomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenGenomeActionPerformed
+    private void fileMenuOpenGenomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuOpenGenomeActionPerformed
         GenePool.getInstance().showGenePool();
-    }//GEN-LAST:event_menuOpenGenomeActionPerformed
+    }//GEN-LAST:event_fileMenuOpenGenomeActionPerformed
 
-    private void menuCloseProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCloseProjectActionPerformed
+    private void fileMenuCloseProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuCloseProjectActionPerformed
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
         }
 
         ProjectManager.getInstance().removeProject(ProjectManager.getInstance().getSelectedProject());
-    }//GEN-LAST:event_menuCloseProjectActionPerformed
+    }//GEN-LAST:event_fileMenuCloseProjectActionPerformed
 
-private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuQuitAppActionPerformed
+private void fileMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuQuitActionPerformed
     //TODO: Handle exit
     System.exit(0);
-}//GEN-LAST:event_menuQuitAppActionPerformed
+}//GEN-LAST:event_fileMenuQuitActionPerformed
 
     private void saveProjectEvent(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveProjectEvent
 
@@ -556,13 +567,13 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         ProjectManager.getInstance().loadProject(projectFile);
     }//GEN-LAST:event_loadProjectEvent
 
-    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem11ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem11ActionPerformed
+    private void helpMenuAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_helpMenuAboutActionPerformed
+    {//GEN-HEADEREND:event_helpMenuAboutActionPerformed
         new AboutDialog().showMe();
-    }//GEN-LAST:event_jMenuItem11ActionPerformed
+    }//GEN-LAST:event_helpMenuAboutActionPerformed
 
-    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem10ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem10ActionPerformed
+    private void helpMenuTutorialActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_helpMenuTutorialActionPerformed
+    {//GEN-HEADEREND:event_helpMenuTutorialActionPerformed
         try {
 
             java.awt.Desktop.getDesktop().browse(new URI("http://bioinformatics.ua.pt/eugene"));
@@ -570,17 +581,17 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         } catch (Exception ex) {
             System.out.println("Error while trying to open eugene tutorial web page.");
         }
-    }//GEN-LAST:event_jMenuItem10ActionPerformed
+    }//GEN-LAST:event_helpMenuTutorialActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem7ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem7ActionPerformed
+    private void editMenuSettingsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editMenuSettingsActionPerformed
+    {//GEN-HEADEREND:event_editMenuSettingsActionPerformed
         ApplicationSettingsGUI.getInstance().setVisible(true);
         ApplicationSettingsGUI.getInstance().setAlwaysOnTop(true);
         ApplicationSettingsGUI.getInstance().setLocationRelativeTo(null);
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    }//GEN-LAST:event_editMenuSettingsActionPerformed
 
-    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem12ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem12ActionPerformed
+    private void editMenuShowDiffActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editMenuShowDiffActionPerformed
+    {//GEN-HEADEREND:event_editMenuShowDiffActionPerformed
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
         }
@@ -593,10 +604,10 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.addNewAASequence();
-    }//GEN-LAST:event_jMenuItem12ActionPerformed
+    }//GEN-LAST:event_editMenuShowDiffActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem6ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem6ActionPerformed
+    private void orthologsMenuViewAminoAcidSeqActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_orthologsMenuViewAminoAcidSeqActionPerformed
+    {//GEN-HEADEREND:event_orthologsMenuViewAminoAcidSeqActionPerformed
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
         }
@@ -609,10 +620,10 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.viewOrthologsAsAminoacids();
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    }//GEN-LAST:event_orthologsMenuViewAminoAcidSeqActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem5ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem5ActionPerformed
+    private void orthologsMenuViewCodonSeqActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_orthologsMenuViewCodonSeqActionPerformed
+    {//GEN-HEADEREND:event_orthologsMenuViewCodonSeqActionPerformed
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
         }
@@ -625,10 +636,10 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.viewOrthologsAsCodons();
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_orthologsMenuViewCodonSeqActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem4ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem4ActionPerformed
+    private void orthologsMenuShowHideActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_orthologsMenuShowHideActionPerformed
+    {//GEN-HEADEREND:event_orthologsMenuShowHideActionPerformed
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
         }
@@ -641,10 +652,10 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.showHideOrthologs();
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_orthologsMenuShowHideActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem3ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem3ActionPerformed
+    private void editMenuCalculateProteinActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editMenuCalculateProteinActionPerformed
+    {//GEN-HEADEREND:event_editMenuCalculateProteinActionPerformed
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
         }
@@ -657,10 +668,10 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.showHideProteinSecondaryStructure();
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_editMenuCalculateProteinActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem2ActionPerformed
+    private void editMenuCopyAminoAcidActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editMenuCopyAminoAcidActionPerformed
+    {//GEN-HEADEREND:event_editMenuCopyAminoAcidActionPerformed
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
         }
@@ -673,10 +684,10 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.copyAminoacidSequenceToClipboard();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_editMenuCopyAminoAcidActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
+    private void editMenuCopyCodonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editMenuCopyCodonActionPerformed
+    {//GEN-HEADEREND:event_editMenuCopyCodonActionPerformed
 
         if (ProjectManager.getInstance().getSelectedProject() == null) {
             return;
@@ -690,38 +701,45 @@ private void menuQuitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         SingleGenePanel panel = (SingleGenePanel) ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getCurrentPanel();
         panel.copyCodonSequenceToClipboard();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_editMenuCopyCodonActionPerformed
+
+    private void editMenuExportTSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuExportTSVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editMenuExportTSVActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editMenuCalculateProtein;
+    private javax.swing.JMenuItem editMenuCopyAminoAcid;
+    private javax.swing.JMenuItem editMenuCopyCodon;
+    private javax.swing.JMenuItem editMenuExportTSV;
+    private javax.swing.JMenu editMenuOrthologsMenu;
+    private javax.swing.JPopupMenu.Separator editMenuSeparator1;
+    private javax.swing.JPopupMenu.Separator editMenuSeparator2;
+    private javax.swing.JPopupMenu.Separator editMenuSeparator3;
+    private javax.swing.JMenuItem editMenuSettings;
+    private javax.swing.JMenuItem editMenuShowDiff;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JMenuItem fileMenuCloseProject;
+    private javax.swing.JMenuItem fileMenuLoadProject;
+    private javax.swing.JMenuItem fileMenuNewProject;
+    private javax.swing.JMenuItem fileMenuOpenGenome;
+    private javax.swing.JMenuItem fileMenuQuit;
+    private javax.swing.JMenuItem fileMenuSaveProject;
+    private javax.swing.JPopupMenu.Separator fileMenuSeparator1;
+    private javax.swing.JPopupMenu.Separator fileMenuSeparator2;
+    private javax.swing.JMenu genePoolMenu;
+    private javax.swing.JMenuItem genePoolMenuOpenGenePool;
+    private javax.swing.JMenu helpMenu;
+    private javax.swing.JMenuItem helpMenuAbout;
+    private javax.swing.JMenuItem helpMenuTutorial;
     private javax.swing.JPanel mainContent;
-    private javax.swing.JMenuItem menuCloseProject;
-    private javax.swing.JMenu menuGenePool;
-    private javax.swing.JMenuItem menuHideInformationZone;
-    private javax.swing.JMenuItem menuHideStudiesZone;
-    private javax.swing.JMenuItem menuNewProject;
-    private javax.swing.JMenuItem menuOpenGenePool;
-    private javax.swing.JMenuItem menuOpenGenome;
-    private javax.swing.JMenuItem menuQuitApp;
+    private javax.swing.JMenuBar mainMenuBar;
+    private javax.swing.JMenuItem orthologsMenuShowHide;
+    private javax.swing.JMenuItem orthologsMenuViewAminoAcidSeq;
+    private javax.swing.JMenuItem orthologsMenuViewCodonSeq;
+    private javax.swing.JMenu viewMenu;
+    private javax.swing.JMenuItem viewMenuHideInfoZone;
+    private javax.swing.JMenuItem viewMenuHideOpsZone;
     // End of variables declaration//GEN-END:variables
 }
