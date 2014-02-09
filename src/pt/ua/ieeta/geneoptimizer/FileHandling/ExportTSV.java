@@ -6,10 +6,20 @@
 
 package pt.ua.ieeta.geneoptimizer.FileHandling;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
+import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 import pt.ua.ieeta.geneoptimizer.geneDB.UsageAndContextTables;
@@ -18,8 +28,29 @@ import pt.ua.ieeta.geneoptimizer.geneDB.UsageAndContextTables;
  *
  * @author ed1000
  */
-public class ExportTSV {
-    public static void exportToTSV (File tsvFile, Gene printingGene) {
+public class ExportTSV extends JFrame implements Runnable{
+    @Override
+    public void run() { 
+        new ExportTSV().createUI();
+    }
+    
+    public ExportTSV() {}
+    
+    public void createUI() {
+        JFileChooser saveFile = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TSV file", "tsv");
+        saveFile.setFileFilter(filter);
+        int returnVal = saveFile.showSaveDialog(MainWindow.getInstance());
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            exportToTSV(saveFile.getSelectedFile(), ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene());
+        } else {
+            return;
+        }
+    }
+    
+    public void exportToTSV (File export, Gene printingGene) {
+        File tsvFile = new File(export.getAbsolutePath()+".tsv");
+        
         try(PrintWriter tsvOut = new PrintWriter(tsvFile);){
             Genome printingGenome = printingGene.getGenome();
             UsageAndContextTables printingTables = printingGenome.getUsageAndContextTables();
@@ -45,13 +76,23 @@ public class ExportTSV {
                 actualAminoAcid = printingGenome.getAminoAcidFromCodon(actualCodon);
                 if(i != printingGene.getSequenceLength()-1) {
                     nextCodon = printingGene.getCodonAt(i+1);
-                    tsvOut.println(idx++ + "\t" + actualCodon + "\t" + actualAminoAcid  + "\t" + printingTables.getCodonPairScore(actualCodon, nextCodon) + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + "GC content (todo)" + (printingGene.hasCAI() ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
+                    tsvOut.println(idx++ + "\t" + actualCodon + "\t" + actualAminoAcid  + "\t" + printingTables.getCodonPairScore(actualCodon, nextCodon) + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (printingGene.hasCAI() ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
                 } else {
-                    tsvOut.println(idx + "\t" + actualCodon + "\t" + "*" + "\t" + "\t" + "\t" + "\t" + printingTables.getCodonRelativeAdaptiveness(actualCodon) + "\t" + printingTables.getCodonUsageCount(actualCodon) + "\t" + printingTables.getCodonUsageFrequency(actualCodon) + "\t" + printingTables.getCodonUsageRSCU(actualCodon));
+                    tsvOut.println(idx + "\t" + actualCodon + "\t" + "*" + "\t" + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (printingGene.hasCAI() ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
                 }
             }
         }catch(FileNotFoundException ex) {
             
         }
+    }
+    
+    private static int GCcontent(String codon) {
+        int count = 0;
+        
+        if(codon.charAt(0) == 'G' || codon.charAt(0) == 'C') count++;
+        if(codon.charAt(1) == 'G' || codon.charAt(1) == 'C') count++;
+        if(codon.charAt(2) == 'G' || codon.charAt(2) == 'C') count++;
+        
+        return count;
     }
 }

@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import pt.ua.ieeta.geneoptimizer.FileHandling.ExportTSV;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePanel.SingleGenePanel;
 import pt.ua.ieeta.geneoptimizer.GUI.RedesignPanel.StudyMakerPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
@@ -704,7 +705,7 @@ private void fileMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     }//GEN-LAST:event_editMenuCopyCodonActionPerformed
 
     private void editMenuExportTSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuExportTSVActionPerformed
-        // TODO add your handling code here:
+        new Thread(new ExportTSV()).start();
     }//GEN-LAST:event_editMenuExportTSVActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
