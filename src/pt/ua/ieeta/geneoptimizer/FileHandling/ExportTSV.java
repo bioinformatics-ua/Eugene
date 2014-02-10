@@ -64,7 +64,7 @@ public class ExportTSV implements Runnable{
             }
             tsvOut.println();
             
-            tsvOut.println("Index" + "\t" + "Codon" + "\t" + "Amino Acid" + "\t" + "Codon Pair Score"  + "\t" + "Codon Usage RSCU" + "\t" + "GC content" + (printingGene.hasCAI() ? "\t" + "Codon Usage (CAI)" : ""));
+            tsvOut.println("Index" + "\t" + "Codon" + "\t" + "Amino Acid" + "\t" + "Codon Pair Score"  + "\t" + "Codon Usage (RSCU)" + "\t" + "GC content" + (printingGene.hasCAI() ? "\t" + "Codon Usage (CAI)" : ""));
             int idx = 1;
             String actualCodon, actualAminoAcid, nextCodon;
             for(int i = 0; i < printingGene.getSequenceLength(); i++) {

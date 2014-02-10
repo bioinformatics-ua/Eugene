@@ -270,7 +270,7 @@ public class MainWindow extends javax.swing.JFrame {
         editMenu.add(editMenuCopyAminoAcid);
         editMenu.add(editMenuSeparator1);
 
-        editMenuExportTSV.setText("Export to TSV");
+        editMenuExportTSV.setText("<html><b>Export</b> selected gene to TSV</html>");
         editMenuExportTSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMenuExportTSVActionPerformed(evt);

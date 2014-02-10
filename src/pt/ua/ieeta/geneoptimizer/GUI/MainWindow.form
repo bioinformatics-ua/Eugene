@@ -120,7 +120,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="editMenuExportTSV">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Export to TSV"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Export&lt;/b&gt; selected gene to TSV&lt;/html&gt;"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editMenuExportTSVActionPerformed"/>
