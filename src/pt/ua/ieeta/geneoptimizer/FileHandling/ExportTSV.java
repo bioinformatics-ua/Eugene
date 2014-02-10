@@ -42,8 +42,10 @@ public class ExportTSV implements Runnable{
         }
     }
     
-    public void exportToTSV (File export, Gene printingGene) {
-        File tsvFile = new File(export.getAbsolutePath()+".tsv");
+    public void exportToTSV (File tsvFile, Gene printingGene) {
+        if(!tsvFile.getAbsolutePath().endsWith(".tsv")) {
+            tsvFile = new File(tsvFile.getAbsolutePath()+".tsv");
+        }
         
         try(PrintWriter tsvOut = new PrintWriter(tsvFile);){
             Genome printingGenome = printingGene.getGenome();
