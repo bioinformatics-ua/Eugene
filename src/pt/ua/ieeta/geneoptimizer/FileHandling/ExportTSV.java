@@ -25,7 +25,7 @@ import pt.ua.ieeta.geneoptimizer.geneDB.UsageAndContextTables;
 public class ExportTSV implements Runnable{
     @Override
     public void run() { 
-        new ExportTSV().createUI();
+        this.createUI();
     }
     
     public ExportTSV() {}
@@ -50,6 +50,8 @@ public class ExportTSV implements Runnable{
         try(PrintWriter tsvOut = new PrintWriter(tsvFile);){
             Genome printingGenome = printingGene.getGenome();
             UsageAndContextTables printingTables = printingGenome.getUsageAndContextTables();
+            boolean availableCAI = printingGene.hasCAI();
+            int length = printingGene.getSequenceLength();
             
             tsvOut.println("Genome name: " + "\t" + printingGenome.getName());
             tsvOut.println("Gene name: " + "\t" + printingGene.getName());
@@ -59,22 +61,22 @@ public class ExportTSV implements Runnable{
             tsvOut.println("Average RSCU: " + "\t" + new DecimalFormat("##.###").format(printingGene.getAverageRSCU()));
             tsvOut.println("Codon Pair Bias: " + "\t" + new DecimalFormat("##.###").format(printingGene.getCPB()));
             tsvOut.println("Effective Number of Codons: " + "\t" + new DecimalFormat("##.###").format(printingGene.getEffectiveNumberOfCodons()));
-            if(printingGene.hasCAI()) {
+            if(availableCAI) {
                 tsvOut.println("CAI: " + "\t" + new DecimalFormat("##.###").format(printingGene.getCAI()));
             }
             tsvOut.println();
             
-            tsvOut.println("Index" + "\t" + "Codon" + "\t" + "Amino Acid" + "\t" + "Codon Pair Score"  + "\t" + "Codon Usage (RSCU)" + "\t" + "GC content" + (printingGene.hasCAI() ? "\t" + "Codon Usage (CAI)" : ""));
+            tsvOut.println("Index" + "\t" + "Codon" + "\t" + "Amino Acid" + "\t" + "Codon Pair Score"  + "\t" + "Codon Usage (RSCU)" + "\t" + "GC content" + (availableCAI ? "\t" + "Codon Usage (CAI)" : ""));
             int idx = 1;
             String actualCodon, actualAminoAcid, nextCodon;
-            for(int i = 0; i < printingGene.getSequenceLength(); i++) {
+            for(int i = 0; i < length; i++) {
                 actualCodon = printingGene.getCodonAt(i);
                 actualAminoAcid = printingGenome.getAminoAcidFromCodon(actualCodon);
-                if(i != printingGene.getSequenceLength()-1) {
+                if(i != length-1) {
                     nextCodon = printingGene.getCodonAt(i+1);
-                    tsvOut.println(idx++ + "\t" + actualCodon + "\t" + actualAminoAcid  + "\t" + printingTables.getCodonPairScore(actualCodon, nextCodon) + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (printingGene.hasCAI() ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
+                    tsvOut.println(idx++ + "\t" + actualCodon + "\t" + actualAminoAcid  + "\t" + printingTables.getCodonPairScore(actualCodon, nextCodon) + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (availableCAI ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
                 } else {
-                    tsvOut.println(idx + "\t" + actualCodon + "\t" + "*" + "\t" + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (printingGene.hasCAI() ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
+                    tsvOut.println(idx + "\t" + actualCodon + "\t" + "*" + "\t" + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (availableCAI ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
                 }
             }
         }catch(FileNotFoundException ex) {
@@ -82,6 +84,7 @@ public class ExportTSV implements Runnable{
         }
     }
     
+    /* Counts the GC content in the passed codon */
     private static int GCcontent(String codon) {
         int count = 0;
         
