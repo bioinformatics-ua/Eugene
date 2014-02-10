@@ -6,17 +6,11 @@
 
 package pt.ua.ieeta.geneoptimizer.FileHandling;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
@@ -28,7 +22,7 @@ import pt.ua.ieeta.geneoptimizer.geneDB.UsageAndContextTables;
  *
  * @author ed1000
  */
-public class ExportTSV extends JFrame implements Runnable{
+public class ExportTSV implements Runnable{
     @Override
     public void run() { 
         new ExportTSV().createUI();
