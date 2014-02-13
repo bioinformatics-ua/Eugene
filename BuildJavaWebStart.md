@@ -4,6 +4,7 @@ Building and Deploying Eugene with Java Web Start
 
 1. Retirar todas os certificados dos JARS da pasta MANIFEST
 2. Criar e assinar o Plugins.jar e o Tools.jar
+   - Comando: jarsigner -storepass password -keystore pathToKeystore pathToJar alias
 3. Configurar o projeto no NetBeans (Properties):
 
     * Application:    
