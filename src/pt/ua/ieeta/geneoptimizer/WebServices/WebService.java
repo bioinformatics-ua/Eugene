@@ -1,10 +1,6 @@
 package pt.ua.ieeta.geneoptimizer.WebServices;
 
 import java.util.ArrayList;
-import javax.xml.namespace.QName;
-import javax.xml.rpc.ParameterMode;
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
 
 /**
  *

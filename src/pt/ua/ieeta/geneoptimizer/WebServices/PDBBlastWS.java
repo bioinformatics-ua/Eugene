@@ -1,7 +1,10 @@
 package pt.ua.ieeta.geneoptimizer.WebServices;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.util.ArrayList;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.Semaphore;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,7 +23,8 @@ import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
  */
 public class PDBBlastWS extends Thread
 {
-    private WebService ws1;
+    private String seq;
+    private double eCut;
     private ResultKeeper resultKeeper;
     private int sequenceLen;
     private static Semaphore fluxControl;
@@ -29,17 +33,9 @@ public class PDBBlastWS extends Thread
     {
         this.resultKeeper = resultKeeper;
         this.sequenceLen = sequence.length();
-
-        ws1 = new WebService();
-        ws1.setAddress("http://www.rcsb.org/pdb/services/pdbws?wsdl");
-        ws1.setProtocol("SOAP");
-
-        ArrayList<WebServiceParameter> params = new ArrayList<WebServiceParameter>();
-        params.add(new WebServiceParameter("method", "blastQueryXml"));
-        params.add(new WebServiceParameter("sequence", sequence));
-        params.add(new WebServiceParameter("eCutOff", Double.toString(eCutOff)));
-        ws1.setParams(params);
-
+        this.seq = sequence;
+        this.eCut = eCutOff;
+        
         if (fluxControl == null)
             fluxControl = new Semaphore((Integer) ApplicationSettings.getInstance().getProperty("maxNumberOfPDBBlastSimultaneousCalls", Integer.class), true);
     }
@@ -51,15 +47,15 @@ public class PDBBlastWS extends Thread
         String result = null;
         ProcessPanel processPanel = ProgressPanel.getInstance().newProgressProcess("Fetching from PDB");
         processPanel.setIndeterminated();
-
+        
         try
         {
             fluxControl.acquire();
-                processPanel.setStatus("Connecting...");
-                result = (String) ws1.call();
+            processPanel.setStatus("Connecting...");
+            result = (String) call();
             fluxControl.release();
 
-            //System.out.println(result);
+            // System.out.println(result);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -118,7 +114,32 @@ public class PDBBlastWS extends Thread
         }
         System.out.println("PDB WebService started.");
     }
+    
+    private String call() throws Exception{
+        StringBuilder sb = new StringBuilder();
 
+        URL url = new URL("http://www.rcsb.org/pdb/rest/getBlastPDB1?sequence=" + this.seq + "&eCutOff=" + this.eCut + "&matrix=BLOSUM62&outputFormat=XML");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/xml");
+
+        if (conn.getResponseCode() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+        }
+
+        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+            sb.append("\n");
+        }
+        
+        br.close();
+        conn.disconnect();
+        
+        return sb.toString();
+    }
+    
     public static void main(String [] Args) throws Exception
     {
         ResultKeeper k = new ResultKeeper();
