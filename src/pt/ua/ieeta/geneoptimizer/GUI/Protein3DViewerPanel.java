@@ -3,7 +3,7 @@ package pt.ua.ieeta.geneoptimizer.GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.biojava.bio.structure.io.PDBFileReader;
@@ -31,8 +32,7 @@ import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
  * @author Paulo Gaspar
  * @author Nuno Silva <nuno.mogas@ua.pt>
  */
-public class Protein3DViewerPanel extends ContentPanel implements Observer, Runnable
-{
+public class Protein3DViewerPanel extends ContentPanel implements Observer, Runnable {
 
     private static PDBFileReader pdbr;
     private JmolPanel jmolPanel;
@@ -43,21 +43,21 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
     private boolean isDetached = false;
     private JFrame newFrame;
     private static volatile Protein3DViewerPanel instance = null;
-
-    public static Protein3DViewerPanel getInstance()
-    {
-        if (instance == null)
-            synchronized(Protein3DViewerPanel.class){
-                if (instance == null){
+    private final JLabel loadLink;
+    private final JPanel buttons;
+    
+    public static Protein3DViewerPanel getInstance() {
+        if (instance == null) {
+            synchronized(Protein3DViewerPanel.class) {
+                if (instance == null) {
                     instance = new Protein3DViewerPanel();
                 }
             }
-            
+        }
         return instance;
     }
-
-    private Protein3DViewerPanel()
-    {
+    
+    private Protein3DViewerPanel() {
         super("Protein Viewer", false);
 
         /* Set a vertical layout. */
@@ -67,43 +67,66 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         jmolPanel = new JmolPanel();
         jmolPanel.setPreferredSize(new Dimension(250, 250));
         this.add(jmolPanel);
+        
+        /* Create panel for buttons */
+        buttons = new JPanel();
+        buttons.setLayout(new GridLayout(1, 2));
+        buttons.setVisible(false);
+        this.add(Box.createHorizontalGlue());
+        this.add(buttons);
+        this.add(Box.createHorizontalGlue());
+        
+        /* Create load button. */
+        loadLink = new JLabel("<html><U>Load protein</U></html>", JLabel.LEFT);
+        loadLink.setForeground(new Color(0, 0, 153));
+        loadLink.addMouseListener(new MouseListener() {
 
+            @Override
+            public void mouseClicked(MouseEvent me) {}
+
+            @Override
+            public void mousePressed(MouseEvent me) {}
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                loadExternalFile();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent me) {}
+
+            @Override
+            public void mouseExited(MouseEvent me) {}
+            
+        });
+        loadLink.setVisible(true);
+        buttons.add(loadLink);
+        
+        
         /* Create detaching button. */
-        textLink = new JLabel("<html><U>Detach this panel</U></HTML>", JLabel.CENTER);
+        textLink = new JLabel("<html><U>Detach this panel</U></HTML>", JLabel.RIGHT);
         textLink.setForeground(new Color(0, 0, 153));
-        textLink.addMouseListener(new MouseListener()
-        {
+        textLink.addMouseListener(new MouseListener() {
+            
+            @Override
+            public void mouseClicked(MouseEvent me) {}
 
             @Override
-            public void mouseClicked(MouseEvent me)
-            {
-            }
+            public void mousePressed(MouseEvent me) {}
 
             @Override
-            public void mousePressed(MouseEvent me)
-            {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent me)
-            {
+            public void mouseReleased(MouseEvent me) {
                 detachWindow(!isDetached);
             }
 
             @Override
-            public void mouseEntered(MouseEvent me)
-            {
-            }
+            public void mouseEntered(MouseEvent me) {}
 
             @Override
-            public void mouseExited(MouseEvent me)
-            {
-            }
+            public void mouseExited(MouseEvent me) {}
         });
-        textLink.setVisible(false);
-        this.add(Box.createHorizontalGlue());
-        this.add(textLink);
-        this.add(Box.createHorizontalGlue());
+        textLink.setVisible(true);
+        buttons.add(textLink);
 
         /* Create PDB file reader. */
         // TODO not working at this moment: need to be reviewed and tested again
@@ -122,30 +145,30 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         setPDBCode(newCode);
     }
 
-    public synchronized void updateViewerForSelectedStudy()
-    {
-        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null)
+    public synchronized void updateViewerForSelectedStudy() {
+        if (ProjectManager.getInstance().getSelectedProject().getSelectedStudy() == null) {
             setPDBCode(null);
-        else
+        } else {
             setPDBCode(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().getPDBCode());
+        }
     }
 
-    public synchronized void setPDBCode(String PDBcode)
-    {
-        if (PDBcode == null)
-        {
+    public synchronized void setPDBCode(String PDBcode) {        
+        if (PDBcode == null) {
             viewer.evalString("hide *; background [240,240,240]; font echo 12 tahoma bold; set echo top center; color echo black; echo No protein to display");
             jmolPanel.setPreferredSize(new Dimension(250, 40));
-
             isShowingProtein = false;
-
             updateUI();
-
             return;
         }
-
-        try
-        {
+        
+        if(PDBcode.equals("_manual_")) {
+            setPDBString(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().getPDBMemory(), 250);
+            buttons.setVisible(true);
+            return;
+        }
+        
+        try {
             String PDB;
             jmolPanel.setPreferredSize(new Dimension(250, 250));
             PDB = retrievePDBfile(PDBcode); //pdbr.getStructureById(PDBcode).toPDB(); //
@@ -157,22 +180,86 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
 //            viewer.evalString("select *; color gray; select (1, 2, 3); color red; cartoon 100;"); // set display selected;
             isShowingProtein = true;
 
-            textLink.setVisible(true);
+            buttons.setVisible(true);
 
             updateUI();
-        } catch (Exception ex)
-        { //TODO: excepçoes
+        } catch (Exception ex) { //TODO: excepçoes
             Logger.getLogger(Protein3DViewerPanel.class.getName()).log(Level.SEVERE, null, ex);
             displayErrorMessage();
             textLink.setVisible(false);
         }
     }
-
-    public void selectAminoAcid(int aminoAcidIndexStart, int aminoAcidIndexEnd)
-    {
-        if (!isShowingProtein)
+    
+    private void loadExternalFile() {
+        JFileChooser loadExternalPDB = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDB file" , "pdb", "pdb.gz");
+        loadExternalPDB.addChoosableFileFilter(filter);
+        File pdbFile;
+        StringBuilder pdbInLine = new StringBuilder();
+        if(loadExternalPDB.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            pdbFile = loadExternalPDB.getSelectedFile();
+            if(pdbFile.exists() && pdbFile.canRead()) {
+                if(pdbFile.getAbsolutePath().endsWith("pdb.gz")) {
+                    try {
+                        FileInputStream fis = new FileInputStream(pdbFile);
+                        GZIPInputStream gzipfis = new GZIPInputStream(fis);
+                        InputStreamReader isr = new InputStreamReader(gzipfis);
+                        BufferedReader br = new BufferedReader(isr);
+                        
+                        String line;
+                        while ((line = br.readLine()) != null)
+                            pdbInLine.append(line).append("\n");
+                        
+                        br.close();
+                        isr.close();
+                        gzipfis.close();
+                        fis.close();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(Protein3DViewerPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Protein3DViewerPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    try {
+                        FileInputStream fis = new FileInputStream(pdbFile);
+                        InputStreamReader isr = new InputStreamReader(fis);
+                        BufferedReader br = new BufferedReader(isr);
+                        
+                        String line;
+                        while ((line = br.readLine()) != null)
+                            pdbInLine.append(line).append("\n");
+                        
+                        br.close();
+                        isr.close();
+                        fis.close();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(Protein3DViewerPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Protein3DViewerPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().setPDBCode("_manual_");
+                ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().setPDBMemory(pdbInLine.toString());
+                setPDBString(pdbInLine.toString(), 250);
+            }
+        }
+        
+    }
+    
+    private void setPDBString(String pdbInLine, int height) {
+        viewer.openStringInline(pdbInLine.toString());
+        jmolPanel.setPreferredSize(new Dimension(250, height));
+        viewer.evalString("select *; color structure; background black; zoom 150; cartoon only; spin on;");
+        isShowingProtein = true;
+        textLink.setVisible(true);
+        updateUI();
+    }
+    
+    public void selectAminoAcid(int aminoAcidIndexStart, int aminoAcidIndexEnd) {
+        if (!isShowingProtein) {
             return;
-
+        }
+        
         StringBuilder builder = new StringBuilder();
         for (int i = Math.min(aminoAcidIndexStart, aminoAcidIndexEnd); i <= Math.max(aminoAcidIndexStart, aminoAcidIndexEnd); i++)
             builder.append(Integer.toString(i + 1)).append(",");
@@ -183,28 +270,25 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         //jmolPanel.getViewer().evalString("select *; color translucent; select "+builder.toString()+"; color red; cartoons;");
     }
 
-    public void unselectAll()
-    {
-        if (!isShowingProtein)
+    public void unselectAll() {
+        if (!isShowingProtein) {
             return;
+        }
 
         jmolPanel.getViewer().evalString("select *; color structure; cartoon only;");
     }
 
-    private void displayErrorMessage()
-    {
+    private void displayErrorMessage() {
         viewer.evalString("hide *; background [240,240,240]; font echo 13 tahoma bold; set echo top center; color echo red; echo Error displaying protein");
         jmolPanel.setPreferredSize(new Dimension(250, 40));
         ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().setPDBCode(null);
         updateUI();
     }
 
-    private String retrievePDBfile(String pdbCode)
-    {
+    private String retrievePDBfile(String pdbCode) {
         String eugeneDir = (String) ApplicationSettings.getProperty("eugene_dir", String.class);
         String localFileName = eugeneDir + File.separator + "PDBFiles" + File.separator + pdbCode.toLowerCase() + ".pdb.gz";
         File tempFile = new File(localFileName);
-
 
         if (!tempFile.exists())
             // file doesn't exists
@@ -214,8 +298,7 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         System.out.println("PDB: Read local file");
         StringBuilder sb = new StringBuilder();
 
-        try
-        {
+        try {
             FileInputStream is = new FileInputStream(localFileName);
             GZIPInputStream gzipis = new GZIPInputStream(is);
             InputStreamReader reader = new InputStreamReader(gzipis);
@@ -225,11 +308,9 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
             while ((line = buffered.readLine()) != null)
                 sb.append(line).append("\n");
             gzipis.close();
-        } catch (FileNotFoundException ex)
-        {
+        } catch (FileNotFoundException ex) {
             ex.printStackTrace();
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
 
@@ -330,14 +411,12 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
     }
 
     @Override
-    public void update(Observable o, Object arg)
-    {
+    public void update(Observable o, Object arg) {
         assert arg != null;
 
         Study study = (Study) arg;
 
-        if (study.isMultiGeneStudy())
-        {
+        if (study.isMultiGeneStudy()) {
             newCode = null;
             synchronized (this)
             {
@@ -347,11 +426,9 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         }
 
         /* Change protein being shown. */
-        if ((study.getResultingGene().getPDBCode() == null) || (!study.getResultingGene().getPDBCode().equals(newCode)))
-        {
+        if ((study.getResultingGene().getPDBCode() == null) || (!study.getResultingGene().getPDBCode().equals(newCode))) {
             newCode = study.getResultingGene().getPDBCode();
-            synchronized (this)
-            {
+            synchronized (this) {
                 notifyAll();
             }
         }

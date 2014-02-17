@@ -36,7 +36,6 @@ public class ApplicationSettings
 
     private static Properties properties;
     private static volatile ApplicationSettings instance = null;
-
     
     public static ApplicationSettings getInstance() {
         if (instance == null) {
@@ -48,7 +47,6 @@ public class ApplicationSettings
         }
         return instance;
     }
-
     
     private ApplicationSettings() {
         settings = new HashMap<String, String>();
@@ -57,8 +55,7 @@ public class ApplicationSettings
         /* Verify if setting exists */
         if (!new File(eugene_dir, settingsFileName).exists()) {
             createDefaultSettingsFile();
-        }
-        else {
+        } else {
             /* Load all settings from file. */
             try {
                 properties.load(new FileInputStream(new File(eugene_dir, settingsFileName)));
@@ -72,7 +69,7 @@ public class ApplicationSettings
             catch (IOException ex) {
                 System.out.println("Fail loading settings");
                 ex.printStackTrace();
-            }
+             }
         }
         
         /* Verify if settings is current version*/
