@@ -16,7 +16,6 @@ import pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI.GenePoolGUI;
  */
 public class GenePool extends Observable {
     /* List of genomes available on the gene pool. Genome pool itself. */
-
     private static List<Genome> genomes = null;
 
     /* Singleton instance of genome pool. */

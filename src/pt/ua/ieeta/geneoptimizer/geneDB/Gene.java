@@ -31,6 +31,7 @@ public class Gene //implements Comparable<Gene>
 
     /* PDB (Protein Data Bank) code of this gene resulting protein. */
     private String PDBCode = null;
+    private String PDBMemory = null;
 
     /* Orthologs parameters. Only used if this gene is actually an obtained ortholog of another gene. */
     private int Score;
@@ -605,6 +606,17 @@ public class Gene //implements Comparable<Gene>
 //            else
 //                return -1;
 //    }
-
     
+    public void setPDBMemory(String pdb) {
+        if(hasPDBMemory())
+            PDBMemory = pdb;
+    }
+    
+    public boolean hasPDBMemory() {
+        return PDBCode.equals("_manual_");
+    }
+    
+    public String getPDBMemory() {
+        return PDBMemory;
+    }
 }
