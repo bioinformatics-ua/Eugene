@@ -26,7 +26,7 @@ public class Main
     public static void main(String[] args) throws FileNotFoundException, IOException
     {          
         /* Application version. */
-        version = "v1.2";
+        version = "v1.3.1";
         
         /* Check directoy tree. */
         verifyDirectoryTree();
