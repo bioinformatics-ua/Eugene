@@ -253,7 +253,7 @@ public class Soap {
             QName key = (QName) entry.getKey();
             List v = (List) entry.getValue();
 
-            if ((qname == null) || qname.equals(qname)) {
+            if ((qname == null) || qname.equals(key)) {
                 for (int i = 0; i < v.size(); ++i) {
                     SymTabEntry symTabEntry = (SymTabEntry) v.get(i);
                     if (cls.isInstance(symTabEntry)) {
