@@ -153,10 +153,10 @@ public class Muscle extends AlignmentTool
     {
         HashMap<String, String> results = new HashMap<String,String>();
         
-        try
-        {
-            File outputFile = new File(path + "alignment_out.txt");
-            BufferedReader in = new BufferedReader(new FileReader(outputFile));
+        File outputFile = new File(path + "alignment_out.txt");
+        
+        try(BufferedReader in = new BufferedReader(new FileReader(outputFile));) {
+            
             String line;
             StringBuilder sb = new StringBuilder("");
             String id, newID;
