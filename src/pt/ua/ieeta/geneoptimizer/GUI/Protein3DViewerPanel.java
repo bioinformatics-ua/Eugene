@@ -298,16 +298,14 @@ public class Protein3DViewerPanel extends ContentPanel implements Observer, Runn
         System.out.println("PDB: Read local file");
         StringBuilder sb = new StringBuilder();
 
-        try {
-            FileInputStream is = new FileInputStream(localFileName);
+        try(FileInputStream is = new FileInputStream(localFileName);
             GZIPInputStream gzipis = new GZIPInputStream(is);
             InputStreamReader reader = new InputStreamReader(gzipis);
-            BufferedReader buffered = new BufferedReader(reader);
-
+            BufferedReader buffered = new BufferedReader(reader);) {
+            
             String line;
             while ((line = buffered.readLine()) != null)
                 sb.append(line).append("\n");
-            gzipis.close();
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
