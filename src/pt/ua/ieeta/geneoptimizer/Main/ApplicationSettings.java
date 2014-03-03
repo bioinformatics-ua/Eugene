@@ -210,11 +210,8 @@ public class ApplicationSettings
         settings.put(propertieName, strValue);
         properties.put(propertieName, strValue);
 
-        try {
-            FileOutputStream out = new FileOutputStream(new File(eugene_dir, settingsFileName));
+        try(FileOutputStream out = new FileOutputStream(new File(eugene_dir, settingsFileName));) {
             properties.store(out, "/* properties updated on: */");
-            out.flush();
-            out.close();
         } catch (Exception ex) {
             //TODO: exceptions..
             ex.printStackTrace();
