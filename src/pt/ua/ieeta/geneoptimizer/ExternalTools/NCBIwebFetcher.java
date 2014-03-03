@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -197,7 +196,6 @@ public class NCBIwebFetcher implements Runnable
                 if ((line.contains(" /locus_tag=\"")) && !hasInformation(HeaderInfo.LOCUS_TAG))
                     fetchedInformation.put(HeaderInfo.LOCUS_TAG, line.replaceAll("[^\"]+\"([^\"]+)\"", "$1"));
             }
-            is.close();
        }
        catch (Exception e) { System.out.println(e.getMessage());} //TODO: exceptions..
        
