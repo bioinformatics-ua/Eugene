@@ -120,7 +120,7 @@ public class SaveXMLProject {
             inputStream.read(fileBytes);
 
             TransformerFactory tf = TransformerFactory.newInstance();
-            tf.setAttribute("indent-number", new Integer(2));
+            tf.setAttribute("indent-number", Integer.valueOf(2));
 
             Transformer t = tf.newTransformer();
             t.setOutputProperty(OutputKeys.INDENT, "yes");
