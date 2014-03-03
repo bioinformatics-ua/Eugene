@@ -62,7 +62,7 @@ public class SequencePaintingPool {
         List<List<Color>> colorSchemes = new ArrayList<List<Color>>();
 
         List<Gene> orthologs = study.getResultingGene().getOrthologList().getGenes();
-        BioStructure originalGene = study.getResultingGene().getAlignedStructure(Type.proteinPrimaryStructure);
+//        BioStructure originalGene = study.getResultingGene().getAlignedStructure(Type.proteinPrimaryStructure);
 
         for (int i = 0; i < orthologs.size(); i++) {
             colorSchemes.add(new ArrayList<Color>());
