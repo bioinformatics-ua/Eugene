@@ -413,7 +413,7 @@ public class NCBIBlastClient extends uk.ac.ebi.webservices.AbstractWsToolClient 
             params.setAlignments(objFactory.createInputParametersAlignments(new Integer(line.getOptionValue("n"))));
         }
         if (line.hasOption("g")) {
-            params.setGapalign(objFactory.createInputParametersGapalign(new Boolean(true)));
+            params.setGapalign(objFactory.createInputParametersGapalign(Boolean.valueOf(true)));
         }
         if (line.hasOption("f")) {
             params.setFilter(objFactory.createInputParametersFilter(line.getOptionValue("f")));
