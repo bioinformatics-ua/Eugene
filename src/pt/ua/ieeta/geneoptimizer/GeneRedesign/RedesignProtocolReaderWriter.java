@@ -198,7 +198,7 @@ public class RedesignProtocolReaderWriter extends Thread {
             System.out.println("FILE EXISTS.... REMOVING IT... FIX ME");
             newFile.delete();
         }
-
+        
         try {
             XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(new FileWriter(newFile));
 
@@ -254,7 +254,6 @@ public class RedesignProtocolReaderWriter extends Thread {
             /* write data and free associated resources */
             writer.flush();
             writer.close();
-
         } catch (IOException ex) {
             System.out.println("Error saving file: " + ex.getMessage());
             return false;
@@ -263,9 +262,9 @@ public class RedesignProtocolReaderWriter extends Thread {
             return false;
         }
 
-        try {
+        try(FileInputStream inputStream = new FileInputStream(newFile);) {
             byte[] fileBytes = new byte[(int) newFile.length()];
-            FileInputStream inputStream = new FileInputStream(newFile);
+            
             inputStream.read(fileBytes);
 
             TransformerFactory tf = TransformerFactory.newInstance();
