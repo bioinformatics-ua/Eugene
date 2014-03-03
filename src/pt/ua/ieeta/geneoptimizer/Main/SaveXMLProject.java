@@ -178,11 +178,11 @@ public class SaveXMLProject {
                 /*create genome element */
                 outWriter.writeStartElement("genome");
 
-                String source = new String();
+                StringBuilder source = new StringBuilder();
                 /* save hash from sourcefiles */
                 if (genome.getGenesFiles().length > 0) {
                     for (String file : genome.getGenesFiles()) {
-                        source += file;
+                        source.append(file);
                     }
                 } else {
                     return false;
