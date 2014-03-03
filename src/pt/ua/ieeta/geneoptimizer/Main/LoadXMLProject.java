@@ -491,9 +491,9 @@ public class LoadXMLProject extends Thread {
     private void fixGenomeIDs() {
         List<Genome> genomeList = GenePool.getInstance().getGenomes();
         for (Genome g : genomeList) {
-            String id = new String();
+            StringBuilder id = new StringBuilder();
             for (String geneFile : g.getGenesFiles()) {
-                id += geneFile;
+                id.append(geneFile);
             }
             GenePool.getInstance().getGenome(g.getGenomeID()).setGenomeID(id.hashCode());
         }
