@@ -114,9 +114,9 @@ public class SaveXMLProject {
             return false;
         }
 
-        try {
+        try(FileInputStream inputStream = new FileInputStream(file);) {
             byte[] fileBytes = new byte[(int) file.length()];
-            FileInputStream inputStream = new FileInputStream(file);
+            
             inputStream.read(fileBytes);
 
             TransformerFactory tf = TransformerFactory.newInstance();
@@ -126,9 +126,6 @@ public class SaveXMLProject {
             t.setOutputProperty(OutputKeys.INDENT, "yes");
 
             t.transform(new StreamSource(new ByteArrayInputStream(fileBytes)), new StreamResult(file));
-
-            inputStream.close();
-
         } catch (IOException ex) {
             System.out.println("File '" + file.getName() + "' may not exist! : " + ex.getMessage());
             System.out.println("XML not indented!!!");
