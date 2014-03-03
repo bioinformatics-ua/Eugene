@@ -222,7 +222,7 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
         
         /* Notify observers that all information is available. */
         setChanged();
-        notifyObservers(new Boolean(true));
+        notifyObservers(Boolean.valueOf(true));
     }
 
     public Genome getGenome() {
