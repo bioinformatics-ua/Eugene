@@ -197,7 +197,7 @@ public class NCBIwebFetcher implements Runnable
        }
        catch (Exception e) { System.out.println(e.getMessage());} //TODO: exceptions..
        
-       fetchedInformation.keySet().toArray().toString();
+//       fetchedInformation.keySet().toArray().toString();
    }
 
    public String getFetchedInformation(HeaderInfo info)
