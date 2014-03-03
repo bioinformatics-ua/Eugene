@@ -345,11 +345,11 @@ public class SaveXMLProject {
             outWriter.writeAttribute("name", study.getOriginalGene().getName());
 
             //writer original genomeid hash
-            String genomeID = new String();
+            StringBuilder genomeID = new StringBuilder();
             /* save hash from sourcefiles */
             if (study.getOriginalGene().getGenome().getGenesFiles().length > 0) {
                 for (String file : study.getOriginalGene().getGenome().getGenesFiles()) {
-                    genomeID += file;
+                    genomeID.append(file);
                 }
             } else {
                 return false;
@@ -362,10 +362,10 @@ public class SaveXMLProject {
             outWriter.writeAttribute("name", study.getResultingGene().getName());
 
             //writer resulting genomeid hash
-            genomeID = new String();
+            genomeID = new StringBuilder();
             if (study.getResultingGene().getGenome().getGenesFiles().length > 0) {
                 for (String file : study.getResultingGene().getGenome().getGenesFiles()) {
-                    genomeID += file;
+                    genomeID.append(file);
                 }
             } else {
                 return false;
