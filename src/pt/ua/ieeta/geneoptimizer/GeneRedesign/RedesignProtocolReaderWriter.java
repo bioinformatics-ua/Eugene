@@ -274,9 +274,6 @@ public class RedesignProtocolReaderWriter extends Thread {
             t.setOutputProperty(OutputKeys.INDENT, "yes");
 
             t.transform(new StreamSource(new ByteArrayInputStream(fileBytes)), new StreamResult(newFile));
-
-            inputStream.close();
-
         } catch (IOException ex) {
             System.out.println("File '" + newFile.getName() + "' may not exist! : " + ex.getMessage());
             System.out.println("XML not indented!!!");
