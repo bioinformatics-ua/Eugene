@@ -274,7 +274,7 @@ public class JOutlookBar extends JPanel implements MouseListener
     /**
      * The JButton that implements the Outlook bar itself
      */
-    private JButton button;
+//    private JButton button;
 
     /**
      * The component that is the body of the Outlook bar
