@@ -4,10 +4,13 @@
 package pt.ua.ieeta.geneoptimizer.GUI.GenePanel;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -16,13 +19,17 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import pt.ua.ieeta.geneoptimizer.GUI.Protein3DViewerPanel;
+import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
 import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
+import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 
 /**
  *
@@ -47,6 +54,15 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
     
     private BoxLayout layoutBox;
     private FlowLayout layoutFlow;
+    
+    /* Control variable to changing a codon*/
+    private int codonIdx = -1;
+    
+    /* JComboBox singleton */
+    private final JComboBox changeCodonBox = new JComboBox();
+    
+    /* Boolean creation event */
+    private boolean preEvent = false;
     
     public TextSequencePanel(SingleGenePanel container, BioStructure structure, boolean detach)
     {
@@ -139,7 +155,26 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
             labelSequence.add( label );
             this.add(label);
         }
-
+        
+        /* Defining properties of JComboBox that change codons */
+        Dimension comboBoxSize = new Dimension(sequenceLabelWidthPixel+2, 22);
+        changeCodonBox.setPreferredSize(comboBoxSize);
+        changeCodonBox.setMinimumSize(comboBoxSize);
+        changeCodonBox.setMaximumSize(comboBoxSize);
+        changeCodonBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(!preEvent)
+                    preEvent = true;
+                else {
+                System.out.println((String) changeCodonBox.getSelectedItem());
+                if(!ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().getCodonAt(codonIdx).equals(changeCodonBox.getSelectedItem()))
+                    createManualStudy();
+                removeComboBox();
+                }
+            }
+        });
+        
         sequenceSize = structure.getSequenceOccupation();
         numberOfPadding = 0;
 
@@ -177,7 +212,13 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
     public void mouseClicked(MouseEvent e)
     {
         ProjectManager.getInstance().getSelectedProject().setSelectedStudy(container.getStudy());
-
+        
+        if(isCodonSequence && !isSelected && e.getClickCount() == 2 && !e.isConsumed()) {
+            if(codonIdx == -1)
+                changeCodon(getComponentIndex((JLabel) e.getSource()));
+            e.consume();
+        }
+        
         if (isCodonSequence && !e.isShiftDown())
         {
             clearSelection();
@@ -342,4 +383,68 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
 //    {
 //        return getParent() != null ? getParent().getSize().width > getPreferredSize().width : true;
 //    }
+
+    private void changeCodon(int idx) {
+        String codon = ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().getCodonAt(idx);
+        codonIdx = idx;
+        
+        this.remove(codonIdx);
+        List<String> synonims = ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene().getGenome().getGeneticCodeTable().getSynonymousFromCodon(codon);
+        
+        for (int i = 0; i < synonims.size(); ++i) {
+            changeCodonBox.addItem(synonims.get(i));
+        }
+
+        this.add(changeCodonBox, codonIdx);
+        changeCodonBox.setVisible(true);
+        
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                changeCodonBox.showPopup();
+            }
+        });
+        
+        this.updateUI();
+    }
+    
+    private int getComponentIndex(Component obj) {
+        Component[] comps = this.getComponents();
+        for(int i = 0; i < comps.length; ++i) {
+            if(comps[i].equals(obj)) return i;
+        }
+        
+        return -1;
+    }
+    
+    private void removeComboBox() {
+        changeCodonBox.removeAllItems();
+        this.remove(codonIdx);
+        this.add(labelSequence.get(codonIdx), codonIdx);
+        codonIdx = -1;
+        preEvent = false;
+        this.updateUI();
+   }
+    
+    private void createManualStudy() {
+        String codonTemp = (String) changeCodonBox.getSelectedItem();
+        Gene originalGene;
+        BioStructure structure;
+
+        if(ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getName().endsWith("(manually edited)")) {
+            originalGene = ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene();
+            structure = originalGene.getStructure(BioStructure.Type.mRNAPrimaryStructure);
+            originalGene.createStructure(structure.getSubSequence(0, codonIdx) + codonTemp + structure.getSubSequence(codonIdx+1, structure.getLength()), BioStructure.Type.mRNAPrimaryStructure);
+            labelSequence.get(codonIdx).setText(codonTemp);
+            labelSequence.get(codonIdx).setBackground(Color.white);
+            this.updateUI();
+        } else {
+            originalGene = ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getResultingGene();
+            structure = originalGene.getStructure(BioStructure.Type.mRNAPrimaryStructure);
+            Gene resultingGene = new Gene(originalGene.getName() + " (manually edited)", originalGene.getGenome());
+            resultingGene.createStructure(structure.getSubSequence(0, codonIdx) + codonTemp + structure.getSubSequence(codonIdx+1, structure.getLength()), BioStructure.Type.mRNAPrimaryStructure);
+            Study temp = new Study(originalGene, resultingGene, ProjectManager.getInstance().getSelectedProject().getSelectedStudy().getName() + " (manually edited)");
+            ProjectManager.getInstance().getSelectedProject().addNewStudy(temp);
+        }
+    }
 }

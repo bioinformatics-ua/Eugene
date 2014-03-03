@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
 import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
+import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
 import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
 import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 import pt.ua.ieeta.geneoptimizer.geneDB.UsageAndContextTables;
@@ -66,17 +67,23 @@ public class ExportTSV implements Runnable{
             }
             tsvOut.println();
             
-            tsvOut.println("Index" + "\t" + "Codon" + "\t" + "Amino Acid" + "\t" + "Codon Pair Score"  + "\t" + "Codon Usage (RSCU)" + "\t" + "GC content" + (availableCAI ? "\t" + "Codon Usage (CAI)" : ""));
+            while(printingGene.getStructure(BioStructure.Type.proteinSecondaryStructure) == null) {}
+            
+            String secondStruct = printingGene.getStructure(BioStructure.Type.proteinSecondaryStructure).getSequence();
+            
+            tsvOut.println("Index" + "\t" + "Codon" + "\t" + "Amino Acid" + "\t" + "Secondary Structure"  + "\t" + "Codon Pair Score"  + "\t" + "Codon Usage (RSCU)" + "\t" + "GC content" + (availableCAI ? "\t" + "Codon Usage (CAI)" : ""));
             int idx = 1;
             String actualCodon, actualAminoAcid, nextCodon;
+            char struct;
             for(int i = 0; i < length; i++) {
                 actualCodon = printingGene.getCodonAt(i);
                 actualAminoAcid = printingGenome.getAminoAcidFromCodon(actualCodon);
+                struct = secondStruct.charAt(i);
                 if(i != length-1) {
                     nextCodon = printingGene.getCodonAt(i+1);
-                    tsvOut.println(idx++ + "\t" + actualCodon + "\t" + actualAminoAcid  + "\t" + printingTables.getCodonPairScore(actualCodon, nextCodon) + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (availableCAI ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
+                    tsvOut.println(idx++ + "\t" + actualCodon + "\t" + actualAminoAcid  + "\t" + struct + "\t" + printingTables.getCodonPairScore(actualCodon, nextCodon) + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (availableCAI ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
                 } else {
-                    tsvOut.println(idx + "\t" + actualCodon + "\t" + "*" + "\t" + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (availableCAI ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
+                    tsvOut.println(idx + "\t" + actualCodon + "\t" + "*" + "\t" + struct +  "\t" + "\t" + printingTables.getCodonUsageRSCU(actualCodon) + "\t" + GCcontent(actualCodon) + (availableCAI ? "\t" + printingGenome.getHouseKeepingGenes().getUsageAndContextTables().getCodonUsageRSCU(actualCodon) : ""));
                 }
             }
         }catch(FileNotFoundException ex) {
