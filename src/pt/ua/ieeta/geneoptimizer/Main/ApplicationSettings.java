@@ -57,8 +57,8 @@ public class ApplicationSettings
             createDefaultSettingsFile();
         } else {
             /* Load all settings from file. */
-            try {
-                properties.load(new FileInputStream(new File(eugene_dir, settingsFileName)));
+            try(FileInputStream input = new FileInputStream(new File(eugene_dir, settingsFileName))) {
+                properties.load(input);
 
                 System.out.println("Loading settings file...");
                 for (Object key : properties.keySet()) {
