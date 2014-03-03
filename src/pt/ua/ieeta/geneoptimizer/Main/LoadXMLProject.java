@@ -614,7 +614,7 @@ public class LoadXMLProject extends Thread {
         return genome;
     }
 
-    public static boolean isValid() {
-        return isValid();
+    public boolean isValid() {
+        return isValid;
     }
 }
