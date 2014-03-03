@@ -251,9 +251,8 @@ public class Psipred extends Thread
     private String parseOutputFile(String path)
     {
         StringBuilder finalSequence = new StringBuilder("");
-        try 
-        {
-            BufferedReader in = new BufferedReader(new FileReader(new File(path + "result4")));
+        try(BufferedReader in = new BufferedReader(new FileReader(new File(path + "result4")));) {
+            
             String line;
             while((line = in.readLine()) != null)
             {
