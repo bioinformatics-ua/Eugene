@@ -67,7 +67,9 @@ public class Psipred extends Thread
 
         /* Delete input file. */
         File seq = new File(path + "sequence");
-        seq.delete();
+        if(!seq.delete()){
+            System.out.println("Error deleting file");
+        }
         
         processPanel.setStatus("Done.");
         processPanel.setComplete();
