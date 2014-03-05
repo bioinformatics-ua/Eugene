@@ -318,7 +318,7 @@ public class NCBIBlastClient extends uk.ac.ebi.webservices.AbstractWsToolClient 
                         if (resultTypes[i].getMediaType().startsWith("text")) { // String
                             System.out.print(result);
                         } else { // Binary
-                            System.out.print(resultbytes);
+                            System.out.print(Arrays.toString(resultbytes));
                         }
                     } else { // File
                         String filename = basename + "." + resultTypes[i].getIdentifier() + "." + resultTypes[i].getFileSuffix();
