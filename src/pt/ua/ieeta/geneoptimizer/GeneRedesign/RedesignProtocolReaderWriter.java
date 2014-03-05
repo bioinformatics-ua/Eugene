@@ -196,7 +196,9 @@ public class RedesignProtocolReaderWriter extends Thread {
         File newFile = new File(directory.getPath() + File.separator + report.getReportName().replaceAll("\\s", "_") + ".study");
         if (newFile.exists() && !newFile.isDirectory()) {
             System.out.println("FILE EXISTS.... REMOVING IT... FIX ME");
-            newFile.delete();
+            if(!newFile.delete()) {
+                System.out.println("Error deleting file");
+            }
         }
         
         try {
