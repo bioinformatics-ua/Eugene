@@ -101,7 +101,9 @@ public class Psipred extends Thread
         catch (IOException ex)
         {
             System.out.println("Error writing fasta file: " + ex.getLocalizedMessage());
-            file.delete();
+            if(file.delete()) {
+                System.out.println("Error deleting file");
+            }
             return false;
         }
         
