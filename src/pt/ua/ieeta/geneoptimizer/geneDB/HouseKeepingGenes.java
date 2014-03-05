@@ -108,7 +108,9 @@ public class HouseKeepingGenes extends Thread
         System.out.println("Creating default highly expressed codes file.");
 
         try {
-            heFile.createNewFile();
+            if(!heFile.createNewFile()) {
+                System.out.println("Error creating highly expressed codes file");
+            }
             BufferedWriter bw = new BufferedWriter(new FileWriter(heFile));
             bw.write(default_highly_expressed);
             bw.flush();
