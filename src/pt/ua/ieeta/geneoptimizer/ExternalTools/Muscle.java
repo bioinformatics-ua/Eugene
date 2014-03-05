@@ -211,7 +211,9 @@ public class Muscle extends AlignmentTool
         /* Write aminoacid sequence to inputFile. */
         try
         {
-            inputFile.createNewFile();
+            if(!inputFile.createNewFile()) {
+                System.out.println("Error creating input file");
+            }
             BufferedWriter out = new BufferedWriter(new FileWriter(inputFile));
             for (Gene gene : sequences)
             {                
