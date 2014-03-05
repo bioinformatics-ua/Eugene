@@ -91,7 +91,9 @@ public class Psipred extends Thread
         /* Write aminoacid sequence to file. */
         try
         {
-            file.createNewFile();
+            if(!file.createNewFile()) {
+                System.out.println("Error creating amino acid file");
+            }
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
             out.write("> sequence");
             out.newLine();
@@ -101,7 +103,7 @@ public class Psipred extends Thread
         catch (IOException ex)
         {
             System.out.println("Error writing fasta file: " + ex.getLocalizedMessage());
-            if(file.delete()) {
+            if(!file.delete()) {
                 System.out.println("Error deleting file");
             }
             return false;
