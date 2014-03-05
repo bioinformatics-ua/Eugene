@@ -102,7 +102,9 @@ public class ApplicationSettings
         File settingsFile = new File(eugene_dir, settingsFileName);
 
         try {
-            settingsFile.createNewFile();
+            if(!settingsFile.createNewFile()) {
+                System.out.println("Error creating settings file");
+            }
 
             for (Iterator<Setting> it = defaultSettings.iterator(); it.hasNext();) {
                 Setting setting = it.next();
