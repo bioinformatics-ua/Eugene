@@ -225,7 +225,9 @@ public class Muscle extends AlignmentTool
         catch (IOException ex)
         {
             //TODO: excepçoes...
-            inputFile.delete();
+            if(!inputFile.delete()) {
+                System.out.println("Error deleting input file");
+            }
             return false;
         }
         
