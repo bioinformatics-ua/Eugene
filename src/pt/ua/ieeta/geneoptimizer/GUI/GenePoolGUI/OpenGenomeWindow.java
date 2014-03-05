@@ -2,7 +2,8 @@ package pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -35,8 +36,9 @@ public class OpenGenomeWindow extends javax.swing.JDialog {
          */
         try {
             HashMap<Integer, String> names = GeneticCodeTableParser.getInstance().getGeneticCodeTableNames();
-            for (Entry key : names.entrySet()) {
-                comboBoxGeneticCode.addItem(new ComboBoxItem((String) key.getValue(),(Integer) key.getKey()));
+            for (Iterator it = names.entrySet().iterator(); it.hasNext();) {
+                Map.Entry key = (Map.Entry) it.next();
+                comboBoxGeneticCode.addItem(new ComboBoxItem((String) key.getValue(), (Integer) key.getKey()));
             }
         } catch (Exception ex) //TODO: exceptions
         {
