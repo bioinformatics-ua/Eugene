@@ -44,7 +44,7 @@ public class GeneticAlgorithm
                                                                 List<IOptimizationPlugin> plugins, 
                                                                 List<ParameterSet> parametersList, 
                                                                 List<Float> originalScores,
-                                                                OptimizationRunner.selectionType selecType)
+                                                                OptimizationRunner.SelectionType selecType)
     {
         assert study != null;
         assert plugins != null;
@@ -65,7 +65,7 @@ public class GeneticAlgorithm
         String originalSubSeq = null;
         int startIndex = 0;
         int endIndex = 0;
-        if( selecType == OptimizationRunner.selectionType.NOT_OPTIMIZE_SELECTION) {
+        if( selecType == OptimizationRunner.SelectionType.NOT_OPTIMIZE_SELECTION) {
                   startIndex = study.getSelectedStartIndex();
                   endIndex = study.getSelectedEndIndex()+1;
                   originalSubSeq = study.getOriginalGene().getCodonSubSequence(startIndex, endIndex);
@@ -82,7 +82,7 @@ public class GeneticAlgorithm
             /*
              * If NOT_OPTIMIZE_SELECTION rollback to original subsuquence
              */
-            if (selecType == OptimizationRunner.selectionType.NOT_OPTIMIZE_SELECTION) {
+            if (selecType == OptimizationRunner.SelectionType.NOT_OPTIMIZE_SELECTION) {
                 newSequence.replace(startIndex * 3, endIndex * 3 + 3, originalSubSeq);
             }
 
@@ -178,7 +178,7 @@ public class GeneticAlgorithm
                                             boolean obtainParetoFront, 
                                             List<String> paretoOptimalSet, 
                                             ProcessPanel processPanel,
-                                            OptimizationRunner.selectionType selecType)
+                                            OptimizationRunner.SelectionType selecType)
     {
         int generationNumber = 1;
         int convergenceCounter = 0;
@@ -217,7 +217,7 @@ public class GeneticAlgorithm
             String originalSubSeq = null;
             int startIndex = 0;
             int endIndex = 0;
-            if (selecType == OptimizationRunner.selectionType.NOT_OPTIMIZE_SELECTION) {
+            if (selecType == OptimizationRunner.SelectionType.NOT_OPTIMIZE_SELECTION) {
                 startIndex = study.getSelectedStartIndex();
                 endIndex = study.getSelectedEndIndex()+1;
                 originalSubSeq = study.getOriginalGene().getCodonSubSequence(startIndex, endIndex);
@@ -245,7 +245,7 @@ public class GeneticAlgorithm
                 reproductionResult = GeneticAlgorithm.makeCrossover(parents,generationNumber, 600);
                 
                 /* If NOT_OPTIMIZE_SELECTION (preserve zone) is active rollback to original subsuquence */
-                if (selecType == OptimizationRunner.selectionType.NOT_OPTIMIZE_SELECTION) {
+                if (selecType == OptimizationRunner.SelectionType.NOT_OPTIMIZE_SELECTION) {
                     StringBuilder seqBuilder;
                     for (int i = 0; i < reproductionResult.size(); i++) {
                         seqBuilder = new StringBuilder(reproductionResult.get(i));
