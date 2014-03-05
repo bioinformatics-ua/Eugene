@@ -25,12 +25,8 @@ public class FastaHeaderParser
 
     private static List<Pattern> patterns = null;
     private Matcher matcher;
-
-    public FastaHeaderParser()
-    {
-        /* If not created yet, compile all patterns. */
-        if (patterns == null)
-        {
+    
+    static{
             System.out.println("Compiling FASTA header patterns for the first time.");
             patterns = new ArrayList<Pattern>();
             patterns.add(Pattern.compile("gb[|]([A-Z]+\\d+)[|][A-Z]+\\d+:\\D?(\\d+)-(\\d+).*", Pattern.DOTALL));
@@ -39,8 +35,9 @@ public class FastaHeaderParser
             patterns.add(Pattern.compile(".*:.*:.*:.*:.*:.*:.*:.*", Pattern.DOTALL));
             patterns.add(Pattern.compile("gi[|](\\d+)[|](gb|dbj|emb)[|]([A-Z]+\\d+)[|].*", Pattern.DOTALL));
             patterns.add(Pattern.compile("ref[|]([^|]+)[|]:\\D?(\\d+)-(\\d+)", Pattern.DOTALL));
-        }
     }
+    
+    public FastaHeaderParser() {}
 
     /* Parse a given FASTA header and extract available information. */
     public boolean parseHeader(String header)
