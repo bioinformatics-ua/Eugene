@@ -154,13 +154,21 @@ public class Psipred extends Thread
         
         /* Delete temporary files. */
         File f = new File(path+"result1");
-        f.delete();
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }
         f = new File(path+"result2");
-        f.delete();
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }
         f = new File(path+"result3");
-        f.delete();
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }
         f = new File(path+"result4");
-        f.delete();    
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }    
         
         /* Arguments to create and run the first PsiPred process. */
         String cmdArgs1[] = {execs[0], path + "sequence"};
