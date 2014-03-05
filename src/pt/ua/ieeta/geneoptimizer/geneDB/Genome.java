@@ -285,7 +285,7 @@ public class Genome {
         return geneRes;
     }
 
-    public boolean OrthologsAreAligned() {
+    public boolean orthologsAreAligned() {
         return orthologsAligned;
     }
 
