@@ -314,7 +314,7 @@ public class GenePoolGUI extends javax.swing.JDialog implements Observer, Runnab
             uploadGeneBt.setEnabled(true);
         }
 
-        Genome g = tabbedGenomes.get(selectedIndex).getGenome();
+//        Genome g = tabbedGenomes.get(selectedIndex).getGenome();
         //jLabel5.setText("<html># of Rejected genes: <b>" + g.getNumRejectedGenes() + "</b></html>");
     }//GEN-LAST:event_genomeContainerStateChanged
 

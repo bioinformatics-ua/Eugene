@@ -371,16 +371,16 @@ public class KEGGOrthoRestWS extends Thread {
 
         codonSequence = SequenceValidator.makeCorrectionsToGene(codonSequence);
 
-        String geneName = "";
+        StringBuilder geneName = new StringBuilder();
         String geneID = getFieldContent(wsCall, "ENTRY")[1];
-        String genomeName = "";
+        StringBuilder genomeName = new StringBuilder();
         String[] aux = getFieldContent(wsCall, "DEFINITION");
         if (aux != null) {
             for (int i = 1; i < aux.length; i++) {
                 if (i == (aux.length - 1)) {
-                    geneName += aux[i];
+                    geneName.append(aux[i]);
                 } else {
-                    geneName += aux[i] + " ";
+                    geneName.append(aux[i]).append(" ");
                 }
             }
         }
@@ -389,19 +389,19 @@ public class KEGGOrthoRestWS extends Thread {
         if (aux != null) {
             for (int i = 2; i < aux.length; i++) {
                 if (i == (aux.length - 1)) {
-                    genomeName += aux[i];
+                    genomeName.append(aux[i]);
                 } else {
-                    genomeName += aux[i] + " ";
+                    genomeName.append(aux[i]).append(" ");
                 }
             }
         }
 
-        if (genomeName.isEmpty()) {
-            genomeName = genome.getName();
+        if (genomeName.capacity() == 0) {
+            genomeName = new StringBuilder(genome.getName());
         }
         /* Create new ortholog gene. */
-        Gene newGene = new Gene(geneName, genome);
-        newGene.setOrthologInfo(0, 0, geneID, genomeName);
+        Gene newGene = new Gene(geneName.toString(), genome);
+        newGene.setOrthologInfo(0, 0, geneID, genomeName.toString());
         newGene.createStructure(codonSequence, BioStructure.Type.mRNAPrimaryStructure);
         newGene.createStructure(aaSequence + "*", BioStructure.Type.proteinPrimaryStructure);
         return newGene;

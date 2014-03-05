@@ -67,7 +67,9 @@ public class Psipred extends Thread
 
         /* Delete input file. */
         File seq = new File(path + "sequence");
-        seq.delete();
+        if(!seq.delete()){
+            System.out.println("Error deleting file");
+        }
         
         processPanel.setStatus("Done.");
         processPanel.setComplete();
@@ -89,7 +91,9 @@ public class Psipred extends Thread
         /* Write aminoacid sequence to file. */
         try
         {
-            file.createNewFile();
+            if(!file.createNewFile()) {
+                System.out.println("Error creating amino acid file");
+            }
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
             out.write("> sequence");
             out.newLine();
@@ -99,7 +103,9 @@ public class Psipred extends Thread
         catch (IOException ex)
         {
             System.out.println("Error writing fasta file: " + ex.getLocalizedMessage());
-            file.delete();
+            if(!file.delete()) {
+                System.out.println("Error deleting file");
+            }
             return false;
         }
         
@@ -148,13 +154,21 @@ public class Psipred extends Thread
         
         /* Delete temporary files. */
         File f = new File(path+"result1");
-        f.delete();
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }
         f = new File(path+"result2");
-        f.delete();
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }
         f = new File(path+"result3");
-        f.delete();
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }
         f = new File(path+"result4");
-        f.delete();    
+        if(!f.delete()) {
+            System.out.println("Error deleting result1 file");
+        }    
         
         /* Arguments to create and run the first PsiPred process. */
         String cmdArgs1[] = {execs[0], path + "sequence"};
@@ -251,9 +265,8 @@ public class Psipred extends Thread
     private String parseOutputFile(String path)
     {
         StringBuilder finalSequence = new StringBuilder("");
-        try 
-        {
-            BufferedReader in = new BufferedReader(new FileReader(new File(path + "result4")));
+        try(BufferedReader in = new BufferedReader(new FileReader(new File(path + "result4")));) {
+            
             String line;
             while((line = in.readLine()) != null)
             {

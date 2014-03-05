@@ -3,7 +3,9 @@ package pt.ua.ieeta.geneoptimizer.WebServices;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Random;
 import java.util.logging.Level;
@@ -88,9 +90,9 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
                 genomeName = genome.getName().trim();
             else
             {
-                String message = new String("The genome name you entered could not be identified as a species.\n" 
+                String message = "The genome name you entered could not be identified as a species.\n" 
                                 + "To contact some online services (such as KEGG), the species name is required.\n"
-                                + "Please enter the species name (two names separated by a space, and possibly the strand):");
+                                + "Please enter the species name (two names separated by a space, and possibly the strand):";
                 while (!genomeName.trim().contains(" "))
                 {
                     genomeName = (String) JOptionPane.showInputDialog(null,
@@ -126,14 +128,14 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
         
         /* Count how many kegg keys are in agreement. */
         String keggName = null;
-        for (Object k : concordance.keySet())
-        {
-            System.out.println("  Concordance: " + k + " occured " + concordance.get(k) + " times out of " + numGenesToUse);
+        for (Iterator it = concordance.entrySet().iterator(); it.hasNext();) {
+            Map.Entry k = (Map.Entry) it.next();
+            System.out.println("  Concordance: " + k + " occured " + k.getValue() + " times out of " + numGenesToUse);
             if (keggName == null)
-                keggName = (String)k;
+                keggName = (String) k.getKey();
             else
                 if ((Integer)concordance.get(k) > (Integer)concordance.get(keggName))
-                    keggName = (String)k;
+                    keggName = (String) k.getKey();
         }
         
         /* If there was unanimity, set the genome name. */
@@ -222,7 +224,7 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
         
         /* Notify observers that all information is available. */
         setChanged();
-        notifyObservers(new Boolean(true));
+        notifyObservers(Boolean.valueOf(true));
     }
 
     public Genome getGenome() {

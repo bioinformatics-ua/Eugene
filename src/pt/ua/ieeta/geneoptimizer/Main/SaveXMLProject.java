@@ -114,21 +114,18 @@ public class SaveXMLProject {
             return false;
         }
 
-        try {
+        try(FileInputStream inputStream = new FileInputStream(file);) {
             byte[] fileBytes = new byte[(int) file.length()];
-            FileInputStream inputStream = new FileInputStream(file);
+            
             inputStream.read(fileBytes);
 
             TransformerFactory tf = TransformerFactory.newInstance();
-            tf.setAttribute("indent-number", new Integer(2));
+            tf.setAttribute("indent-number", Integer.valueOf(2));
 
             Transformer t = tf.newTransformer();
             t.setOutputProperty(OutputKeys.INDENT, "yes");
 
             t.transform(new StreamSource(new ByteArrayInputStream(fileBytes)), new StreamResult(file));
-
-            inputStream.close();
-
         } catch (IOException ex) {
             System.out.println("File '" + file.getName() + "' may not exist! : " + ex.getMessage());
             System.out.println("XML not indented!!!");
@@ -178,11 +175,11 @@ public class SaveXMLProject {
                 /*create genome element */
                 outWriter.writeStartElement("genome");
 
-                String source = new String();
+                StringBuilder source = new StringBuilder();
                 /* save hash from sourcefiles */
                 if (genome.getGenesFiles().length > 0) {
                     for (String file : genome.getGenesFiles()) {
-                        source += file;
+                        source.append(file);
                     }
                 } else {
                     return false;
@@ -345,11 +342,11 @@ public class SaveXMLProject {
             outWriter.writeAttribute("name", study.getOriginalGene().getName());
 
             //writer original genomeid hash
-            String genomeID = new String();
+            StringBuilder genomeID = new StringBuilder();
             /* save hash from sourcefiles */
             if (study.getOriginalGene().getGenome().getGenesFiles().length > 0) {
                 for (String file : study.getOriginalGene().getGenome().getGenesFiles()) {
-                    genomeID += file;
+                    genomeID.append(file);
                 }
             } else {
                 return false;
@@ -362,10 +359,10 @@ public class SaveXMLProject {
             outWriter.writeAttribute("name", study.getResultingGene().getName());
 
             //writer resulting genomeid hash
-            genomeID = new String();
+            genomeID = new StringBuilder();
             if (study.getResultingGene().getGenome().getGenesFiles().length > 0) {
                 for (String file : study.getResultingGene().getGenome().getGenesFiles()) {
-                    genomeID += file;
+                    genomeID.append(file);
                 }
             } else {
                 return false;

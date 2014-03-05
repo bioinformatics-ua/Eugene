@@ -216,7 +216,9 @@ public class Main
                         }
 
                         if (file.exists()) {
-                            file.delete();
+                            if(!file.delete()) {
+                                System.out.println("Error deleting file");
+                            }
                         }
 
                         buffer = new byte[2048];

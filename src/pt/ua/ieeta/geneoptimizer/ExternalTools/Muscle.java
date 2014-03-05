@@ -153,10 +153,10 @@ public class Muscle extends AlignmentTool
     {
         HashMap<String, String> results = new HashMap<String,String>();
         
-        try
-        {
-            File outputFile = new File(path + "alignment_out.txt");
-            BufferedReader in = new BufferedReader(new FileReader(outputFile));
+        File outputFile = new File(path + "alignment_out.txt");
+        
+        try(BufferedReader in = new BufferedReader(new FileReader(outputFile));) {
+            
             String line;
             StringBuilder sb = new StringBuilder("");
             String id, newID;
@@ -211,7 +211,9 @@ public class Muscle extends AlignmentTool
         /* Write aminoacid sequence to inputFile. */
         try
         {
-            inputFile.createNewFile();
+            if(!inputFile.createNewFile()) {
+                System.out.println("Error creating input file");
+            }
             BufferedWriter out = new BufferedWriter(new FileWriter(inputFile));
             for (Gene gene : sequences)
             {                
@@ -225,7 +227,9 @@ public class Muscle extends AlignmentTool
         catch (IOException ex)
         {
             //TODO: excepçoes...
-            inputFile.delete();
+            if(!inputFile.delete()) {
+                System.out.println("Error deleting input file");
+            }
             return false;
         }
         

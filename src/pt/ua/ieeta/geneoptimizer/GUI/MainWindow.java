@@ -464,7 +464,7 @@ public class MainWindow extends javax.swing.JFrame {
 
 private void fileMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuQuitActionPerformed
     //TODO: Handle exit
-    System.exit(0);
+    Runtime.getRuntime().exit(0);
 }//GEN-LAST:event_fileMenuQuitActionPerformed
 
     private void saveProjectEvent(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveProjectEvent

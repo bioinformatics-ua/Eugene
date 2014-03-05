@@ -253,7 +253,7 @@ public class Soap {
             QName key = (QName) entry.getKey();
             List v = (List) entry.getValue();
 
-            if ((qname == null) || qname.equals(qname)) {
+            if ((qname == null) || qname.equals(key)) {
                 for (int i = 0; i < v.size(); ++i) {
                     SymTabEntry symTabEntry = (SymTabEntry) v.get(i);
                     if (cls.isInstance(symTabEntry)) {
@@ -274,12 +274,12 @@ public class Soap {
      * @throws java.lang.Exception
      */
     private static Port selectPort(Map ports, String portName) throws Exception {
-        Iterator valueIterator = ports.keySet().iterator();
+        Iterator valueIterator = ports.entrySet().iterator();
         while (valueIterator.hasNext()) {
-            String name = (String) valueIterator.next();
+            Map.Entry entryPort = (Map.Entry) valueIterator.next();
 
             if ((portName == null) || (portName.length() == 0)) {
-                Port port = (Port) ports.get(name);
+                Port port = (Port) entryPort.getValue();
                 List list = port.getExtensibilityElements();
 
                 for (int i = 0; (list != null) && (i < list.size()); i++) {
@@ -288,8 +288,8 @@ public class Soap {
                         return port;
                     }
                 }
-            } else if ((name != null) && name.equals(portName)) {
-                return (Port) ports.get(name);
+            } else if (entryPort.getKey().equals(portName)) {
+                return (Port) entryPort.getValue();
             }
         }
         return null;

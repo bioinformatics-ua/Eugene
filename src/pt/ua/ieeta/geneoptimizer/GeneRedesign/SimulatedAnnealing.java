@@ -34,7 +34,7 @@ public class SimulatedAnnealing
                                                 String seed, 
                                                 int kmax, 
                                                 List<IOptimizationPlugin> selectedPlugins,                                                 
-                                                OptimizationRunner.selectionType selecType,
+                                                OptimizationRunner.SelectionType selecType,
                                                 ProcessPanel processPanel)
     {
         Random rand = new Random();
@@ -60,7 +60,7 @@ public class SimulatedAnnealing
         String originalSubSeq = null;
         int startIndex = 0;
         int endIndex = 0;
-        if( selecType == OptimizationRunner.selectionType.NOT_OPTIMIZE_SELECTION)
+        if( selecType == OptimizationRunner.SelectionType.NOT_OPTIMIZE_SELECTION)
         {
                   startIndex = study.getSelectedStartIndex();
                   endIndex = study.getSelectedEndIndex()+1;
@@ -76,7 +76,7 @@ public class SimulatedAnnealing
               snew.replace(randomPos*3, randomPos*3+3, synonymous.get(randomPos).get(rand.nextInt(synonymous.get(randomPos).size())));
               
               /* If NOT_OPTIMIZE_SELECTION rollback to original subsequence */
-              if( selecType == OptimizationRunner.selectionType.NOT_OPTIMIZE_SELECTION)
+              if( selecType == OptimizationRunner.SelectionType.NOT_OPTIMIZE_SELECTION)
                   snew.replace(startIndex*3, endIndex*3, originalSubSeq);
               
               /* Calculate energy. */
