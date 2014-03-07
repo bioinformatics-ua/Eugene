@@ -9,3 +9,5 @@ build.xml
 homo_sapiens.fa
 src/just
 testingFASTA
+*.jnlp
+*.html
