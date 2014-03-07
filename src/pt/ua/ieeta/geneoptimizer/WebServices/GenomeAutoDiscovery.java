@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Random;
 import java.util.logging.Level;
@@ -129,12 +129,12 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
         /* Count how many kegg keys are in agreement. */
         String keggName = null;
         for (Iterator it = concordance.entrySet().iterator(); it.hasNext();) {
-            Map.Entry k = (Map.Entry) it.next();
-            System.out.println("  Concordance: " + k + " occured " + k.getValue() + " times out of " + numGenesToUse);
+            Entry k = (Entry) it.next();
+            System.out.println("  Concordance: " + k.getKey() + " occured " + k.getValue() + " times out of " + numGenesToUse);
             if (keggName == null)
                 keggName = (String) k.getKey();
             else
-                if ((Integer)concordance.get(k) > (Integer)concordance.get(keggName))
+                if ((Integer) k.getValue() > (Integer) concordance.get(keggName))
                     keggName = (String) k.getKey();
         }
         

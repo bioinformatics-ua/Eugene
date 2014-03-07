@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author David Campos
@@ -276,10 +277,10 @@ public class Soap {
     private static Port selectPort(Map ports, String portName) throws Exception {
         Iterator valueIterator = ports.entrySet().iterator();
         while (valueIterator.hasNext()) {
-            Map.Entry portEntry = (Map.Entry) valueIterator.next();
+            Entry name = (Entry) valueIterator.next();
 
             if ((portName == null) || (portName.length() == 0)) {
-                Port port = (Port) portEntry.getValue();
+                Port port = (Port) name.getValue();
                 List list = port.getExtensibilityElements();
 
                 for (int i = 0; (list != null) && (i < list.size()); i++) {
@@ -288,8 +289,8 @@ public class Soap {
                         return port;
                     }
                 }
-            } else if ((portEntry.getKey() != null) && portEntry.getKey().equals(portName)) {
-                return (Port) portEntry.getValue();
+            } else if ((name != null) && name.getKey().equals(portName)) {
+                return (Port) name.getValue();
             }
         }
         return null;
