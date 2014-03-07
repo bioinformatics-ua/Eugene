@@ -57,8 +57,8 @@ public class ApplicationSettings
             createDefaultSettingsFile();
         } else {
             /* Load all settings from file. */
-            try {
-                properties.load(new FileInputStream(new File(eugene_dir, settingsFileName)));
+            try(FileInputStream input = new FileInputStream(new File(eugene_dir, settingsFileName))) {
+                properties.load(input);
 
                 System.out.println("Loading settings file...");
                 for (Object key : properties.keySet()) {
@@ -102,7 +102,9 @@ public class ApplicationSettings
         File settingsFile = new File(eugene_dir, settingsFileName);
 
         try {
-            settingsFile.createNewFile();
+            if(!settingsFile.createNewFile()) {
+                System.out.println("Error creating settings file");
+            }
 
             for (Iterator<Setting> it = defaultSettings.iterator(); it.hasNext();) {
                 Setting setting = it.next();
@@ -210,11 +212,8 @@ public class ApplicationSettings
         settings.put(propertieName, strValue);
         properties.put(propertieName, strValue);
 
-        try {
-            FileOutputStream out = new FileOutputStream(new File(eugene_dir, settingsFileName));
+        try(FileOutputStream out = new FileOutputStream(new File(eugene_dir, settingsFileName));) {
             properties.store(out, "/* properties updated on: */");
-            out.flush();
-            out.close();
         } catch (Exception ex) {
             //TODO: exceptions..
             ex.printStackTrace();

@@ -69,12 +69,12 @@ public class ModifiedFlowLayout extends FlowLayout
             int y = insets.top + vgap; // FlowLayout starts by adding vgap, so do that here too.
             int rowHeight = 0;
             
-            Component ci = target.getComponent(0);
-            Dimension di = ci.getPreferredSize();  //get width from first component
-            int perLine = Math.min(maxwidth / (di.width + hgap), n) ;
-            int lines = (int) Math.min(Math.ceil((float)n / (float)perLine), n);
-            int gy = lines*(vgap + di.height) + insets.bottom + 1;
-            int gx = perLine * (di.width + hgap) + insets.left + insets.right - 1;
+//            Component ci = target.getComponent(0);
+//            Dimension di = ci.getPreferredSize();  //get width from first component
+//            int perLine = Math.min(maxwidth / (di.width + hgap), n) ;
+//            int lines = (int) Math.min(Math.ceil((float)n / (float)perLine), n);
+//            int gy = lines*(vgap + di.height) + insets.bottom + 1;
+//            int gx = perLine * (di.width + hgap) + insets.left + insets.right - 1;
             
 //            System.out.println("Window Dimension: " + target.getSize().toString() + "    o normal daria: " + super.preferredLayoutSize(target).toString() + "   este deu: [" + gx+ ", " + gy+"]");
 //            System.out.println("Insets: " + insets.left + " " + insets.right);

@@ -196,9 +196,11 @@ public class RedesignProtocolReaderWriter extends Thread {
         File newFile = new File(directory.getPath() + File.separator + report.getReportName().replaceAll("\\s", "_") + ".study");
         if (newFile.exists() && !newFile.isDirectory()) {
             System.out.println("FILE EXISTS.... REMOVING IT... FIX ME");
-            newFile.delete();
+            if(!newFile.delete()) {
+                System.out.println("Error deleting file");
+            }
         }
-
+        
         try {
             XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(new FileWriter(newFile));
 
@@ -254,7 +256,6 @@ public class RedesignProtocolReaderWriter extends Thread {
             /* write data and free associated resources */
             writer.flush();
             writer.close();
-
         } catch (IOException ex) {
             System.out.println("Error saving file: " + ex.getMessage());
             return false;
@@ -263,21 +264,18 @@ public class RedesignProtocolReaderWriter extends Thread {
             return false;
         }
 
-        try {
+        try(FileInputStream inputStream = new FileInputStream(newFile);) {
             byte[] fileBytes = new byte[(int) newFile.length()];
-            FileInputStream inputStream = new FileInputStream(newFile);
+            
             inputStream.read(fileBytes);
 
             TransformerFactory tf = TransformerFactory.newInstance();
-            tf.setAttribute("indent-number", new Integer(2));
+            tf.setAttribute("indent-number", Integer.valueOf(2));
 
             Transformer t = tf.newTransformer();
             t.setOutputProperty(OutputKeys.INDENT, "yes");
 
             t.transform(new StreamSource(new ByteArrayInputStream(fileBytes)), new StreamResult(newFile));
-
-            inputStream.close();
-
         } catch (IOException ex) {
             System.out.println("File '" + newFile.getName() + "' may not exist! : " + ex.getMessage());
             System.out.println("XML not indented!!!");

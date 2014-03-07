@@ -265,8 +265,8 @@ public class ParetoPlotter extends JPanel implements ChartMouseListener
         if ((localChartEntity != null) && ((localChartEntity instanceof XYItemEntity)))
         {
               XYItemEntity entity = (XYItemEntity) cme.getEntity();
-              double X = entity.getDataset().getXValue(entity.getSeriesIndex(), entity.getItem());
-              double Y = entity.getDataset().getYValue(entity.getSeriesIndex(), entity.getItem());
+//              double X = entity.getDataset().getXValue(entity.getSeriesIndex(), entity.getItem());
+//              double Y = entity.getDataset().getYValue(entity.getSeriesIndex(), entity.getItem());
 
               currentSelectedSolutionIndex = entity.getItem();
         }

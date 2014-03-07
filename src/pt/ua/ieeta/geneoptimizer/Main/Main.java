@@ -317,5 +317,4 @@ public class Main
         return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
 
     }
-    
 }

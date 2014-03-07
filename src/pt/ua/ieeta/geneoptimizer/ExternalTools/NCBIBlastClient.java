@@ -318,7 +318,7 @@ public class NCBIBlastClient extends uk.ac.ebi.webservices.AbstractWsToolClient 
                         if (resultTypes[i].getMediaType().startsWith("text")) { // String
                             System.out.print(result);
                         } else { // Binary
-                            System.out.print(resultbytes);
+                            System.out.print(Arrays.toString(resultbytes));
                         }
                     } else { // File
                         String filename = basename + "." + resultTypes[i].getIdentifier() + "." + resultTypes[i].getFileSuffix();
@@ -413,7 +413,7 @@ public class NCBIBlastClient extends uk.ac.ebi.webservices.AbstractWsToolClient 
             params.setAlignments(objFactory.createInputParametersAlignments(new Integer(line.getOptionValue("n"))));
         }
         if (line.hasOption("g")) {
-            params.setGapalign(objFactory.createInputParametersGapalign(new Boolean(true)));
+            params.setGapalign(objFactory.createInputParametersGapalign(Boolean.valueOf(true)));
         }
         if (line.hasOption("f")) {
             params.setFilter(objFactory.createInputParametersFilter(line.getOptionValue("f")));

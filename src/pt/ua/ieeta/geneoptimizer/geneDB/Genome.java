@@ -161,7 +161,7 @@ public class Genome {
     public synchronized void setGenesRef(String[] filelist, List<Gene> genes) {
         genesFiles = new String[filelist.length];
         for (int i = 0; i < filelist.length; i++) {
-            genesFiles[i] = new String(filelist[i]);
+            genesFiles[i] = filelist[i];
         }
 
         genesHeaders = new ArrayList<String>(100);
@@ -285,7 +285,7 @@ public class Genome {
         return geneRes;
     }
 
-    public boolean OrthologsAreAligned() {
+    public boolean orthologsAreAligned() {
         return orthologsAligned;
     }
 

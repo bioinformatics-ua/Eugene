@@ -34,11 +34,11 @@ public class OptimizationRunner extends Thread
     private Study study, originalStudy;
     private boolean obtainParetoFront;
     private boolean useQuickOptimization;
-    private selectionType selecType;
+    private SelectionType selecType;
     private static boolean interruptFlag;
     private static boolean isRunning;
 
-    public enum selectionType 
+    public enum SelectionType 
     {
         NO_SELECTION,
         OPTIMIZE_SELECTION,
@@ -96,7 +96,7 @@ public class OptimizationRunner extends Thread
             /* Optimize selected zone */
             if (n == 0) 
             {
-                selecType = selectionType.OPTIMIZE_SELECTION;
+                selecType = SelectionType.OPTIMIZE_SELECTION;
                 
                 Gene newGene = new Gene("SubGene", originalStudy.getOriginalGene().getGenome());
                 String subGeneSequence = originalStudy.getOriginalGene().getCodonSubSequence(study.getSelectedStartIndex(), study.getSelectedEndIndex()+1);
@@ -106,7 +106,7 @@ public class OptimizationRunner extends Thread
             else
             /* No optimize selected zone */
             if (n == 1) {
-                selecType = selectionType.NOT_OPTIMIZE_SELECTION;
+                selecType = SelectionType.NOT_OPTIMIZE_SELECTION;
                 
             }
             else
@@ -120,7 +120,7 @@ public class OptimizationRunner extends Thread
         }
         else
         {   /* No zone selected */
-            selecType = selectionType.NO_SELECTION;
+            selecType = SelectionType.NO_SELECTION;
         }
         
         
@@ -147,7 +147,7 @@ public class OptimizationRunner extends Thread
         /* Avoid using genetic algorithms when dealing with single algorithm cases. */
         if ((selectedPlugins.size() == 1)
                 && (!selectedPlugins.get(0).needsGeneticAlgorithm())
-                && (selecType != selectionType.NOT_OPTIMIZE_SELECTION))
+                && (selecType != SelectionType.NOT_OPTIMIZE_SELECTION))
         {
             System.out.println(selectedPlugins.get(0).getPluginName() + " plugin started.");
             processPanel.setIndeterminated();
@@ -314,7 +314,7 @@ public class OptimizationRunner extends Thread
         Gene gene = new Gene(originalStudy.getResultingGene().getName(), getSelectedHost());
         StringBuilder newGene = new StringBuilder();
         newGene.append(finalSolutionSequence);
-        if (selecType == selectionType.OPTIMIZE_SELECTION)
+        if (selecType == SelectionType.OPTIMIZE_SELECTION)
         {
             String before = originalStudy.getResultingGene().getCodonSubSequence(0, originalStudy.getSelectedStartIndex());
             String after = originalStudy.getResultingGene().getCodonSubSequence(originalStudy.getSelectedEndIndex()+1, originalStudy.getResultingGene().getSequenceLength());
@@ -379,7 +379,7 @@ public class OptimizationRunner extends Thread
 
         /* Tweek to avoid wrong score when optimizing partial sequences. */
         String sequence;
-        if (selecType!=selectionType.OPTIMIZE_SELECTION)
+        if (selecType!=SelectionType.OPTIMIZE_SELECTION)
             sequence = newStudy.getResultingGene().getCodonSequence();
         else
             sequence = newStudy.getResultingGene().getCodonSubSequence(originalStudy.getSelectedStartIndex(), originalStudy.getSelectedEndIndex()+1);

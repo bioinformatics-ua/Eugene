@@ -167,7 +167,9 @@ public class GeneticCodeTableParser {
         System.out.println("Creating default genetic code table.");
 
         try {
-            gctFile.createNewFile();
+            if(!gctFile.createNewFile()) {
+                System.out.println("Error creating default genetic code table file");
+            }
             BufferedWriter bw = new BufferedWriter(new FileWriter(gctFile));
             bw.write(defaultGeneticCodeTable);
             bw.flush();

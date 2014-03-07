@@ -4,10 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pt.ua.ieeta.geneoptimizer.FileHandling.HeaderInfo;
 
 
@@ -136,16 +138,17 @@ public class NCBIwebFetcher implements Runnable
 
        System.out.println("FETCHING FROM: " + requestBuild.toString());
 
-       URL url;
-       InputStream is = null;
-       BufferedReader dis;
+       URL url = null;
+       try {
+           url = new URL(requestBuild.toString());
+       } catch (MalformedURLException ex) {
+           Logger.getLogger(NCBIwebFetcher.class.getName()).log(Level.SEVERE, null, ex);
+       }
        String line;
 
-       try
-       {
-            url = new URL(requestBuild.toString());
-            is = url.openStream();
-            dis = new BufferedReader(new InputStreamReader(new BufferedInputStream(is)));
+       try(InputStream is = url.openStream();
+           BufferedReader dis = new BufferedReader(new InputStreamReader(new BufferedInputStream(is)));) {
+            
 
             while ((line = dis.readLine()) != null)
             {
@@ -193,11 +196,10 @@ public class NCBIwebFetcher implements Runnable
                 if ((line.contains(" /locus_tag=\"")) && !hasInformation(HeaderInfo.LOCUS_TAG))
                     fetchedInformation.put(HeaderInfo.LOCUS_TAG, line.replaceAll("[^\"]+\"([^\"]+)\"", "$1"));
             }
-            is.close();
        }
        catch (Exception e) { System.out.println(e.getMessage());} //TODO: exceptions..
        
-       fetchedInformation.keySet().toArray().toString();
+//       fetchedInformation.keySet().toArray().toString();
    }
 
    public String getFetchedInformation(HeaderInfo info)

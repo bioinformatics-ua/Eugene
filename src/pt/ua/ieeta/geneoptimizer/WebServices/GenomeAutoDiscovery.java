@@ -88,9 +88,9 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
                 genomeName = genome.getName().trim();
             else
             {
-                String message = new String("The genome name you entered could not be identified as a species.\n" 
+                String message = "The genome name you entered could not be identified as a species.\n" 
                                 + "To contact some online services (such as KEGG), the species name is required.\n"
-                                + "Please enter the species name (two names separated by a space, and possibly the strand):");
+                                + "Please enter the species name (two names separated by a space, and possibly the strand):";
                 while (!genomeName.trim().contains(" "))
                 {
                     genomeName = (String) JOptionPane.showInputDialog(null,
@@ -222,7 +222,7 @@ public class GenomeAutoDiscovery extends Observable implements Runnable
         
         /* Notify observers that all information is available. */
         setChanged();
-        notifyObservers(new Boolean(true));
+        notifyObservers(Boolean.valueOf(true));
     }
 
     public Genome getGenome() {

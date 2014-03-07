@@ -60,17 +60,15 @@ public class HouseKeepingGenes extends Thread
             return;
         }
         
-        try
-        {
-            if (geneCodesFileName == null)
+        if (geneCodesFileName == null)
                 geneCodesFileName = createDefaultHighlyExpressed();
             else if (!new File(eugeneDir + File.pathSeparator + geneCodesFolder, geneCodesFileName).exists() || geneCodesFileName.isEmpty())
                 geneCodesFileName = createDefaultHighlyExpressed();
-          
-            FileInputStream fstream = new FileInputStream(eugeneDir +  geneCodesFolder + File.separator + geneCodesFileName);
+        
+        try(FileInputStream fstream = new FileInputStream(eugeneDir +  geneCodesFolder + File.separator + geneCodesFileName);
             DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));){
+            
             String strLine;
             int i=0;
             while ((strLine = br.readLine()) != null)
@@ -83,9 +81,6 @@ public class HouseKeepingGenes extends Thread
                 
                 i++;
             }
-            
-            in.close();
-            fstream.close();
         }
         catch (Exception ex)
         {
@@ -113,7 +108,9 @@ public class HouseKeepingGenes extends Thread
         System.out.println("Creating default highly expressed codes file.");
 
         try {
-            heFile.createNewFile();
+            if(!heFile.createNewFile()) {
+                System.out.println("Error creating highly expressed codes file");
+            }
             BufferedWriter bw = new BufferedWriter(new FileWriter(heFile));
             bw.write(default_highly_expressed);
             bw.flush();
