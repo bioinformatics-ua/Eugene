@@ -29,6 +29,7 @@ public class UsageAndContextTables extends Observable implements Runnable
 
     /* Reference to the genome this codon usage table refers to. */
     private Genome genome;
+    
     /* Genes present in genome */
     private List<Gene> genes;
 
