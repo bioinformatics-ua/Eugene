@@ -45,9 +45,6 @@ public class Project extends Observable
         
         /* Add 3D viewer as an observer to show the correct protein every time a panel is selected. */
         this.addObserver(Protein3DViewerPanel.getInstance());
-        
-        /* Add web search as observer to only show when there is a study in a project */
-        this.addObserver(ObtainGeneFromWebPanel.getInstance());
     }
 
     public synchronized void setContainerPanel(ContainerPanel newPanel)

@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import pt.ua.ieeta.geneoptimizer.GUI.LoadProjectFileProgPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
-import pt.ua.ieeta.geneoptimizer.GUI.ObtainGeneFromWebPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.TabbedProjectsPanel;
 
 /**
