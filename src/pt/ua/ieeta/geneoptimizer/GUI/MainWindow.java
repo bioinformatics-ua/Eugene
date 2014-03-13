@@ -84,6 +84,7 @@ public class MainWindow extends javax.swing.JFrame {
                     /* Add studies panel and information panel to main window. */
                     toggleContentPanelVisibility(0, ProgressPanel.getInstance(), true);
                     toggleContentPanelVisibility(0, StudyMakerPanel.getInstance(), true);
+                    toggleContentPanelVisibility(1, ObtainGeneFromWebPanel.getInstance(), true);
                     toggleContentPanelVisibility(1, GeneInformationPanel.getInstance(), true);
                     toggleContentPanelVisibility(1, Protein3DViewerPanel.getInstance(), true);
 
