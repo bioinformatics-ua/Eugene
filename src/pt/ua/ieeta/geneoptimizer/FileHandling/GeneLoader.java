@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI.GenePoolGUI;
 import pt.ua.ieeta.geneoptimizer.GUI.MainWindow;
+import pt.ua.ieeta.geneoptimizer.GUI.ObtainGeneFromWebPanel;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
 import pt.ua.ieeta.geneoptimizer.WebServices.GenomeAutoDiscovery;
 import pt.ua.ieeta.geneoptimizer.geneDB.*;
@@ -235,7 +236,7 @@ public class GeneLoader extends Thread {
         UsageAndContextTables cut = new UsageAndContextTables(genome, genes);
         genome.setCodonUsageContextTables(cut);
         new Thread(cut).start();
-
+        
         /* Add genome to pool. */
         genome.setGenomeID(genomeID);
         GenePool.getInstance().addGenomeToPool(genome);

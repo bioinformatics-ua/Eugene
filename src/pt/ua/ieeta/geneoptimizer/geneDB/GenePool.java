@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI.GenePoolGUI;
+import pt.ua.ieeta.geneoptimizer.GUI.ObtainGeneFromWebPanel;
 
 /**
  * Class responsible to manage available genomes in application
@@ -39,6 +40,9 @@ public class GenePool extends Observable {
 
                     /* Add the GUI as observer of this class. */
                     registerObserver(GenePoolGUI.getInstance());
+                    
+                    /* Add the obtain gene from web as observer of this class */
+                    registerObserver(ObtainGeneFromWebPanel.getInstance());
                 }
             }
         }
@@ -54,10 +58,11 @@ public class GenePool extends Observable {
 
         /* Add genome to pool. */
         genomes.add(genome);
-
+        
         /* Notify GUI to update gene pool graphic interface. */
         setChanged();
         notifyObservers(genome);
+        
     }
 
     /* Open gene pool window. */

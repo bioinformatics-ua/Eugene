@@ -50,7 +50,9 @@ public class Gene //implements Comparable<Gene>
         this.fastaOriginalHeaderText = iName;
         this.geneName = iName;
         this.genome = genome;
-        this.genomeName = genome.getName();
+        if(genome != null) {
+            this.genomeName = genome.getName();
+        }
         this.orthologList = null;
         this.PDBCode = null;
         this.bioStructures = new EnumMap<BioStructure.Type, BioStructure>(BioStructure.Type.class);
@@ -81,8 +83,6 @@ public class Gene //implements Comparable<Gene>
         this.gotProductNameConfirmation = gotProductNameConfirmation;
     }
 
-    
-    
     public String getProductName()
     {
         return productName;
@@ -419,6 +419,11 @@ public class Gene //implements Comparable<Gene>
         return bioStructures.get(type);
     }
 
+    public void setGenome(Genome genome) {
+        this.genome = genome;
+        this.genomeName = genome.getName();
+    }
+    
     public Genome getGenome() {
         return genome;
     }

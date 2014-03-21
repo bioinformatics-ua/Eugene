@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -549,5 +550,16 @@ public class GenePoolGUI extends javax.swing.JDialog implements Observer, Runnab
 
     public static void enableButtonLoadGenomes(boolean flag) {
         openGenomeWindow.getLoadButton().setEnabled(flag);
+    }
+    
+    public void updateGenome(Genome temp) {
+        Iterator it = tabbedGenomes.listIterator();
+        while(it.hasNext()) {
+            GenomeHomePage update = (GenomeHomePage) it.next();
+            if(temp.getName().equals(update.getGenome().getName())) {
+                update.fillGenesTable();
+                return;
+            }
+        }
     }
 }

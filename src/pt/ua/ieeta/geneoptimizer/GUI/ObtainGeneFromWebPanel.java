@@ -6,17 +6,31 @@
 
 package pt.ua.ieeta.geneoptimizer.GUI;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
+import pt.ua.ieeta.geneoptimizer.ExternalTools.NCBIwebFetcher;
+import pt.ua.ieeta.geneoptimizer.ExternalTools.ResultKeeper;
+import pt.ua.ieeta.geneoptimizer.FileHandling.SequenceValidator;
+import pt.ua.ieeta.geneoptimizer.GUI.GenePoolGUI.GenePoolGUI;
+import pt.ua.ieeta.geneoptimizer.geneDB.BioStructure;
+import pt.ua.ieeta.geneoptimizer.geneDB.Gene;
+import pt.ua.ieeta.geneoptimizer.geneDB.GenePool;
+import pt.ua.ieeta.geneoptimizer.geneDB.Genome;
 
 /**
  *
@@ -24,60 +38,122 @@ import pt.ua.ieeta.geneoptimizer.Main.ProjectManager;
  */
 public class ObtainGeneFromWebPanel extends ContentPanel implements Observer{
     
+    /* Singleton object */
     private static volatile ObtainGeneFromWebPanel instance = null;
-    private static JPanel content;
+    
+    /* Singleton fields */
+    private JPanel content;
+    private JPanel subcontent;
+    private JLabel searchLabel;
+    private JTextField searchField;
+    private JButton searchButton;
+    private NCBIwebFetcher tempFetcher;
     
     /* Created when class is loaded */
     static {
         instance = new ObtainGeneFromWebPanel();
         instance.setLayout(new BoxLayout(instance, BoxLayout.Y_AXIS));
-        content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        instance.add(content);
+        instance.content = new JPanel();
+        instance.content.setLayout(new BoxLayout(instance.content, BoxLayout.Y_AXIS));
+        instance.add(instance.content);
 
-        JLabel label = new JLabel("<html><b>No genome opened</b></html>", JLabel.CENTER);
+        instance.searchLabel = new JLabel("<html><b>No genome opened</b></html>", JLabel.CENTER);
 
-        content.add(Box.createHorizontalGlue());
-        content.add(label);
-        content.add(Box.createHorizontalGlue());
+        instance.content.add(Box.createHorizontalGlue());
+        instance.content.add(instance.searchLabel);
+        instance.content.add(Box.createHorizontalGlue());
     }
     
     private ObtainGeneFromWebPanel() {
         super("Obtain Gene", false);
+        tempFetcher = null;
     }
     
     public static ObtainGeneFromWebPanel getInstance() {
         return instance;
     }
     
-    @Override
-    public void update(Observable obs, Object obj) {
+    private void updateAspect() {
         content.removeAll();
-        
-        content.add(Box.createHorizontalGlue());
-        JLabel label = new JLabel("Insert Gene Locus (ex. NM_031418):");
-        content.add(label);
-        content.add(Box.createHorizontalGlue());
-        
-        JTextField text = new JTextField();
-        content.add(text);
+        content.setLayout(new GridLayout(2, 1));
+        searchLabel = new JLabel("Insert Gene Transcript:");
+        content.add(searchLabel);
 
-        JButton search = new JButton("Search");
-        search.addActionListener(new ActionListener() {
+        subcontent = new JPanel();
+        subcontent.setLayout(new FlowLayout());
+        searchField = new JTextField("NM_");
+        searchField.setPreferredSize(new Dimension(250, 23));
+        subcontent.add(searchField);
+
+        searchButton = new JButton("Search");
+        searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                String text = ((JTextField) content.getComponent(1)).getText();
-                if(text.startsWith("NM_"))
+                String text = searchField.getText();
+                if (text.startsWith("NM_")) {
                     searchGene(text);
-                else
+                } else {
                     System.out.println("Error: " + text);
+                }
             }
         });
-        content.add(search);
-        content.add(Box.createHorizontalGlue());
+        subcontent.add(searchButton);
+        content.add(subcontent);
+    }
+    
+    private void fetchResult() {
+        String geneName = tempFetcher.getFetchedName();
+        String geneSequence = tempFetcher.getFetchedRNASequence();
+
+        if (geneName.equals("NOT_FOUND")) {
+            JOptionPane.showMessageDialog(content, "Gene " + tempFetcher.getValue() + " not found", "Gene not found", JOptionPane.ERROR_MESSAGE);
+        } else {
+            List<Genome> genomes = GenePool.getInstance().getGenomes();
+            List<Object> tempGenomeName = new LinkedList<>();
+            Iterator it = genomes.listIterator();
+            while (it.hasNext()) {
+                tempGenomeName.add(((Genome) it.next()).getName());
+            }
+            
+            Object tempGenomeChoosen = JOptionPane.showInputDialog(content, "Choose a genome", "Input", JOptionPane.INFORMATION_MESSAGE, null, tempGenomeName.toArray(), tempGenomeName.get(0));
+            it = genomes.listIterator();
+            while (it.hasNext()) {
+                Genome tempGenome = (Genome) it.next();
+                if (tempGenome.getName().equals(tempGenomeChoosen)) {
+                    Gene newGene = new Gene(geneName, tempGenome);
+                    newGene.createStructure(SequenceValidator.makeCorrectionsToGene(geneSequence), BioStructure.Type.mRNAPrimaryStructure);
+
+                    tempGenome.addGeneManually(newGene);
+
+                    System.out.println("Gene added");
+
+                    GenePoolGUI.getInstance().updateGenome(tempGenome);
+                    
+                    instance.searchField.setText("NM_");
+                    
+                    return;
+                }
+            }
+        }
+        
+        instance.searchField.setText("NM_");
+        tempFetcher = null;
+    }
+    
+    @Override
+    public void update(Observable obs, Object obj) {
+        if(obs.getClass() == GenePool.class) {
+            updateAspect();
+        } else if(obs.getClass() == ResultKeeper.class && ((Boolean) obj).equals(true)) {
+            fetchResult();
+        }
     }
     
     private void searchGene(String text) {
-        System.out.println(text);
+        tempFetcher = new NCBIwebFetcher(new ResultKeeper(this), true);
+        tempFetcher.setValue(text);
+        new Thread(tempFetcher).start();
     }
+    
+    
 }
