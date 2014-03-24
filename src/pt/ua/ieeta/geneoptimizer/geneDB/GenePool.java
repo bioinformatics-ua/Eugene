@@ -55,14 +55,15 @@ public class GenePool extends Observable {
 
     /* Add a genome to the genome pool. */
     public synchronized void addGenomeToPool(Genome genome) {
-
+        System.out.println("Begining add");
         /* Add genome to pool. */
         genomes.add(genome);
         
         /* Notify GUI to update gene pool graphic interface. */
         setChanged();
-        notifyObservers(genome);
         
+        notifyObservers(genome);
+        System.out.println("Ending add");
     }
 
     /* Open gene pool window. */

@@ -74,6 +74,7 @@ public class ObtainGeneFromWebPanel extends ContentPanel implements Observer{
     }
     
     private void updateAspect() {
+        System.out.println("Update aspect begin");
         content.removeAll();
         content.setLayout(new GridLayout(2, 1));
         searchLabel = new JLabel("Insert Gene Transcript:");
@@ -82,7 +83,7 @@ public class ObtainGeneFromWebPanel extends ContentPanel implements Observer{
         subcontent = new JPanel();
         subcontent.setLayout(new FlowLayout());
         searchField = new JTextField("NM_");
-        searchField.setPreferredSize(new Dimension(250, 23));
+        searchField.setPreferredSize(new Dimension(150, 23));
         subcontent.add(searchField);
 
         searchButton = new JButton("Search");
@@ -99,14 +100,19 @@ public class ObtainGeneFromWebPanel extends ContentPanel implements Observer{
         });
         subcontent.add(searchButton);
         content.add(subcontent);
+        
+        instance.updateUI();
     }
     
     private void fetchResult() {
         String geneName = tempFetcher.getFetchedName();
         String geneSequence = tempFetcher.getFetchedRNASequence();
-
-        if (geneName.equals("NOT_FOUND")) {
-            JOptionPane.showMessageDialog(content, "Gene " + tempFetcher.getValue() + " not found", "Gene not found", JOptionPane.ERROR_MESSAGE);
+        
+        System.out.println("Gene Name: " + geneName + "\nGene Sequence: " + geneSequence);
+        
+        if (geneName.equals("NOT_FOUND") && geneSequence.equals("NOT_FOUND")) {
+            JOptionPane.showMessageDialog(null, "Gene " + tempFetcher.getValue() + " not found", "Gene not found", JOptionPane.ERROR_MESSAGE);
+            updateAspect();
         } else {
             List<Genome> genomes = GenePool.getInstance().getGenomes();
             List<Object> tempGenomeName = new LinkedList<>();
@@ -142,9 +148,11 @@ public class ObtainGeneFromWebPanel extends ContentPanel implements Observer{
     
     @Override
     public void update(Observable obs, Object obj) {
+        System.out.println("Update begin");
         if(obs.getClass() == GenePool.class) {
             updateAspect();
-        } else if(obs.getClass() == ResultKeeper.class && ((Boolean) obj).equals(true)) {
+        } else if(obs.getClass() == ResultKeeper.class) {
+            System.out.println("Fetch result begin");
             fetchResult();
         }
     }

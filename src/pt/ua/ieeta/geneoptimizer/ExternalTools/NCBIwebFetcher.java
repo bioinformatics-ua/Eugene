@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.EnumMap;
@@ -119,7 +120,7 @@ public class NCBIwebFetcher implements Runnable {
             BufferedReader buffReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(is)));
             
             String line, name = null;
-            boolean cdsFound = false, originFound = false;
+            boolean cdsFound = false, originFound = false, nameFound = false;
             int i, cdsBegin = 0, cdsEnd = 0;
             
             while ((line = buffReader.readLine()) != null) {
@@ -128,6 +129,7 @@ public class NCBIwebFetcher implements Runnable {
                         line = buffReader.readLine();
                         if(line.contains("/gene=\"")) {
                             name = line.substring(line.indexOf("\"")+1, line.lastIndexOf("\"")) + " (manually added)";
+                            nameFound = true;
                         }
                     }
                 }
@@ -148,7 +150,7 @@ public class NCBIwebFetcher implements Runnable {
                 }
             }
             
-            if(cdsFound && originFound) {
+            if(nameFound && cdsFound && originFound) {
                 StringBuilder geneBuffer = new StringBuilder();
                 while((line = buffReader.readLine()) != null) {
                     line = line.trim();
@@ -167,17 +169,21 @@ public class NCBIwebFetcher implements Runnable {
                 return;
             }
         } catch(MalformedURLException ex) {
-            sequenceName = "NOT_FOUND";
+            Logger.getLogger(NCBIwebFetcher.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(SocketTimeoutException ex) {
             Logger.getLogger(NCBIwebFetcher.class.getName()).log(Level.SEVERE, null, ex);
         } catch(IOException ex) {
-            sequenceName = "NOT_FOUND";
-            Logger.getLogger(NCBIwebFetcher.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(Exception ex) {
-            sequenceName = "NOT_FOUND";
             Logger.getLogger(NCBIwebFetcher.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        notFound();
     }
 
+    private void notFound() {
+        sequenceName = "NOT_FOUND";
+        sequenceRNA = "NOT_FOUND";
+    }
+    
     private void fetchInfoFromOrganism() {
         if ((!to.matches("\\D\\d+")) && (!from.matches("\\D\\d+"))) {
             assert Integer.parseInt(to) >= Integer.parseInt(from);
