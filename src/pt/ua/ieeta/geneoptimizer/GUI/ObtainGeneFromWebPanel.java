@@ -121,7 +121,7 @@ public class ObtainGeneFromWebPanel extends ContentPanel implements Observer{
                 tempGenomeName.add(((Genome) it.next()).getName());
             }
             
-            Object tempGenomeChoosen = JOptionPane.showInputDialog(content, "Choose a genome", "Input", JOptionPane.INFORMATION_MESSAGE, null, tempGenomeName.toArray(), tempGenomeName.get(0));
+            Object tempGenomeChoosen = JOptionPane.showInputDialog(null, "Choose a genome", "Input", JOptionPane.INFORMATION_MESSAGE, null, tempGenomeName.toArray(), tempGenomeName.get(0));
             it = genomes.listIterator();
             while (it.hasNext()) {
                 Genome tempGenome = (Genome) it.next();
@@ -134,6 +134,8 @@ public class ObtainGeneFromWebPanel extends ContentPanel implements Observer{
                     System.out.println("Gene added");
 
                     GenePoolGUI.getInstance().updateGenome(tempGenome);
+                    
+                    JOptionPane.showMessageDialog(null, "Gene has been added to Gene Pool");
                     
                     instance.searchField.setText("NM_");
                     
