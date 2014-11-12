@@ -26,10 +26,11 @@ Building and Deploying Eugene with Java Web Start
             - (select) Application descriptor (use project Main class)
     
 Nota: Verificar se todos estes campos do launch.jnlp foram inseridos exatamente iguais a estes:
+            - <jnlp codebase="http://bioinformatics.ua.pt/eugene/" href="launch.jnlp" spec="6.0+">
     * information:
-            
             - <icon href="icon.png" kind="default"/>
             - <icon href="splash.png" kind="splash"/>
+            - <offline-allowed/>
             - <shortcut online="false">
             -    <desktop/>
             -    <menu submenu="EuGene">
@@ -38,7 +39,7 @@ Nota: Verificar se todos estes campos do launch.jnlp foram inseridos exatamente 
             
     * resources:
     
-            - <j2se version="1.6+"/>
+            - <j2se version="1.7+"/>
             - ...
             - <jar href="Tools.jar"/>
             - <jar href="Plugins.jar"/>
