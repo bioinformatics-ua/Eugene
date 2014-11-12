@@ -26,7 +26,7 @@ public class Main
     public static void main(String[] args) throws FileNotFoundException, IOException
     {          
         /* Application version. */
-        version = "v1.3.1";
+        version = "v1.3.2";
         
         /* Check directoy tree. */
         verifyDirectoryTree();
@@ -79,6 +79,12 @@ public class Main
         UIManager.put("TaskPane.backgroundGradientEnd", new Color(190, 204, 218));
         UIManager.put("TaskPaneGroup.background", new Color(240, 240, 240));
         UIManager.put("TabbedPane.tabInsets", new Insets(0, 0, 0, 0));
+        
+        if(!version.equals(ApplicationSettings.getProperty("EugeneVersion", String.class))) {
+            showChangelogs();
+            
+            ApplicationSettings.setProperty("EugeneVersion", version, String.class);
+        }
         
         /* Create gene pool. */
         GenePool.getInstance();
@@ -316,5 +322,13 @@ public class Main
         // linux or unix
         return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
 
+    }
+
+    private static void showChangelogs() {
+        Object changes = "Eugene was updated to a newer versions. The new version includes this new features:\n"
+                + "*** Changelogs have been added\n"
+                + "*** Calculates CAI from selected zone";
+        
+        JOptionPane.showMessageDialog(null, changes, "Updated to version " + version, JOptionPane.INFORMATION_MESSAGE);
     }
 }

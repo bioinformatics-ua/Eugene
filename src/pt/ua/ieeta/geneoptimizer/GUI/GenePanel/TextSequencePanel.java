@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import pt.ua.ieeta.geneoptimizer.GUI.GeneInformationPanel;
 import pt.ua.ieeta.geneoptimizer.GUI.Protein3DViewerPanel;
 import pt.ua.ieeta.geneoptimizer.GeneRedesign.Study;
 import pt.ua.ieeta.geneoptimizer.Main.ApplicationSettings;
@@ -177,7 +178,7 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
         
         sequenceSize = structure.getSequenceOccupation();
         numberOfPadding = 0;
-
+        
         assert labelSequence.size() == structure.getLength();
         assert sequenceSize > 0;
     }
@@ -264,6 +265,8 @@ public class TextSequencePanel extends SequencePanel implements MouseListener, M
                     container.getStudy().setSelection(dragStartIndex, dragEndIndex);
                 else
                     container.getStudy().setSelection(dragEndIndex, dragStartIndex);
+                
+                GeneInformationPanel.getInstance().updateInformationForSelectedStudy();
             }
         }
     }

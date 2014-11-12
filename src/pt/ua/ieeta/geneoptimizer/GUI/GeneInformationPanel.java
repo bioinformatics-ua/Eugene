@@ -153,6 +153,8 @@ public class GeneInformationPanel extends ContentPanel implements Observer {
         if (study.getResultingGene().hasCAI()) {
             content.add(new InformationZone("CAI: ", "" + new DecimalFormat("##.###").format(study.getResultingGene().getCAI()), true));
         }
+        if(study.hasCodonSelection())
+            content.add(new InformationZone("CAI from selected zone: ", "" + new DecimalFormat("##.###").format(study.getResultingGene().getSelectedCAI(study.getSelectedStartIndex(), study.getSelectedEndIndex())), true));
         content.add(new JSeparator());
 
         /* Optimizations information. */

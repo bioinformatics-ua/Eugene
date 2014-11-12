@@ -163,6 +163,43 @@ public class Gene //implements Comparable<Gene>
         return (float) accumulator;
     }
     
+    public float getSelectedCAI(int beginIdx, int endIdx) {
+        double result, accumulator, value, exponent;
+        int counterRSCU, size;
+        Genome highlyExpressed;
+        
+        highlyExpressed = genome.getHouseKeepingGenes();
+        counterRSCU = 0;
+        size = endIdx - beginIdx;
+        
+        if(endIdx == getSequenceLength()-1) {
+            size--;
+            endIdx--;
+        }
+        
+        for(int i = beginIdx; i <= endIdx; i++)
+            if(highlyExpressed.getUsageAndContextTables().getCodonUsageRSCU(getCodonAt(i)) == 1f)
+                counterRSCU++;
+        
+        exponent = 1f / (float) (size-counterRSCU);
+        result = 1;
+        accumulator = 1;
+        
+        for(int i = beginIdx; i <= endIdx; i++) {
+            value = highlyExpressed.getUsageAndContextTables().getCodonRelativeAdaptiveness(getCodonAt(i));
+            result *= (value != 0) ? value : 0.5;
+            
+            if(result < Math.pow(10, -100)) {
+                accumulator = accumulator * Math.pow(result, exponent);
+                result = 1;
+            }
+        }
+        
+        accumulator = accumulator * Math.pow(result, exponent);
+        
+        return (float) accumulator;
+    }
+    
     public boolean hasCAI()
     {
         return genome.getHouseKeepingGenes() != null;
